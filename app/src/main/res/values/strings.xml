@@ -23,4 +23,19 @@
     <string name="t_m_ki_m">Tìm kiếm</string>
     <string name="danh_s_ch">Danh sách</string>
     <string name="n_danh_20">Ẩn danh, 20</string>
+
+    <string name="title_slider_1">Lượt tăng tốc</string>
+    <string name="description_slider_1">Đẩy hồ sơ của bạn lên khu vực trong 30 phút để được tương tác nhiều hơn</string>
+
+    <string name="title_slider_2">Mua Tinder Gold</string>
+    <string name="description_slider_2">Xem ai thích bạn và nhiều thứ khác</string>
+
+    <string name="title_slider_3">Tinder Platinum</string>
+    <string name="description_slider_3">Nâng cấp mọi hoạt động của bạn trên Tinder</string>
+
+    <string name="title_slider_4">Tinder Plus</string>
+    <string name="description_slider_4">Nhận lượt thích vô hạn,Hộ Chiếu và nhiều thứ khác</string>
+
+    <string name="title_slider_5">Nâng cấp trải nghiệm hẹn hò của bạn</string>
+    <string name="description_slider_5">Mở khóa các tính năng hay nhất của Tinder</string>
 </resources>

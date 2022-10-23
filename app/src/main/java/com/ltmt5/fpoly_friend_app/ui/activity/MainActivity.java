@@ -13,6 +13,7 @@ import com.ltmt5.fpoly_friend_app.ui.fragment.AddFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.ChatFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.HomeFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.LoveFragment;
+import com.ltmt5.fpoly_friend_app.ui.fragment.SwipeViewFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.UserFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        loadFragment(new HomeFragment());
+        loadFragment(new SwipeViewFragment());
     }
 
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -32,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         Fragment fragment;
         switch (item.getItemId()) {
             case R.id.navigation_home:
-                fragment = new HomeFragment();
+                fragment = new SwipeViewFragment();
                 loadFragment(fragment);
                 return true;
             case R.id.navigation_love:
