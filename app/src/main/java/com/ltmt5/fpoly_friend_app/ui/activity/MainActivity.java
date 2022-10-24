@@ -1,9 +1,13 @@
 package com.ltmt5.fpoly_friend_app.ui.activity;
 
+import android.app.ActivityOptions;
 import android.os.Bundle;
+import android.util.Pair;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -62,6 +66,12 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(binding.fcvMain.getId(), fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    private FragmentActivity fragmentActivity;
+
+    public void loadProfileActivity(){
+
     }
 
 }
