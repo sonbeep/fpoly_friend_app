@@ -6,6 +6,7 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
 
 public class SplashActivity extends AppCompatActivity {
@@ -15,7 +16,11 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         new Handler().postDelayed(() -> {
-            startActivity(new Intent(this, OnBoard1Activity.class));
+            if (App.sharePref.isFirstTimeLaunch()) {
+                startActivity(new Intent(this, OnBoard1Activity.class));
+            } else {
+                startActivity(new Intent(this, LogInActivity.class));
+            }
             finish();
         }, 1500);
     }

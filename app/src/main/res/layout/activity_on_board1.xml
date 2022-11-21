@@ -19,6 +19,37 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.725" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_hor2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="@string/k_t_n_i_v_i_b_n_b"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gl_hor2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:alpha="0.7"
+        android:text="@string/k_t_n_i_v_i_b_n_b_em_l_i_c_m_gi_c_g_n_g_i_v_an_to_n"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv1" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnNext"
         android:layout_width="match_parent"

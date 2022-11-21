@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityOnBoard1Binding;
 
 public class OnBoard1Activity extends AppCompatActivity {
@@ -16,7 +17,13 @@ public class OnBoard1Activity extends AppCompatActivity {
         binding = ActivityOnBoard1Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.btnNext.setOnClickListener(v -> startActivity(new Intent(this, OnBoard2Activity.class)));
-        binding.btnSkip.setOnClickListener(v -> startActivity(new Intent(this, LogInActivity.class)));
-        binding.btnSignIn.setOnClickListener(v -> startActivity(new Intent(this, LogInActivity.class)));
+        binding.btnSkip.setOnClickListener(v -> {
+            App.sharePref.setFirstTimeLaunch(false);
+            startActivity(new Intent(this, LogInActivity.class));
+        });
+        binding.btnSignIn.setOnClickListener(v -> {
+            App.sharePref.setFirstTimeLaunch(false);
+            startActivity(new Intent(this, SignInActivity.class));
+        });
     }
 }
