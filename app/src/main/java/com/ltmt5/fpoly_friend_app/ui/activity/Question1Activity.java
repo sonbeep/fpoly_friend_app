@@ -26,7 +26,7 @@ public class Question1Activity extends AppCompatActivity {
     boolean validate() {
         boolean isDone = true;
         if (binding.ed1.getText().toString().trim().equals("")) {
-            Toast.makeText(this, "Name can not be empty", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Tên không được để trống", Toast.LENGTH_SHORT).show();
             isDone = false;
         }
         return isDone;
