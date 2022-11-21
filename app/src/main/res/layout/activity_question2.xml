@@ -41,7 +41,7 @@
         android:layout_marginTop="40dp"
         android:fontFamily="@font/poppins_semibold"
         android:gravity="center"
-        android:text="Tên tôi là"
+        android:text="Sinh nhật của tôi là"
         android:textColor="@color/black"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,13 +63,12 @@
         app:strokeWidth="1dp">
 
         <EditText
-            android:id="@+id/ed1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginHorizontal="10dp"
             android:background="@color/transparent"
-            android:hint="@string/t_n"
+            android:hint="@string/d_d_m_m_y_y_y_y"
             android:paddingVertical="11dp"
             android:textColor="@color/black" />
     </com.google.android.material.card.MaterialCardView>

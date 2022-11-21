@@ -19,6 +19,37 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.725" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_hor2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <TextView
+        android:id="@+id/tv1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="@string/th_hi_n_b_n_th_n_v_i_th_gi_i"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/gl_hor2" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="7dp"
+        android:alpha="0.7"
+        android:text="@string/h_y_gi_ng_n_i_c_a_b_n_c_l_ng_nghe_tr_n_internet_th_ng_qua_c_c_t_nh_n_ng_c_a_polyfriends_tr_n_ng_d_ng_m_kh_ng_b_h_n_ch"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv1" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnNext"
         android:layout_width="match_parent"

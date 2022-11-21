@@ -19,6 +19,21 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.77" />
 
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/gl_hor2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.57" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/ng_nh_p_b_ng_gmail_c_a_sinh_vi_n_fpoly_ch_ng_t_i_c_th_x_c_th_c_danh_t_nh_c_a_b_n"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toTopOf="@id/gl_hor2" />
+
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/btnLogIn"
         android:layout_width="match_parent"
@@ -60,6 +75,32 @@
 
 
     </com.google.android.material.card.MaterialCardView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogIn">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/b_n_ch_a_ng_k_t_i_kho_n"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/btnSignUp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/poppins_medium"
+            android:text="@string/ng_k"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
 
 
     <TextView
