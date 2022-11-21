@@ -75,4 +75,6 @@
     <string name="marketing">Marketing</string>
     <string name="s_th_ch_c_a_t_i_l">Sở thích của tôi là</string>
     <string name="b_n_ch_a_ng_k_t_i_kho_n">Bạn chưa đăng kí tài khoản?</string>
+    <string name="n_m_sinh_c_a_t_i_l">Năm sinh của tôi là</string>
+    <string name="n_m_sinh">Năm sinh</string>
 </resources>
