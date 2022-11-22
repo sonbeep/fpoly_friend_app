@@ -20,10 +20,10 @@ public class Question3Activity extends AppCompatActivity {
         binding = ActivityQuestion3Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.btnNext.setOnClickListener(v -> {
-            if (!mGender.equals("none")) {
-                PublicData.gender = mGender;
+//            if (!mGender.equals("none")) {
+//                PublicData.gender = mGender;
                 startActivity(new Intent(this, Question4Activity.class));
-            }
+//            }
         });
         binding.btnMale.setOnClickListener(v -> {
             mGender = "Male";
@@ -38,7 +38,6 @@ public class Question3Activity extends AppCompatActivity {
             binding.tvOther.setTextColor(ContextCompat.getColor(this, R.color.prime_1));
 
             binding.btnNext.setCardBackgroundColor(ContextCompat.getColor(this, R.color.prime_1));
-            binding.tvNext.setTextColor(ContextCompat.getColor(this, R.color.white));
 
         });
 
@@ -55,7 +54,6 @@ public class Question3Activity extends AppCompatActivity {
             binding.tvOther.setTextColor(ContextCompat.getColor(this, R.color.prime_1));
 
             binding.btnNext.setCardBackgroundColor(ContextCompat.getColor(this, R.color.prime_1));
-            binding.tvNext.setTextColor(ContextCompat.getColor(this, R.color.white));
         });
 
         binding.btnOther.setOnClickListener(v -> {
@@ -71,7 +69,6 @@ public class Question3Activity extends AppCompatActivity {
             binding.tvMale.setTextColor(ContextCompat.getColor(this, R.color.prime_1));
 
             binding.btnNext.setCardBackgroundColor(ContextCompat.getColor(this, R.color.prime_1));
-            binding.tvNext.setTextColor(ContextCompat.getColor(this, R.color.white));
         });
     }
 

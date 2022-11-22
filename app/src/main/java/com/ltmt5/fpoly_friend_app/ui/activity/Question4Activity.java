@@ -18,9 +18,9 @@ public class Question4Activity extends AppCompatActivity {
         binding = ActivityQuestion4Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.btnNext.setOnClickListener(v -> {
-            if (validate()) {
+//            if (validate()) {
                 startActivity(new Intent(this, Question5Activity.class));
-            }
+//            }
         });
     }
 

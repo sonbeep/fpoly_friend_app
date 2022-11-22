@@ -77,4 +77,8 @@
     <string name="b_n_ch_a_ng_k_t_i_kho_n">Bạn chưa đăng kí tài khoản?</string>
     <string name="n_m_sinh_c_a_t_i_l">Năm sinh của tôi là</string>
     <string name="n_m_sinh">Năm sinh</string>
+    <string name="vui_l_ng_ch_n_t_nh_t_2_nh">Vui lòng chọn ít nhất 2 ảnh</string>
+    <string name="th_m_nh">Thêm ảnh</string>
+    <string name="gi_i_thi_u_b_n_th_n">Giới thiệu bản thân</string>
+    <string name="s_th_ch_c_a_t_i">Sở thích của tôi</string>
 </resources>

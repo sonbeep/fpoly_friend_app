@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityWelcomeBinding;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -15,6 +16,9 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityWelcomeBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        binding.btnNext.setOnClickListener(v -> startActivity(new Intent(this, MainActivity.class)));
+        binding.btnNext.setOnClickListener(v -> {
+            App.sharePref.setSignIn(true);
+            startActivity(new Intent(this, MainActivity.class));
+        });
     }
 }

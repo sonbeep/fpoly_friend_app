@@ -17,9 +17,9 @@ public class Question2Activity extends AppCompatActivity {
         binding = ActivityQuestion2Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.btnNext.setOnClickListener(v -> {
-            if (validate()) {
+//            if (validate()) {
                 startActivity(new Intent(this, Question3Activity.class));
-            }
+//            }
         });
     }
 
@@ -28,12 +28,14 @@ public class Question2Activity extends AppCompatActivity {
         if (binding.ed1.getText().toString().trim().equals("")) {
             Toast.makeText(this, "Ngày sinh không được để trống", Toast.LENGTH_SHORT).show();
             isDone = false;
+        } else {
+            int i = Integer.parseInt(binding.ed1.getText().toString().trim());
+            if (i < 1900 || i > 2022) {
+                Toast.makeText(this, "Năm không hợp lệ", Toast.LENGTH_SHORT).show();
+                isDone = false;
+            }
         }
-        int i = Integer.parseInt(binding.ed1.getText().toString().trim());
-        if (i < 1900 || i > 2022) {
-            Toast.makeText(this, "Năm không hợp lệ", Toast.LENGTH_SHORT).show();
-            isDone = false;
-        }
+
         return isDone;
     }
 }
