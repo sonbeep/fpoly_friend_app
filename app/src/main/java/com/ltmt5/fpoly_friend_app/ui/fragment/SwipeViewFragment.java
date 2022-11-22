@@ -29,10 +29,12 @@ import java.util.List;
 public class SwipeViewFragment extends Fragment {
     public static final String EXTRA_USER_PROFILE = "EXTRA_USER_PROFILE";
     public static final String EXTRA_SWIPE_VIEW_SOURCE = "EXTRA_SWIPE_VIEW_SOURCE";
+    public static Profile mProfile;
+    public static int mPos = 0;
     FragmentSwipeViewBinding binding;
-    private Context mContext;
     List<Profile> profileList;
     MainActivity mainActivity;
+    private Context mContext;
 
     public SwipeViewFragment() {
 
@@ -72,6 +74,7 @@ public class SwipeViewFragment extends Fragment {
             binding.swipeView.addView(new TinderCard(mContext, profile, binding.swipeView));
         }
 
+
         binding.btnSkip.setOnClickListener(v -> {
             animateFab(binding.btnSkip);
             binding.swipeView.doSwipe(false);
@@ -87,11 +90,11 @@ public class SwipeViewFragment extends Fragment {
         binding.btnReverse.setOnClickListener(v -> animateFab(binding.btnReverse));
 
         binding.btnInfo.setOnClickListener(v -> {
-//            mainActivity.loadProfileActivity();
-//            ActivityOptions options = ActivityOptions
-//                    .makeSceneTransitionAnimation(mainActivity,
-//                            Pair.create(binding.swipeView, "user_swipe_image_transition"));
-//            mainActivity.startActivity(getBundledIntent(profileList.get(0)), options.toBundle());
+            mainActivity.loadProfileActivity();
+            ActivityOptions options = ActivityOptions
+                    .makeSceneTransitionAnimation(mainActivity,
+                            Pair.create(binding.swipeView, "user_swipe_image_transition"));
+            mainActivity.startActivity(getBundledIntent(profileList.get(profileList.indexOf(mProfile) - 2)), options.toBundle());
         });
     }
 

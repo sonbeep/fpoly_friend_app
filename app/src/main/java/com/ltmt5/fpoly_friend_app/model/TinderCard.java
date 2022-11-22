@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.ltmt5.fpoly_friend_app.R;
+import com.ltmt5.fpoly_friend_app.ui.fragment.SwipeViewFragment;
 import com.mindorks.placeholderview.SwipePlaceHolderView;
 import com.mindorks.placeholderview.annotations.Layout;
 import com.mindorks.placeholderview.annotations.Resolve;
@@ -41,35 +42,37 @@ public class TinderCard {
     }
 
     @Resolve
-    public void onResolved(){
+    public void onResolved() {
         Glide.with(mContext).load(mProfile.getImageUrl()).centerCrop().into(profileImageView);
         nameAgeTxt.setText(mProfile.getName() + ", " + mProfile.getAge());
         locationNameTxt.setText(mProfile.getLocation());
+        SwipeViewFragment.mProfile = mProfile;
+        Log.d("AAA","mProfile: "+mProfile.getName());
     }
 
     @SwipeOut
-    public void onSwipedOut(){
+    public void onSwipedOut() {
         Log.d("EVENT", "onSwipedOut");
         mSwipeView.addView(this);
     }
 
     @SwipeCancelState
-    public void onSwipeCancelState(){
+    public void onSwipeCancelState() {
         Log.d("EVENT", "onSwipeCancelState");
     }
 
     @SwipeIn
-    public void onSwipeIn(){
+    public void onSwipeIn() {
         Log.d("EVENT", "onSwipedIn");
     }
 
     @SwipeInState
-    public void onSwipeInState(){
+    public void onSwipeInState() {
         Log.d("EVENT", "onSwipeInState");
     }
 
     @SwipeOutState
-    public void onSwipeOutState(){
+    public void onSwipeOutState() {
         Log.d("EVENT", "onSwipeOutState");
     }
 }

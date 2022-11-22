@@ -82,4 +82,11 @@ dependencies {
     implementation 'com.github.mmin18:realtimeblurview:1.1.2'
 //    implementation "com.google.firebase:firebase-messaging:21.0.1"
 //    implementation "com.google.firebase:firebase-core:18.0.0"
+
+    //flexbox
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
+
+    // Ted permission
+    // Normal
+    implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
 }

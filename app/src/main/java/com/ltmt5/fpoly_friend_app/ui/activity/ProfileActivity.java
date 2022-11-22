@@ -2,6 +2,8 @@ package com.ltmt5.fpoly_friend_app.ui.activity;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Fade;
@@ -17,52 +19,65 @@ import androidx.cardview.widget.CardView;
 import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.bumptech.glide.Glide;
 import com.github.ybq.parallaxviewpager.ParallaxViewPager;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.flexbox.AlignItems;
+import com.google.android.flexbox.FlexDirection;
+import com.google.android.flexbox.FlexboxLayoutManager;
+import com.google.android.flexbox.JustifyContent;
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
+import com.ltmt5.fpoly_friend_app.adapter.HobbiesAdapter;
+import com.ltmt5.fpoly_friend_app.databinding.ActivityProfileBinding;
 import com.ltmt5.fpoly_friend_app.help.ImageLoader;
+import com.ltmt5.fpoly_friend_app.model.Hobbies;
 import com.ltmt5.fpoly_friend_app.model.Profile;
 import com.ltmt5.fpoly_friend_app.ui.fragment.SwipeViewFragment;
 
-public class ProfileActivity extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+
+public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter.ItemClick {
+    ActivityProfileBinding binding;
+    Profile userProfileInfo;
+    List<Bitmap> bitmaps = new ArrayList<>();
+    Context context;
     private boolean swipeViewSource;
-    private ParallaxViewPager parallaxViewPager;
     private ImageLoader imageLoader;
-    private FloatingActionButton fab;
     private CardView profileImageCard;
+    HobbiesAdapter hobbiesAdapter;
 
     @SuppressLint({"RestrictedApi", "MissingInflatedId"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
+        binding = ActivityProfileBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        initView();
 //        imageLoader = App.getImageLoader();
 
-        Profile userProfileInfo = (Profile) getIntent().getExtras().getParcelable(SwipeViewFragment.EXTRA_USER_PROFILE);
+        userProfileInfo = (Profile) getIntent().getExtras().getParcelable(SwipeViewFragment.EXTRA_USER_PROFILE);
         swipeViewSource = getIntent().getExtras().getBoolean(SwipeViewFragment.EXTRA_SWIPE_VIEW_SOURCE);
-        parallaxViewPager = findViewById(R.id.parallax_viewpager);
-        TextView profileUsername = findViewById(R.id.profile_name);
-        profileUsername.setText(userProfileInfo.getName() + ", " + userProfileInfo.getAge());
 
-        TextView userDistance = findViewById(R.id.profile_about_distance);
-        userDistance.setText(userProfileInfo.getName() + " miles away");
+        binding.tvName.setText(userProfileInfo.getName());
+        binding.tvAge.setText( userProfileInfo.getAge()+"");
+        binding.tvDistance.setText("cách xa 5 km");
+
         profileImageCard = findViewById(R.id.user_swipe_card_view);
-        TextView description = findViewById(R.id.profile_description);
-        description.setText(userProfileInfo.getName());
-        if (!swipeViewSource) {
-            TextView matchValue = findViewById(R.id.profile_match_text_view);
-            matchValue.setText("match in " + userProfileInfo.getName() + "%!");
-            matchValue.setVisibility(View.VISIBLE);
-            ImageView profileMatchHeart = findViewById(R.id.profile_match_heart);
-            profileMatchHeart.setVisibility(View.VISIBLE);
-        }
-        fab = findViewById(R.id.profileFab);
-        if (!swipeViewSource) fab.setVisibility(View.VISIBLE);
+        binding.tvDescription.setText(userProfileInfo.getName());
 
-        fab.setOnClickListener(new View.OnClickListener() {
+//        if (!swipeViewSource) {
+//            TextView matchValue = findViewById(R.id.profile_match_text_view);
+//            matchValue.setText("match in " + 87 + "%!");
+//            matchValue.setVisibility(View.VISIBLE);
+//            binding.profileMatchHeart.setVisibility(View.VISIBLE);
+//        }
+
+        if (!swipeViewSource) binding.profileFab.setVisibility(View.VISIBLE);
+
+        binding.profileFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 onBackPressed();
-
             }
         });
 
@@ -107,6 +122,34 @@ public class ProfileActivity extends AppCompatActivity {
         initViewPager(userProfileInfo);
     }
 
+    private void initView() {
+        context = App.context;
+        for (Bitmap bitmap : Question6Activity.bitmapList) {
+            if (bitmap != null) {
+                bitmaps.add(bitmap);
+            }
+        }
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(this);
+        layoutManager.setFlexDirection(FlexDirection.ROW);
+        layoutManager.setJustifyContent(JustifyContent.CENTER);
+        layoutManager.setAlignItems(AlignItems.CENTER);
+        hobbiesAdapter = new HobbiesAdapter(getList(), this, this);
+        hobbiesAdapter.setData(getList());
+        binding.recHobbies.setLayoutManager(layoutManager);
+        binding.recHobbies.setAdapter(hobbiesAdapter);
+    }
+
+    List<Hobbies> getList() {
+        List<Hobbies> list = new ArrayList<>();
+        list.add(new Hobbies("Thế hệ 9x"));
+        list.add(new Hobbies("Harry Potter"));
+        list.add(new Hobbies("SoundCloud"));
+        list.add(new Hobbies("Spa"));
+        list.add(new Hobbies("Chăm sóc bản thân"));
+        list.add(new Hobbies("Heavy Metal"));
+        return list;
+    }
+
     private void initViewPager(final Profile userProfileInfo) {
         PagerAdapter adapter = new PagerAdapter() {
 
@@ -124,6 +167,8 @@ public class ProfileActivity extends AppCompatActivity {
             public Object instantiateItem(ViewGroup container, int position) {
                 View view = View.inflate(container.getContext(), R.layout.parallax_viewpager_item, null);
                 ImageView imageView = (ImageView) view.findViewById(R.id.item_img);
+//                Glide.with(context).load(bitmaps.get(position)).centerCrop().into(imageView);
+                Glide.with(context).load(userProfileInfo.getImageUrl()).centerCrop().into(imageView);
 //                imageLoader.downloadImage(userProfileInfo.parallax_viewpager_item.xml().get(position), imageView);
                 container.addView(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 return view;
@@ -131,29 +176,29 @@ public class ProfileActivity extends AppCompatActivity {
 
             @Override
             public int getCount() {
-//                return userProfileInfo.getPhotoLinks().size();
+//                return bitmaps.size();
                 return 1;
             }
         };
-        parallaxViewPager.setAdapter(adapter);
+        binding.parallaxViewpager.setAdapter(adapter);
     }
 
 
     @SuppressLint("RestrictedApi")
     private void showFab() {
-        fab.animate().cancel();
-        fab.setScaleX(0f);
-        fab.setScaleY(0f);
-        fab.setAlpha(0f);
-        fab.setVisibility(View.VISIBLE);
-        fab.animate().setDuration(200).scaleX(1).scaleY(1).alpha(1).setInterpolator(new LinearOutSlowInInterpolator());
+        binding.profileFab.animate().cancel();
+        binding.profileFab.setScaleX(0f);
+        binding.profileFab.setScaleY(0f);
+        binding.profileFab.setAlpha(0f);
+        binding.profileFab.setVisibility(View.VISIBLE);
+        binding.profileFab.animate().setDuration(200).scaleX(1).scaleY(1).alpha(1).setInterpolator(new LinearOutSlowInInterpolator());
     }
 
     @SuppressLint("RestrictedApi")
     private void hideFab() {
-        fab.animate().cancel();
-        fab.animate().setDuration(200).scaleX(0).scaleY(0).alpha(0).setInterpolator(new LinearOutSlowInInterpolator());
-        fab.setVisibility(View.GONE);
+        binding.profileFab.animate().cancel();
+        binding.profileFab.animate().setDuration(200).scaleX(0).scaleY(0).alpha(0).setInterpolator(new LinearOutSlowInInterpolator());
+        binding.profileFab.setVisibility(View.GONE);
     }
 
     @Override
@@ -161,5 +206,10 @@ public class ProfileActivity extends AppCompatActivity {
         super.onBackPressed();
         supportFinishAfterTransition();
         if (swipeViewSource) hideFab();
+    }
+
+    @Override
+    public void clickItem(Hobbies hobbies) {
+
     }
 }

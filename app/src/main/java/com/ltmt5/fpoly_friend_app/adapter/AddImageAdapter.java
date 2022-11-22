@@ -17,9 +17,9 @@ import com.ltmt5.fpoly_friend_app.databinding.ItemAddImageBinding;
 import java.util.List;
 
 public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.ViewHolder> {
-    private List<Bitmap> list;
     private final Context context;
     private final ItemClick itemClick;
+    private List<Bitmap> list;
 
     public AddImageAdapter(List<Bitmap> list, Context context, ItemClick itemClick) {
         this.list = list;
@@ -33,10 +33,6 @@ public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.ViewHo
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemAddImageBinding binding = ItemAddImageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(binding);
-    }
-
-    public interface ItemClick {
-        void clickItem(int position);
     }
 
     @Override
@@ -61,6 +57,12 @@ public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.ViewHo
         }
     }
 
+    public interface ItemClick {
+        void clickItem(int position);
+
+        void deleteItem(int position);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         ItemAddImageBinding binding;
 
@@ -77,8 +79,14 @@ public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.ViewHo
                 binding.imgAddImage.setImageResource(R.drawable.ic_add);
                 binding.btnDelete.setVisibility(View.GONE);
             }
+            binding.btnAddImage.setOnClickListener(view -> {
+                if (bitmap == null) {
+                    itemClick.clickItem(position);
+                }
+            });
+
             binding.btnDelete.setOnClickListener(v -> {
-                itemClick.clickItem(position);
+                itemClick.deleteItem(position);
             });
         }
     }
