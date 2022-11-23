@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PublicData {
+    public static String TEXT_WELCOME = "TEXT_WELCOME";
     public static String name;
     public static String date;
     public static String gender;

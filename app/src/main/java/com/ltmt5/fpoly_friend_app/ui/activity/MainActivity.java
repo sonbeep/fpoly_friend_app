@@ -1,9 +1,9 @@
 package com.ltmt5.fpoly_friend_app.ui.activity;
 
-import android.app.ActivityOptions;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
-import android.util.Pair;
-import android.view.View;
+import android.provider.MediaStore;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -15,23 +15,14 @@ import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityMainBinding;
 import com.ltmt5.fpoly_friend_app.ui.fragment.AddFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.ChatFragment;
-import com.ltmt5.fpoly_friend_app.ui.fragment.HomeFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.LoveFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.SwipeViewFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.UserFragment;
 
+import java.io.IOException;
+
 public class MainActivity extends AppCompatActivity {
     ActivityMainBinding binding;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        binding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        loadFragment(new SwipeViewFragment());
-    }
-
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = item -> {
         Fragment fragment;
@@ -59,6 +50,16 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     };
+    private FragmentActivity fragmentActivity;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        binding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        loadFragment(new SwipeViewFragment());
+    }
 
     private void loadFragment(Fragment fragment) {
         // load fragment
@@ -68,10 +69,18 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    private FragmentActivity fragmentActivity;
+    public void loadProfileActivity() {
 
-    public void loadProfileActivity(){
+    }
 
+    public Bitmap getBitmapFromUri(Uri uri) {
+        Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
     }
 
 }
