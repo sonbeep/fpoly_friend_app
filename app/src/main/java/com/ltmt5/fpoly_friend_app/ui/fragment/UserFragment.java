@@ -1,21 +1,23 @@
 package com.ltmt5.fpoly_friend_app.ui.fragment;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.adapter.SliderAdapter;
+import com.ltmt5.fpoly_friend_app.databinding.FragmentUserBinding;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
 import com.smarteist.autoimageslider.SliderView;
 
 public class UserFragment extends Fragment {
-    View rootLayout;
-    private SliderView sliderView;
+    FragmentUserBinding binding;
 
     public UserFragment() {
 
@@ -29,16 +31,34 @@ public class UserFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        rootLayout = inflater.inflate(R.layout.fragment_user, container, false);
-        sliderView = rootLayout.findViewById(R.id.slider_view);
+        binding = FragmentUserBinding.inflate(inflater);
 
         final SliderAdapter sliderAdapter = new SliderAdapter(getActivity());
-        sliderView.setSliderAdapter(sliderAdapter);
-        sliderView.setIndicatorAnimation(IndicatorAnimationType.SLIDE); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
-        sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
-        sliderView.setAutoCycleDirection(SliderView.AUTO_CYCLE_DIRECTION_RIGHT);
-        sliderView.startAutoCycle();
+        binding.sliderView.setSliderAdapter(sliderAdapter);
+        binding.sliderView.setIndicatorAnimation(IndicatorAnimationType.SLIDE); //set indicator animation by using SliderLayout.IndicatorAnimations. :WORM or THIN_WORM or COLOR or DROP or FILL or NONE or SCALE or SCALE_DOWN or SLIDE and SWAP!!
+        binding.sliderView.setSliderTransformAnimation(SliderAnimations.SIMPLETRANSFORMATION);
+        binding.sliderView.setAutoCycleDirection(binding.sliderView.AUTO_CYCLE_DIRECTION_RIGHT);
+        binding.sliderView.startAutoCycle();
+        setClick();
+        return binding.getRoot();
+    }
 
-        return rootLayout;
+    private void setClick() {
+        binding.tvVIP.setOnClickListener(view -> {
+            Toast.makeText(getActivity(), "Coming soon", Toast.LENGTH_SHORT).show();
+            Log.e("AAA","Coming soon");
+        });
+
+        binding.btnAdd.setOnClickListener(view -> {
+            Log.e("AAA","Add");
+        });
+
+        binding.btnUpdate.setOnClickListener(view -> {
+            Log.e("AAA","Update");
+        });
+
+        binding.btnSetting.setOnClickListener(view -> {
+            Log.e("AAA","Setting");
+        });
     }
 }
