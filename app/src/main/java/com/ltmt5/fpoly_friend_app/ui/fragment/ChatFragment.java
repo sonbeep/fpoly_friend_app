@@ -1,6 +1,7 @@
 package com.ltmt5.fpoly_friend_app.ui.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.ltmt5.fpoly_friend_app.adapter.RecentlyAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.FragmentChatBinding;
 import com.ltmt5.fpoly_friend_app.model.Chat;
 import com.ltmt5.fpoly_friend_app.ui.activity.MainActivity;
+import com.ltmt5.fpoly_friend_app.ui.activity.StoryActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +74,6 @@ public class ChatFragment extends Fragment implements ChatAdapter.ItemClick, Rec
 
     @Override
     public void clickItem(Chat chat) {
-
+        startActivity(new Intent(getActivity(), StoryActivity.class));
     }
 }
