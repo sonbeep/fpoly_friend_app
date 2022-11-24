@@ -16,45 +16,70 @@ public class UserProfile implements Parcelable {
             return new UserProfile[size];
         }
     };
-    private int id;
+    private int userId;
     private String name;
     private String image;
     private int age;
+    private int phoneNumber;
+    private String email;
     private String location;
     private String description;
     private String gender;
-    private String major;
+    private String education;
     private String hobbies;
+    private String zodiac;
+    private String personality;
+    private String sexualOrientation;
+    private String favoriteSong;
+    private String showPriority;
 
-    public UserProfile(String name, String image, int age, String location, String description, String gender, String major, String hobbies) {
+    public UserProfile(String name, String image, int age, int phoneNumber, String email, String location, String description, String gender, String education, String hobbies, String zodiac, String personality, String sexualOrientation, String favoriteSong, String showPriority) {
         this.name = name;
         this.image = image;
         this.age = age;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
         this.location = location;
         this.description = description;
         this.gender = gender;
-        this.major = major;
+        this.education = education;
         this.hobbies = hobbies;
+        this.zodiac = zodiac;
+        this.personality = personality;
+        this.sexualOrientation = sexualOrientation;
+        this.favoriteSong = favoriteSong;
+        this.showPriority = showPriority;
+    }
+
+
+    public UserProfile() {
     }
 
     protected UserProfile(Parcel in) {
-        id = in.readInt();
+        userId = in.readInt();
         name = in.readString();
         image = in.readString();
         age = in.readInt();
+        phoneNumber = in.readInt();
+        email = in.readString();
         location = in.readString();
         description = in.readString();
         gender = in.readString();
-        major = in.readString();
+        education = in.readString();
         hobbies = in.readString();
+        zodiac = in.readString();
+        personality = in.readString();
+        sexualOrientation = in.readString();
+        favoriteSong = in.readString();
+        showPriority = in.readString();
     }
 
-    public int getId() {
-        return id;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public String getName() {
@@ -81,6 +106,22 @@ public class UserProfile implements Parcelable {
         this.age = age;
     }
 
+    public int getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getLocation() {
         return location;
     }
@@ -105,12 +146,12 @@ public class UserProfile implements Parcelable {
         this.gender = gender;
     }
 
-    public String getMajor() {
-        return major;
+    public String getEducation() {
+        return education;
     }
 
-    public void setMajor(String major) {
-        this.major = major;
+    public void setEducation(String education) {
+        this.education = education;
     }
 
     public String getHobbies() {
@@ -121,6 +162,46 @@ public class UserProfile implements Parcelable {
         this.hobbies = hobbies;
     }
 
+    public String getZodiac() {
+        return zodiac;
+    }
+
+    public void setZodiac(String zodiac) {
+        this.zodiac = zodiac;
+    }
+
+    public String getPersonality() {
+        return personality;
+    }
+
+    public void setPersonality(String personality) {
+        this.personality = personality;
+    }
+
+    public String getSexualOrientation() {
+        return sexualOrientation;
+    }
+
+    public void setSexualOrientation(String sexualOrientation) {
+        this.sexualOrientation = sexualOrientation;
+    }
+
+    public String getFavoriteSong() {
+        return favoriteSong;
+    }
+
+    public void setFavoriteSong(String favoriteSong) {
+        this.favoriteSong = favoriteSong;
+    }
+
+    public String getShowPriority() {
+        return showPriority;
+    }
+
+    public void setShowPriority(String showPriority) {
+        this.showPriority = showPriority;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -128,14 +209,21 @@ public class UserProfile implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
+        parcel.writeInt(userId);
         parcel.writeString(name);
         parcel.writeString(image);
         parcel.writeInt(age);
+        parcel.writeInt(phoneNumber);
+        parcel.writeString(email);
         parcel.writeString(location);
         parcel.writeString(description);
         parcel.writeString(gender);
-        parcel.writeString(major);
+        parcel.writeString(education);
         parcel.writeString(hobbies);
+        parcel.writeString(zodiac);
+        parcel.writeString(personality);
+        parcel.writeString(sexualOrientation);
+        parcel.writeString(favoriteSong);
+        parcel.writeString(showPriority);
     }
 }

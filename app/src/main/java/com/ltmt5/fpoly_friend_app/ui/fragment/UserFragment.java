@@ -1,5 +1,6 @@
 package com.ltmt5.fpoly_friend_app.ui.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,12 +13,15 @@ import androidx.fragment.app.Fragment;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.adapter.SliderAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.FragmentUserBinding;
+import com.ltmt5.fpoly_friend_app.ui.activity.MainActivity;
+import com.ltmt5.fpoly_friend_app.ui.activity.SettingActivity;
+import com.ltmt5.fpoly_friend_app.ui.activity.UpdateProfileActivity;
 import com.smarteist.autoimageslider.IndicatorView.animation.type.IndicatorAnimationType;
 import com.smarteist.autoimageslider.SliderAnimations;
-import com.smarteist.autoimageslider.SliderView;
 
 public class UserFragment extends Fragment {
     FragmentUserBinding binding;
+    MainActivity mainActivity;
 
     public UserFragment() {
 
@@ -32,6 +36,7 @@ public class UserFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentUserBinding.inflate(inflater);
+        mainActivity = (MainActivity) getActivity();
 
         final SliderAdapter sliderAdapter = new SliderAdapter(getActivity());
         binding.sliderView.setSliderAdapter(sliderAdapter);
@@ -46,19 +51,19 @@ public class UserFragment extends Fragment {
     private void setClick() {
         binding.tvVIP.setOnClickListener(view -> {
             Toast.makeText(getActivity(), "Coming soon", Toast.LENGTH_SHORT).show();
-            Log.e("AAA","Coming soon");
+            Log.e("AAA", "Coming soon");
         });
 
         binding.btnAdd.setOnClickListener(view -> {
-            Log.e("AAA","Add");
+            mainActivity.loadFragment(new AddFragment(), R.id.navigation_add);
         });
 
         binding.btnUpdate.setOnClickListener(view -> {
-            Log.e("AAA","Update");
+            startActivity(new Intent(getActivity(), UpdateProfileActivity.class));
         });
 
         binding.btnSetting.setOnClickListener(view -> {
-            Log.e("AAA","Setting");
+            startActivity(new Intent(getActivity(), SettingActivity.class));
         });
     }
 }

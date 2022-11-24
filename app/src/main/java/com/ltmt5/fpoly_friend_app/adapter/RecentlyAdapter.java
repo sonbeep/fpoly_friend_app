@@ -48,6 +48,7 @@ public class RecentlyAdapter extends RecyclerView.Adapter<RecentlyAdapter.ViewHo
         notifyDataSetChanged();
     }
 
+
     @Override
     public int getItemCount() {
         return list.size();
@@ -64,6 +65,9 @@ public class RecentlyAdapter extends RecyclerView.Adapter<RecentlyAdapter.ViewHo
         public void bindData(Chat chat) {
             int drawableId = context.getResources().getIdentifier(chat.getAvatar(), "drawable", context.getPackageName());
             binding.imgAvatar.setImageResource(drawableId);
+            binding.imgAvatar.setOnClickListener(view -> {
+                itemClick.clickItem(chat);
+            });
         }
     }
 }

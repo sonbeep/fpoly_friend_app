@@ -41,6 +41,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
+    implementation project(':library')
+
     //quẹt
     implementation 'com.github.Yalantis:Koloda-Android:v0.0.2-alpha'
     implementation 'com.github.smarteist:autoimageslider:1.4.0'

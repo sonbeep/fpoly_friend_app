@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         loadFragment(new SwipeViewFragment());
     }
 
-    private void loadFragment(Fragment fragment) {
+    public void loadFragment(Fragment fragment) {
         // load fragment
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(binding.fcvMain.getId(), fragment);
@@ -69,7 +69,19 @@ public class MainActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    public void loadFragment(Fragment fragment,int id) {
+        // load fragment
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(binding.fcvMain.getId(), fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+        binding.navigation.setSelectedItemId(id);
+    }
+
     public void loadProfileActivity() {
+
+    }
+    public void loadNav() {
 
     }
 
