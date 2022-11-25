@@ -1,5 +1,6 @@
 package com.ltmt5.fpoly_friend_app.ui.fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,8 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.adapter.SliderAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.FragmentUserBinding;
@@ -22,6 +25,7 @@ import com.smarteist.autoimageslider.SliderAnimations;
 public class UserFragment extends Fragment {
     FragmentUserBinding binding;
     MainActivity mainActivity;
+    Context context;
 
     public UserFragment() {
 
@@ -37,6 +41,7 @@ public class UserFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentUserBinding.inflate(inflater);
         mainActivity = (MainActivity) getActivity();
+        context = App.context;
 
         final SliderAdapter sliderAdapter = new SliderAdapter(getActivity());
         binding.sliderView.setSliderAdapter(sliderAdapter);
@@ -45,7 +50,15 @@ public class UserFragment extends Fragment {
         binding.sliderView.setAutoCycleDirection(binding.sliderView.AUTO_CYCLE_DIRECTION_RIGHT);
         binding.sliderView.startAutoCycle();
         setClick();
+        initView();
         return binding.getRoot();
+    }
+
+    private void initView() {
+        if (mainActivity.profile != null) {
+            binding.tvName.setText(mainActivity.profile.getName());
+            Glide.with(context).load(mainActivity.profile.getImageUrl()).error(R.drawable.demo).centerCrop().into(binding.profileImage);
+        }
     }
 
     private void setClick() {

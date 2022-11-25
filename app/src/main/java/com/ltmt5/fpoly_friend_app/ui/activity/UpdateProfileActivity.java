@@ -1,23 +1,33 @@
 package com.ltmt5.fpoly_friend_app.ui.activity;
 
+import static com.ltmt5.fpoly_friend_app.App.TAG;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.ltmt5.fpoly_friend_app.App;
@@ -39,6 +49,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
     File fileCamera;
     Context context;
     private Uri cameraUri;
+    ProgressDialog progressDialog;
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @SuppressLint("NotifyDataSetChanged")
         @Override
@@ -85,15 +96,39 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
         }
         addImageAdapter = new AddImageAdapter(bitmapList, context, this);
         binding.recAddImage.setAdapter(addImageAdapter);
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...");
     }
 
     private void setClick() {
         binding.btnNext.setOnClickListener(v -> {
 //            if (checkBitmap()) {
 //            }
-            onBackPressed();
+            handleNextClick();
         });
         binding.btnBack.setOnClickListener(view -> onBackPressed());
+    }
+
+    private void handleNextClick() {
+        progressDialog.show();
+        String name = binding.edName.getText().toString().trim();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .build();
+
+        user.updateProfile(profileUpdates)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        progressDialog.dismiss();
+                        if (task.isSuccessful()) {
+                            Log.e(TAG, "User profile updated.");
+                        }
+                    }
+                });
     }
 
     @Override

@@ -22,6 +22,12 @@ public class Profile implements Parcelable {
     @SerializedName("location")
     private String location;
 
+    public Profile(String name, String imageUrl, String location) {
+        this.name = name;
+        this.imageUrl = imageUrl;
+        this.location = location;
+    }
+
     protected Profile(Parcel in) {
         name = in.readString();
         imageUrl = in.readString();
