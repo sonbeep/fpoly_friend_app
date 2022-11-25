@@ -15,6 +15,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.databinding.FragmentSwipeViewBinding;
 import com.ltmt5.fpoly_friend_app.help.UtilsMode;
@@ -52,29 +53,11 @@ public class SwipeViewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initalizeView();
+        initView();
+        setClick();
+    }
 
-        mContext = getActivity();
-
-        int bottomMargin = UtilsMode.dpToPx(0);
-        Point windowSize = UtilsMode.getDisplaySize(getActivity().getWindowManager());
-        binding.swipeView.getBuilder()
-                .setDisplayViewCount(3)
-                .setSwipeDecor(new SwipeDecor()
-                        .setViewWidth(windowSize.x)
-                        .setViewHeight(windowSize.y - bottomMargin)
-                        .setViewGravity(Gravity.TOP)
-                        .setPaddingTop(20)
-                        .setRelativeScale(0.01f)
-                        .setSwipeInMsgLayoutId(R.layout.tinder_swipe_in_msg_view)
-                        .setSwipeOutMsgLayoutId(R.layout.tinder_swipe_out_msg_view));
-
-
-        for (Profile profile : profileList) {
-            binding.swipeView.addView(new TinderCard(mContext, profile, binding.swipeView));
-        }
-
-
+    private void setClick() {
         binding.btnSkip.setOnClickListener(v -> {
             animateFab(binding.btnSkip);
             binding.swipeView.doSwipe(false);
@@ -105,9 +88,28 @@ public class SwipeViewFragment extends Fragment {
         return intent;
     }
 
-    private void initalizeView() {
+    private void initView() {
+        mContext = App.context;
         mainActivity = (MainActivity) getActivity();
         profileList = UtilsMode.loadProfiles(getActivity());
+
+        int bottomMargin = UtilsMode.dpToPx(0);
+        Point windowSize = UtilsMode.getDisplaySize(getActivity().getWindowManager());
+        binding.swipeView.getBuilder()
+                .setDisplayViewCount(3)
+                .setSwipeDecor(new SwipeDecor()
+                        .setViewWidth(windowSize.x)
+                        .setViewHeight(windowSize.y - bottomMargin)
+                        .setViewGravity(Gravity.TOP)
+                        .setPaddingTop(20)
+                        .setRelativeScale(0.01f)
+                        .setSwipeInMsgLayoutId(R.layout.tinder_swipe_in_msg_view)
+                        .setSwipeOutMsgLayoutId(R.layout.tinder_swipe_out_msg_view));
+
+
+        for (Profile profile : profileList) {
+            binding.swipeView.addView(new TinderCard(mContext, profile, binding.swipeView));
+        }
     }
 
 
