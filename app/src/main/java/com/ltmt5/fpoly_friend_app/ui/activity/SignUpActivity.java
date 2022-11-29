@@ -17,6 +17,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.ltmt5.fpoly_friend_app.databinding.ActivitySignUpBinding;
+import com.ltmt5.fpoly_friend_app.ui.dialog.SignUpDialog;
 
 public class SignUpActivity extends AppCompatActivity {
     ActivitySignUpBinding binding;
@@ -37,18 +38,33 @@ public class SignUpActivity extends AppCompatActivity {
         binding.btnSignUp.setOnClickListener(view -> {
             String email = binding.edUsername.getText().toString().trim();
             String password = binding.edPassword.getText().toString().trim();
-            String phoneNumber = binding.edPhoneNumber.getText().toString().trim();
-            handleSignUpClick(email, password);
+//            if(validate(email,password)){
+                handleSignUpClick(email, password);
+//            }
         });
         binding.btnBack.setOnClickListener(view -> onBackPressed());
     }
 
+    private boolean validate(String email, String password) {
+        boolean isDone = true;
+        String emailPattern = "[a-zA-Z0-9._-]+@fpt.edu.vn";
+        if (email.equals("") || password.equals("")) {
+            Toast.makeText(this, "Email, password không được để trống", Toast.LENGTH_SHORT).show();
+            isDone = false;
+        }
+        if (password.length() < 8) {
+            Toast.makeText(this, "Password quá ngắn", Toast.LENGTH_SHORT).show();
+            isDone = false;
+        }
+        if (!email.matches(emailPattern)) {
+            Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
+            isDone = false;
+        }
+        return isDone;
+    }
+
     private void initView() {
         mAuth = FirebaseAuth.getInstance();
-//        FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if(currentUser != null){
-//            reload();
-//        }
 
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
@@ -66,22 +82,31 @@ public class SignUpActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            updateUI();
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-//                            updateUI(null);
                         }
                     }
                 });
     }
 
-    private void updateUI(FirebaseUser user) {
-        Intent intent = new Intent(this, MainActivity.class);
-//        intent.putExtra("user", user.getEmail());
-        startActivity(intent);
+    private void updateUI() {
+        SignUpDialog signUpDialog = SignUpDialog.newInstance();
+        signUpDialog.showAllowingStateLoss(getSupportFragmentManager(), "back");
+        signUpDialog.setOnClickListener(new SignUpDialog.OnClickListener() {
+
+            @Override
+            public void onApply() {
+                startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
     }
 }
