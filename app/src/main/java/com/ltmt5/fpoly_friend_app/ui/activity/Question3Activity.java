@@ -22,7 +22,8 @@ public class Question3Activity extends AppCompatActivity {
         binding.btnNext.setOnClickListener(v -> {
 //            if (!mGender.equals("none")) {
 //                PublicData.gender = mGender;
-                startActivity(new Intent(this, Question4Activity.class));
+            PublicData.profileTemp.setGender(mGender);
+            startActivity(new Intent(this, Question4Activity.class));
 //            }
         });
         binding.btnMale.setOnClickListener(v -> {

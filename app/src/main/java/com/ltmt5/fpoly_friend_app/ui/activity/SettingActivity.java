@@ -48,8 +48,8 @@ public class SettingActivity extends AppCompatActivity {
         });
         binding.btnDelete.setOnClickListener(view -> {
             progressDialog.show();
-            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-
+              user = FirebaseAuth.getInstance().getCurrentUser();
+            assert user != null;
             user.delete()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
@@ -63,4 +63,5 @@ public class SettingActivity extends AppCompatActivity {
                     });
         });
     }
+    FirebaseUser user;
 }

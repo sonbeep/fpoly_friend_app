@@ -32,6 +32,7 @@ import com.ltmt5.fpoly_friend_app.databinding.ActivityProfileBinding;
 import com.ltmt5.fpoly_friend_app.help.ImageLoader;
 import com.ltmt5.fpoly_friend_app.model.Hobbies;
 import com.ltmt5.fpoly_friend_app.model.Profile;
+import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.fragment.SwipeViewFragment;
 
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ import java.util.List;
 
 public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter.ItemClick {
     ActivityProfileBinding binding;
-    Profile userProfileInfo;
+    UserProfile userProfileInfo;
     List<Bitmap> bitmaps = new ArrayList<>();
     Context context;
     private boolean swipeViewSource;
@@ -54,10 +55,31 @@ public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter
         binding = ActivityProfileBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         initView();
-//        imageLoader = App.getImageLoader();
+    }
 
-        userProfileInfo = (Profile) getIntent().getExtras().getParcelable(SwipeViewFragment.EXTRA_USER_PROFILE);
-        swipeViewSource = getIntent().getExtras().getBoolean(SwipeViewFragment.EXTRA_SWIPE_VIEW_SOURCE);
+    private void initView() {
+        context = App.context;
+//        for (Bitmap bitmap : Question6Activity.bitmapList) {
+//            if (bitmap != null) {
+//                bitmaps.add(bitmap);
+//            }
+//        }
+        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(this);
+        layoutManager.setFlexDirection(FlexDirection.ROW);
+        layoutManager.setJustifyContent(JustifyContent.CENTER);
+        layoutManager.setAlignItems(AlignItems.CENTER);
+        hobbiesAdapter = new HobbiesAdapter(getList(), this, this);
+        binding.recHobbies.setLayoutManager(layoutManager);
+        binding.recHobbies.setAdapter(hobbiesAdapter);
+
+        //        imageLoader = App.getImageLoader();
+
+//        userProfileInfo = (UserProfile) getIntent().getExtras().getParcelable(SwipeViewFragment.EXTRA_USER_PROFILE);
+//        swipeViewSource = getIntent().getExtras().getBoolean(SwipeViewFragment.EXTRA_SWIPE_VIEW_SOURCE);
+
+        userProfileInfo = SwipeViewFragment.mProfile;
+        swipeViewSource = true;
+
 
         binding.tvName.setText(userProfileInfo.getName());
         binding.tvAge.setText( userProfileInfo.getAge()+"");
@@ -65,6 +87,8 @@ public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter
 
         profileImageCard = findViewById(R.id.user_swipe_card_view);
         binding.tvDescription.setText(userProfileInfo.getName());
+
+        hobbiesAdapter.setData(getList());
 
 //        if (!swipeViewSource) {
 //            TextView matchValue = findViewById(R.id.profile_match_text_view);
@@ -122,23 +146,6 @@ public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter
         initViewPager(userProfileInfo);
     }
 
-    private void initView() {
-        context = App.context;
-        for (Bitmap bitmap : Question6Activity.bitmapList) {
-            if (bitmap != null) {
-                bitmaps.add(bitmap);
-            }
-        }
-        FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(this);
-        layoutManager.setFlexDirection(FlexDirection.ROW);
-        layoutManager.setJustifyContent(JustifyContent.CENTER);
-        layoutManager.setAlignItems(AlignItems.CENTER);
-        hobbiesAdapter = new HobbiesAdapter(getList(), this, this);
-        hobbiesAdapter.setData(getList());
-        binding.recHobbies.setLayoutManager(layoutManager);
-        binding.recHobbies.setAdapter(hobbiesAdapter);
-    }
-
     List<Hobbies> getList() {
         List<Hobbies> list = new ArrayList<>();
         list.add(new Hobbies("Thế hệ 9x"));
@@ -150,7 +157,7 @@ public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter
         return list;
     }
 
-    private void initViewPager(final Profile userProfileInfo) {
+    private void initViewPager(final UserProfile userProfileInfo) {
         PagerAdapter adapter = new PagerAdapter() {
 
             @Override
@@ -168,7 +175,7 @@ public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter
                 View view = View.inflate(container.getContext(), R.layout.parallax_viewpager_item, null);
                 ImageView imageView = (ImageView) view.findViewById(R.id.item_img);
 //                Glide.with(context).load(bitmaps.get(position)).centerCrop().into(imageView);
-                Glide.with(context).load(userProfileInfo.getImageUrl()).centerCrop().into(imageView);
+                Glide.with(context).load(userProfileInfo.getAvt()).centerCrop().into(imageView);
 //                imageLoader.downloadImage(userProfileInfo.parallax_viewpager_item.xml().get(position), imageView);
                 container.addView(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 return view;

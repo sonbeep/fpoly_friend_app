@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.ltmt5.fpoly_friend_app.databinding.ActivityQuestion1Binding;
+import com.ltmt5.fpoly_friend_app.help.PublicData;
 
 public class Question1Activity extends AppCompatActivity {
     ActivityQuestion1Binding binding;
@@ -18,7 +19,8 @@ public class Question1Activity extends AppCompatActivity {
         setContentView(binding.getRoot());
         binding.btnNext.setOnClickListener(v -> {
 //            if (validate()) {
-                startActivity(new Intent(this, Question2Activity.class));
+            PublicData.profileTemp.setName(binding.ed1.getText().toString().trim());
+            startActivity(new Intent(this, Question2Activity.class));
 //            }
         });
     }

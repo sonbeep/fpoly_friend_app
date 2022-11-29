@@ -1,9 +1,78 @@
 package com.ltmt5.fpoly_friend_app.model;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.List;
+
 public class UserProfile implements Parcelable {
+
+    private int userId;
+    private String name;
+    private int age;
+    private String gender;
+    private String education;
+    private List<String> hobbies;
+    private List<String> image;
+
+    private String description;
+    private String location;
+    private String zodiac;
+    private String personality;
+    private String sexualOrientation;
+    private String favoriteSong;
+    private String showPriority;
+
+    private Bitmap avt;
+
+
+    public UserProfile() {
+    }
+
+
+    public UserProfile(String name, int age, String gender, String education, List<String> hobbies, List<String> image, String description, String location, String zodiac, String personality, String sexualOrientation, String favoriteSong, String showPriority) {
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.education = education;
+        this.hobbies = hobbies;
+        this.image = image;
+        this.description = description;
+        this.location = location;
+        this.zodiac = zodiac;
+        this.personality = personality;
+        this.sexualOrientation = sexualOrientation;
+        this.favoriteSong = favoriteSong;
+        this.showPriority = showPriority;
+    }
+
+    public UserProfile(String name, int age, String gender, String education, List<String> hobbies, List<String> image) {
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.education = education;
+        this.hobbies = hobbies;
+        this.image = image;
+    }
+
+    protected UserProfile(Parcel in) {
+        userId = in.readInt();
+        name = in.readString();
+        age = in.readInt();
+        gender = in.readString();
+        education = in.readString();
+        hobbies = in.createStringArrayList();
+        image = in.createStringArrayList();
+        description = in.readString();
+        location = in.readString();
+        zodiac = in.readString();
+        personality = in.readString();
+        sexualOrientation = in.readString();
+        favoriteSong = in.readString();
+        showPriority = in.readString();
+        avt = in.readParcelable(Bitmap.class.getClassLoader());
+    }
 
     public static final Creator<UserProfile> CREATOR = new Creator<UserProfile>() {
         @Override
@@ -16,63 +85,6 @@ public class UserProfile implements Parcelable {
             return new UserProfile[size];
         }
     };
-    private int userId;
-    private String name;
-    private String image;
-    private int age;
-    private int phoneNumber;
-    private String email;
-    private String location;
-    private String description;
-    private String gender;
-    private String education;
-    private String hobbies;
-    private String zodiac;
-    private String personality;
-    private String sexualOrientation;
-    private String favoriteSong;
-    private String showPriority;
-
-    public UserProfile(String name, String image, int age, int phoneNumber, String email, String location, String description, String gender, String education, String hobbies, String zodiac, String personality, String sexualOrientation, String favoriteSong, String showPriority) {
-        this.name = name;
-        this.image = image;
-        this.age = age;
-        this.phoneNumber = phoneNumber;
-        this.email = email;
-        this.location = location;
-        this.description = description;
-        this.gender = gender;
-        this.education = education;
-        this.hobbies = hobbies;
-        this.zodiac = zodiac;
-        this.personality = personality;
-        this.sexualOrientation = sexualOrientation;
-        this.favoriteSong = favoriteSong;
-        this.showPriority = showPriority;
-    }
-
-
-    public UserProfile() {
-    }
-
-    protected UserProfile(Parcel in) {
-        userId = in.readInt();
-        name = in.readString();
-        image = in.readString();
-        age = in.readInt();
-        phoneNumber = in.readInt();
-        email = in.readString();
-        location = in.readString();
-        description = in.readString();
-        gender = in.readString();
-        education = in.readString();
-        hobbies = in.readString();
-        zodiac = in.readString();
-        personality = in.readString();
-        sexualOrientation = in.readString();
-        favoriteSong = in.readString();
-        showPriority = in.readString();
-    }
 
     public int getUserId() {
         return userId;
@@ -90,52 +102,12 @@ public class UserProfile implements Parcelable {
         this.name = name;
     }
 
-    public String getImage() {
-        return image;
-    }
-
-    public void setImage(String image) {
-        this.image = image;
-    }
-
     public int getAge() {
         return age;
     }
 
     public void setAge(int age) {
         this.age = age;
-    }
-
-    public int getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(int phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getLocation() {
-        return location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String getGender() {
@@ -154,12 +126,36 @@ public class UserProfile implements Parcelable {
         this.education = education;
     }
 
-    public String getHobbies() {
+    public List<String> getHobbies() {
         return hobbies;
     }
 
-    public void setHobbies(String hobbies) {
+    public void setHobbies(List<String> hobbies) {
         this.hobbies = hobbies;
+    }
+
+    public List<String> getImage() {
+        return image;
+    }
+
+    public void setImage(List<String> image) {
+        this.image = image;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getZodiac() {
@@ -211,19 +207,26 @@ public class UserProfile implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(userId);
         parcel.writeString(name);
-        parcel.writeString(image);
         parcel.writeInt(age);
-        parcel.writeInt(phoneNumber);
-        parcel.writeString(email);
-        parcel.writeString(location);
-        parcel.writeString(description);
         parcel.writeString(gender);
         parcel.writeString(education);
-        parcel.writeString(hobbies);
+        parcel.writeStringList(hobbies);
+        parcel.writeStringList(image);
+        parcel.writeString(description);
+        parcel.writeString(location);
         parcel.writeString(zodiac);
         parcel.writeString(personality);
         parcel.writeString(sexualOrientation);
         parcel.writeString(favoriteSong);
         parcel.writeString(showPriority);
+        parcel.writeParcelable(avt, i);
+    }
+
+    public Bitmap getAvt() {
+        return avt;
+    }
+
+    public void setAvt(Bitmap avt) {
+        this.avt = avt;
     }
 }

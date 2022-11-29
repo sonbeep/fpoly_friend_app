@@ -2,12 +2,16 @@ package com.ltmt5.fpoly_friend_app.ui.activity;
 
 import static com.ltmt5.fpoly_friend_app.App.TAG;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,20 +23,31 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityMainBinding;
 import com.ltmt5.fpoly_friend_app.model.Profile;
+import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.fragment.AddFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.ChatFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.LoveFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.SwipeViewFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.UserFragment;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    public static List<UserProfile> userProfiles = new ArrayList<>();
     public Profile profile;
+    public UserProfile userProfile;
     ActivityMainBinding binding;
     private final BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = item -> {
@@ -61,8 +76,11 @@ public class MainActivity extends AppCompatActivity {
         }
         return false;
     };
+    FirebaseDatabase database;
+    FirebaseUser user;
     String phoneNumber;
     String id;
+    SwipeViewFragment swipeViewFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +93,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void intitView() {
+        database = FirebaseDatabase.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        swipeViewFragment = new SwipeViewFragment();
+        getUserProfile();
+        getAllUserProfile();
+
         binding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-        loadFragment(new SwipeViewFragment());
+        loadFragment(swipeViewFragment);
 
 
         FirebaseMessaging.getInstance().getToken()
@@ -138,12 +162,11 @@ public class MainActivity extends AppCompatActivity {
     private void getUserInfo() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user == null) {
-            Log.e(TAG,"null");
+            Log.e(TAG, "null");
             return;
         }
-        Log.e(TAG,"name: "+user.getDisplayName());
         String name = user.getDisplayName();
-        Log.d(TAG,"id: "+user.getUid());
+        Log.d(TAG, "id: " + user.getUid());
         String email = user.getEmail();
         Uri photoUrl = user.getPhotoUrl();
         if (photoUrl != null) {
@@ -153,7 +176,60 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void getUserProfile() {
+        DatabaseReference myRef = database.getReference("user_profile/" + user.getUid());
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userProfile = snapshot.getValue(UserProfile.class);
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(MainActivity.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void getAllUserProfile() {
+        ProgressDialog dialog = new ProgressDialog(MainActivity.this);
+        dialog.setCancelable(false);
+        dialog.setMessage("Loading...");
+        dialog.show();
+        DatabaseReference myRef = database.getReference("user_profile/");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                    if (userProfile != null) {
+                        userProfile.setAvt(getBitmapFromArray(userProfile.getImage().get(0)));
+                        userProfiles.add(userProfile);
+                    }
+                }
+                SwipeViewFragment.userProfileList = userProfiles;
+                swipeViewFragment.setUpSwipeView();
+                dialog.dismiss();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(MainActivity.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public String convertBitmapToArray(Bitmap bm) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
+        byte[] b = baos.toByteArray();
+        return Base64.encodeToString(b, Base64.DEFAULT);
+    }
+
+    public Bitmap getBitmapFromArray(String encoded) {
+        byte[] imageAsBytes = Base64.decode(encoded.getBytes(), Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+    }
 
 
 }

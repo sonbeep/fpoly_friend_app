@@ -1,7 +1,10 @@
 package com.ltmt5.fpoly_friend_app.ui.fragment;
 
+import static com.ltmt5.fpoly_friend_app.App.TAG;
+
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +19,7 @@ import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.adapter.SliderAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.FragmentUserBinding;
+import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.activity.MainActivity;
 import com.ltmt5.fpoly_friend_app.ui.activity.SettingActivity;
 import com.ltmt5.fpoly_friend_app.ui.activity.UpdateProfileActivity;
@@ -54,10 +58,17 @@ public class UserFragment extends Fragment {
         return binding.getRoot();
     }
 
+    UserProfile userProfile;
     private void initView() {
-        if (mainActivity.profile != null) {
-            binding.tvName.setText(mainActivity.profile.getName());
-            Glide.with(context).load(mainActivity.profile.getImageUrl()).error(R.drawable.demo).centerCrop().into(binding.profileImage);
+        userProfile = mainActivity.userProfile;
+        if (userProfile != null) {
+            Bitmap bitmap = mainActivity.getBitmapFromArray(userProfile.getImage().get(0));
+            binding.tvName.setText(userProfile.getName());
+//            Glide.with(context).load(mainActivity.profile.getImageUrl()).error(R.drawable.demo).centerCrop().into(binding.profileImage);
+            Glide.with(context).load(bitmap).centerCrop().into(binding.profileImage);
+        }
+        else {
+            Log.e(TAG,"null");
         }
     }
 

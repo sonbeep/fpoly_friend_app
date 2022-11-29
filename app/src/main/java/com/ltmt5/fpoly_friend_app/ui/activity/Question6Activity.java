@@ -3,11 +3,16 @@ package com.ltmt5.fpoly_friend_app.ui.activity;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -17,22 +22,27 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
+import com.google.gson.Gson;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.ltmt5.fpoly_friend_app.BuildConfig;
 import com.ltmt5.fpoly_friend_app.adapter.AddImageAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityQuestion6Binding;
+import com.ltmt5.fpoly_friend_app.help.PublicData;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
 public class Question6Activity extends AppCompatActivity implements AddImageAdapter.ItemClick {
 
     public static int positionAdd = 0;
-    ActivityQuestion6Binding binding;
     public static List<Bitmap> bitmapList = new ArrayList<>();
+    ActivityQuestion6Binding binding;
     AddImageAdapter addImageAdapter;
     File fileCamera;
     private Uri cameraUri;
@@ -82,9 +92,30 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
     }
 
     private void setClick() {
+        ProgressDialog dialog= new ProgressDialog(this);
+        dialog.setCancelable(false);
+        dialog.setMessage("Loading...");
+
+
         binding.btnNext.setOnClickListener(v -> {
 //            if (checkBitmap()) {
-                startActivity(new Intent(this, WelcomeActivity.class));
+            dialog.show();
+            List<String> list = new ArrayList<>();
+
+            Executor executor = Executors.newSingleThreadExecutor();
+            Handler handler = new Handler(Looper.getMainLooper());
+            executor.execute(() -> {
+                for (Bitmap bitmap:bitmapList){
+                    if (bitmap!=null){
+                        list.add(convertBitmapToArray(bitmap));
+                    }
+                }
+                handler.post(() -> {
+                    dialog.dismiss();
+                    PublicData.profileTemp.setImage(list);
+                    startActivity(new Intent(this, WelcomeActivity.class));
+                });
+            });
 //            }
         });
     }
@@ -104,6 +135,18 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
             }
         }).setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]").setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE).check();
 
+    }
+
+    public String convertBitmapToArray(Bitmap bm) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
+        byte[] b = baos.toByteArray();
+        return Base64.encodeToString(b, Base64.DEFAULT);
+    }
+
+    public Bitmap getBitmapFromArray(String encoded) {
+        byte[] imageAsBytes = Base64.decode(encoded.getBytes(), Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
 
     private Uri createCameraUri() {
