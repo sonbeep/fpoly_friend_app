@@ -27,17 +27,17 @@
     <string name="title_slider_1">Lượt tăng tốc</string>
     <string name="description_slider_1">Đẩy hồ sơ của bạn lên khu vực trong 30 phút để được tương tác nhiều hơn</string>
 
-    <string name="title_slider_2">Mua Tinder Gold</string>
+    <string name="title_slider_2">Mua Fpoly Friend Gold</string>
     <string name="description_slider_2">Xem ai thích bạn và nhiều thứ khác</string>
 
-    <string name="title_slider_3">Tinder Platinum</string>
-    <string name="description_slider_3">Nâng cấp mọi hoạt động của bạn trên Tinder</string>
+    <string name="title_slider_3">Fpoly Friend Platinum</string>
+    <string name="description_slider_3">Nâng cấp mọi hoạt động của bạn trên Fpoly Friend</string>
 
-    <string name="title_slider_4">Tinder Plus</string>
+    <string name="title_slider_4">Fpoly Friend Plus</string>
     <string name="description_slider_4">Nhận lượt thích vô hạn,Hộ Chiếu và nhiều thứ khác</string>
 
     <string name="title_slider_5">Nâng cấp trải nghiệm hẹn hò của bạn</string>
-    <string name="description_slider_5">Mở khóa các tính năng hay nhất của Tinder</string>
+    <string name="description_slider_5">Mở khóa các tính năng hay nhất của Fpoly Friend</string>
     <string name="k_t_n_i_v_i_b_n_b">Kết nối với bạn bè</string>
     <string name="k_t_n_i_v_i_b_n_b_em_l_i_c_m_gi_c_g_n_g_i_v_an_to_n">Kết nối với bạn bè \nđem lại cảm giác gần gũi và an toàn</string>
     <string name="k_t_b_n_m_i_m_t_c_ch_d_d_ng">Kết bạn mới \nmột cách dễ dàng</string>
@@ -81,4 +81,8 @@
     <string name="th_m_nh">Thêm ảnh</string>
     <string name="gi_i_thi_u_b_n_th_n">Giới thiệu bản thân</string>
     <string name="s_th_ch_c_a_t_i">Sở thích của tôi</string>
+    <string name="qu_n_m_t_kh_u">Quên mật khẩu</string>
+    <string name="kh_ng_nh_n_c_m">Không nhận được mã ?</string>
+    <string name="g_i_l_i_m">Gửi lại mã</string>
+    <string name="n_p_ti_n_n_o">Nạp tiền nào</string>
 </resources>

@@ -6,8 +6,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ltmt5.fpoly_friend_app.databinding.ActivityQuestion2Binding;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityQuestion4Binding;
+import com.ltmt5.fpoly_friend_app.help.PublicData;
 
 public class Question4Activity extends AppCompatActivity {
     ActivityQuestion4Binding binding;
@@ -19,7 +19,8 @@ public class Question4Activity extends AppCompatActivity {
         setContentView(binding.getRoot());
         binding.btnNext.setOnClickListener(v -> {
 //            if (validate()) {
-                startActivity(new Intent(this, Question5Activity.class));
+            PublicData.profileTemp.setEducation(binding.ed1.getText().toString().trim());
+            startActivity(new Intent(this, Question5Activity.class));
 //            }
         });
     }

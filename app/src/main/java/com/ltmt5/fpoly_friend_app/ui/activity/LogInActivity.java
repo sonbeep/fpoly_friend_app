@@ -6,7 +6,8 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.ltmt5.fpoly_friend_app.App;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityLogInBinding;
 
 public class LogInActivity extends AppCompatActivity {
@@ -17,15 +18,19 @@ public class LogInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLogInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        if (App.sharePref.isSignIn()) {
-            startActivity(new Intent(this, MainActivity.class));
-        } else {
-            binding.btnLogIn.setOnClickListener(v -> startActivity(new Intent(this, PermissionActivity.class)));
-            binding.btnSignUp.setOnClickListener(v -> startActivity(new Intent(this, SignUpActivity.class)));
-            binding.btnError.setOnClickListener(v -> {
-                Toast.makeText(this, "Kệ người dùng", Toast.LENGTH_SHORT).show();
-            });
-        }
+        initView();
+        binding.btnLogIn.setOnClickListener(v -> startActivity(new Intent(this, SignInActivity.class)));
+        binding.btnSignUp.setOnClickListener(v -> startActivity(new Intent(this, SignUpActivity.class)));
+        binding.btnError.setOnClickListener(v -> {
+            Toast.makeText(this, "Kệ người dùng", Toast.LENGTH_SHORT).show();
+        });
 
+    }
+
+    private void initView() {
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            startActivity(new Intent(this, MainActivity.class));
+        }
     }
 }

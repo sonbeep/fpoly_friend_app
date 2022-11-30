@@ -15,6 +15,7 @@ import com.google.android.flexbox.JustifyContent;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.adapter.HobbiesAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityQuestion5Binding;
+import com.ltmt5.fpoly_friend_app.help.PublicData;
 import com.ltmt5.fpoly_friend_app.model.Hobbies;
 
 import java.util.ArrayList;
@@ -34,6 +35,11 @@ public class Question5Activity extends AppCompatActivity implements HobbiesAdapt
         setClick();
         binding.btnNext.setOnClickListener(v -> {
 //            if (validate()) {
+            List<String> list = new ArrayList<>();
+            for (Hobbies hobbies : hobbiesList) {
+                list.add(hobbies.getName());
+            }
+            PublicData.profileTemp.setHobbies(list);
             startActivity(new Intent(this, Question6Activity.class));
 //            }
         });

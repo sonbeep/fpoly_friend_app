@@ -1,6 +1,11 @@
 package com.ltmt5.fpoly_friend_app.model;
 
+import static com.ltmt5.fpoly_friend_app.App.TAG;
+
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -18,6 +23,8 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeInState;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOut;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOutState;
 
+import java.io.ByteArrayOutputStream;
+
 
 @Layout(R.layout.adapter_tinder_card)
 public class TinderCard {
@@ -31,11 +38,12 @@ public class TinderCard {
     @View(R.id.locationNameTxt)
     public TextView locationNameTxt;
 
-    public Profile mProfile;
+    public UserProfile mProfile;
     public Context mContext;
     public SwipePlaceHolderView mSwipeView;
+    Bitmap bitmap;
 
-    public TinderCard(Context context, Profile profile, SwipePlaceHolderView swipeView) {
+    public TinderCard(Context context, UserProfile profile, SwipePlaceHolderView swipeView) {
         mContext = context;
         mProfile = profile;
         mSwipeView = swipeView;
@@ -43,11 +51,10 @@ public class TinderCard {
 
     @Resolve
     public void onResolved() {
-        Glide.with(mContext).load(mProfile.getImageUrl()).centerCrop().into(profileImageView);
-        nameAgeTxt.setText(mProfile.getName() + ", " + mProfile.getAge());
-        locationNameTxt.setText(mProfile.getLocation());
+        Glide.with(mContext).load(mProfile.getAvt()).centerCrop().into(profileImageView);
+        nameAgeTxt.setText(mProfile.getName() + ", " + (2022 - mProfile.getAge()));
+        locationNameTxt.setText(mProfile.getEducation());
         SwipeViewFragment.mProfile = mProfile;
-        Log.d("AAA","mProfile: "+mProfile.getName());
     }
 
     @SwipeOut
@@ -74,5 +81,17 @@ public class TinderCard {
     @SwipeOutState
     public void onSwipeOutState() {
         Log.d("EVENT", "onSwipeOutState");
+    }
+
+    public String convertBitmapToArray(Bitmap bm) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
+        byte[] b = baos.toByteArray();
+        return Base64.encodeToString(b, Base64.DEFAULT);
+    }
+
+    public Bitmap getBitmapFromArray(String encoded) {
+        byte[] imageAsBytes = Base64.decode(encoded.getBytes(), Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
 }

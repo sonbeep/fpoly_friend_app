@@ -45,7 +45,7 @@
             android:fontFamily="@font/poppins_semibold"
             android:gravity="center"
             android:paddingVertical="11dp"
-            android:text="@string/next"
+            android:text="@string/ti_p_t_c"
             android:textColor="@color/white"
             android:textSize="18sp" />
     </com.google.android.material.card.MaterialCardView>
