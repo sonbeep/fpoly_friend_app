@@ -1,6 +1,5 @@
 package com.ltmt5.fpoly_friend_app.model;
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -8,6 +7,17 @@ import java.util.List;
 
 public class UserProfile implements Parcelable {
 
+    public static final Creator<UserProfile> CREATOR = new Creator<UserProfile>() {
+        @Override
+        public UserProfile createFromParcel(Parcel in) {
+            return new UserProfile(in);
+        }
+
+        @Override
+        public UserProfile[] newArray(int size) {
+            return new UserProfile[size];
+        }
+    };
     private int userId;
     private String name;
     private int age;
@@ -15,7 +25,6 @@ public class UserProfile implements Parcelable {
     private String education;
     private List<String> hobbies;
     private List<String> image;
-
     private String description;
     private String location;
     private String zodiac;
@@ -23,15 +32,14 @@ public class UserProfile implements Parcelable {
     private String sexualOrientation;
     private String favoriteSong;
     private String showPriority;
-
-    private Bitmap avt;
+    private String imageUri;
+    private String token;
 
 
     public UserProfile() {
     }
 
-
-    public UserProfile(String name, int age, String gender, String education, List<String> hobbies, List<String> image, String description, String location, String zodiac, String personality, String sexualOrientation, String favoriteSong, String showPriority) {
+    public UserProfile(String name, int age, String gender, String education, List<String> hobbies, List<String> image, String description, String location, String zodiac, String personality, String sexualOrientation, String favoriteSong, String showPriority, String imageUri) {
         this.name = name;
         this.age = age;
         this.gender = gender;
@@ -45,15 +53,17 @@ public class UserProfile implements Parcelable {
         this.sexualOrientation = sexualOrientation;
         this.favoriteSong = favoriteSong;
         this.showPriority = showPriority;
+        this.imageUri = imageUri;
     }
 
-    public UserProfile(String name, int age, String gender, String education, List<String> hobbies, List<String> image) {
+    public UserProfile(String name, int age, String gender, String education, List<String> hobbies, List<String> image, String imageUri) {
         this.name = name;
         this.age = age;
         this.gender = gender;
         this.education = education;
         this.hobbies = hobbies;
         this.image = image;
+        this.imageUri = imageUri;
     }
 
     protected UserProfile(Parcel in) {
@@ -71,20 +81,9 @@ public class UserProfile implements Parcelable {
         sexualOrientation = in.readString();
         favoriteSong = in.readString();
         showPriority = in.readString();
-        avt = in.readParcelable(Bitmap.class.getClassLoader());
+        imageUri = in.readString();
+        token = in.readString();
     }
-
-    public static final Creator<UserProfile> CREATOR = new Creator<UserProfile>() {
-        @Override
-        public UserProfile createFromParcel(Parcel in) {
-            return new UserProfile(in);
-        }
-
-        @Override
-        public UserProfile[] newArray(int size) {
-            return new UserProfile[size];
-        }
-    };
 
     public int getUserId() {
         return userId;
@@ -219,14 +218,23 @@ public class UserProfile implements Parcelable {
         parcel.writeString(sexualOrientation);
         parcel.writeString(favoriteSong);
         parcel.writeString(showPriority);
-        parcel.writeParcelable(avt, i);
+        parcel.writeString(imageUri);
+        parcel.writeString(token);
     }
 
-    public Bitmap getAvt() {
-        return avt;
+    public String getImageUri() {
+        return imageUri;
     }
 
-    public void setAvt(Bitmap avt) {
-        this.avt = avt;
+    public void setImageUri(String imageUri) {
+        this.imageUri = imageUri;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

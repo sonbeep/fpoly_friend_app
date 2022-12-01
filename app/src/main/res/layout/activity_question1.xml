@@ -69,7 +69,7 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="10dp"
             android:background="@color/transparent"
-            android:hint="@string/t_n"
+            android:hint="Tên hiển thị với người dùng khác"
             android:paddingVertical="11dp"
             android:textColor="@color/black" />
     </com.google.android.material.card.MaterialCardView>

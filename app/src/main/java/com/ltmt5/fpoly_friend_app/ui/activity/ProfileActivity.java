@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Fade;
@@ -175,7 +176,7 @@ public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter
                 View view = View.inflate(container.getContext(), R.layout.parallax_viewpager_item, null);
                 ImageView imageView = (ImageView) view.findViewById(R.id.item_img);
 //                Glide.with(context).load(bitmaps.get(position)).centerCrop().into(imageView);
-                Glide.with(context).load(userProfileInfo.getAvt()).centerCrop().into(imageView);
+                Glide.with(context).load(Uri.parse(userProfileInfo.getImageUri())).centerCrop().error(R.drawable.demo1).into(imageView);
 //                imageLoader.downloadImage(userProfileInfo.parallax_viewpager_item.xml().get(position), imageView);
                 container.addView(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 return view;

@@ -2,7 +2,6 @@ package com.ltmt5.fpoly_friend_app.ui.activity;
 
 import static com.ltmt5.fpoly_friend_app.App.TAG;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,6 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityMainBinding;
 import com.ltmt5.fpoly_friend_app.model.Profile;
@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         swipeViewFragment = new SwipeViewFragment();
         getUserProfile();
-        getAllUserProfile();
 
         binding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         loadFragment(swipeViewFragment);
@@ -121,6 +120,19 @@ public class MainActivity extends AppCompatActivity {
 //                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
+
+        checkList();
+    }
+
+    public void checkList() {
+        if (App.userProfileList == null) {
+            App.userProfileList = new ArrayList<>();
+            getAllUserProfile();
+        } else {
+            if (App.userProfileList.size() == 0) {
+                getAllUserProfile();
+            }
+        }
     }
 
     public void loadFragment(Fragment fragment) {
@@ -192,10 +204,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getAllUserProfile() {
-        ProgressDialog dialog = new ProgressDialog(MainActivity.this);
-        dialog.setCancelable(false);
-        dialog.setMessage("Loading...");
-        dialog.show();
+        List<UserProfile> userProfileList = new ArrayList<>();
+        database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("user_profile/");
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -203,18 +213,18 @@ public class MainActivity extends AppCompatActivity {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
                     if (userProfile != null) {
-                        userProfile.setAvt(getBitmapFromArray(userProfile.getImage().get(0)));
-                        userProfiles.add(userProfile);
+                        userProfileList.add(userProfile);
                     }
+                    Log.e(TAG, "userProfileList" + userProfileList.size());
+                    App.userProfileList.addAll(userProfileList);
+                    App.userProfileList.addAll(userProfileList);
+                    App.userProfileList.addAll(userProfileList);
                 }
-                SwipeViewFragment.userProfileList = userProfiles;
-                swipeViewFragment.setUpSwipeView();
-                dialog.dismiss();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainActivity.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "profile list empty");
             }
         });
     }

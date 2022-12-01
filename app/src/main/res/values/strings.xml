@@ -85,4 +85,5 @@
     <string name="kh_ng_nh_n_c_m">Không nhận được mã ?</string>
     <string name="g_i_l_i_m">Gửi lại mã</string>
     <string name="n_p_ti_n_n_o">Nạp tiền nào</string>
+    <string name="type_a_message">type a message</string>
 </resources>

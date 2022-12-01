@@ -24,4 +24,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "fpoly_friend_app"
 include ':app'
-include ':library'

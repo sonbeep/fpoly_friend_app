@@ -5,6 +5,7 @@ import static com.ltmt5.fpoly_friend_app.App.TAG;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
@@ -51,10 +52,13 @@ public class TinderCard {
 
     @Resolve
     public void onResolved() {
-        Glide.with(mContext).load(mProfile.getAvt()).centerCrop().into(profileImageView);
-        nameAgeTxt.setText(mProfile.getName() + ", " + (2022 - mProfile.getAge()));
-        locationNameTxt.setText(mProfile.getEducation());
-        SwipeViewFragment.mProfile = mProfile;
+        if (mProfile!=null){
+            Glide.with(mContext).load(Uri.parse(mProfile.getImageUri())).centerCrop().error(R.drawable.demo1).into(profileImageView);
+            nameAgeTxt.setText(mProfile.getName() + ", " + (2022 - mProfile.getAge()));
+            locationNameTxt.setText(mProfile.getEducation());
+            SwipeViewFragment.mProfile = mProfile;
+        }
+
     }
 
     @SwipeOut
