@@ -61,6 +61,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
             android:text="@string/_08_43"
+            android:visibility="invisible"
             android:textColor="@color/prime_4"
             android:textSize="10sp" />
 
@@ -69,6 +70,7 @@
             android:layout_height="17dp"
             app:cardBackgroundColor="@color/prime_1"
             app:cardCornerRadius="32dp"
+            android:visibility="invisible"
             app:cardElevation="0dp">
 
             <TextView

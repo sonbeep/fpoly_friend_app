@@ -107,7 +107,7 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
             executor.execute(() -> {
                 for (Bitmap bitmap:bitmapList){
                     if (bitmap!=null){
-                        list.add(convertBitmapToArray(bitmap));
+                        list.add(EncodeImage(bitmap));
                     }
                 }
                 handler.post(() -> {
@@ -142,6 +142,16 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
         bm.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
         byte[] b = baos.toByteArray();
         return Base64.encodeToString(b, Base64.DEFAULT);
+    }
+
+    private String EncodeImage(Bitmap bitmap){
+        int previewWith = 150;
+        int previewHeight = bitmap.getHeight() * previewWith / bitmap.getWidth();
+        Bitmap previewBitmap  = Bitmap.createScaledBitmap(bitmap, previewWith, previewHeight, false);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        previewBitmap.compress(Bitmap.CompressFormat.JPEG,50,byteArrayOutputStream);
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
 
     public Bitmap getBitmapFromArray(String encoded) {

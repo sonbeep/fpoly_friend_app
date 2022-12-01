@@ -33,7 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="30dp"
             android:fontFamily="@font/poppins_semibold"
             android:gravity="center"
             android:text="@string/ng_k"
@@ -52,15 +52,78 @@
             android:textColor="@color/black"
             android:textSize="16sp" />
 
+        <RelativeLayout
+            android:id="@+id/layoutImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp">
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/imageProfile"
+                android:layout_width="@dimen/_80sdp"
+                android:layout_height="@dimen/_80sdp"
+                android:background="@drawable/background_image"
+                android:scaleType="centerCrop"
+                app:riv_oval="true" />
+
+            <TextView
+                android:id="@+id/textAddImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:alpha="0.7"
+                android:fontFamily="@font/poppins_medium"
+                android:text="Add image"
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+        </RelativeLayout>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:alpha="0.7"
             android:fontFamily="@font/poppins_medium"
             android:gravity="center"
-            android:text="@string/email"
+            android:text="Họ tên"
+            android:textColor="@color/black" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="@color/transparent"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/prime_2"
+            app:strokeWidth="1dp">
+
+            <EditText
+                android:id="@+id/edName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginHorizontal="10dp"
+                android:background="@color/transparent"
+                android:hint="Nhập họ tên"
+                android:paddingVertical="11dp"
+                android:textColor="@color/black" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:alpha="0.7"
+            android:fontFamily="@font/poppins_medium"
+            android:gravity="center"
+            android:text="Email"
             android:textColor="@color/black" />
 
         <com.google.android.material.card.MaterialCardView
@@ -83,7 +146,7 @@
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="10dp"
                 android:background="@color/transparent"
-                android:hint="@string/nh_p_t_n_t_i_kho_n"
+                android:hint="Nhập email"
                 android:paddingVertical="11dp"
                 android:textColor="@color/black" />
         </com.google.android.material.card.MaterialCardView>
@@ -92,11 +155,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:alpha="0.7"
             android:fontFamily="@font/poppins_medium"
             android:gravity="center"
-            android:text="@string/password"
+            android:text="Mật khẩu"
             android:textColor="@color/black" />
 
         <com.google.android.material.card.MaterialCardView
@@ -119,46 +182,10 @@
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="10dp"
                 android:background="@color/transparent"
-                android:hint="@string/nh_p_m_t_kh_u"
+                android:hint="Nhập mật khẩu"
                 android:paddingVertical="11dp"
                 android:textColor="@color/black" />
         </com.google.android.material.card.MaterialCardView>
-
-<!--        <TextView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginStart="20dp"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            android:alpha="0.7"-->
-<!--            android:fontFamily="@font/poppins_medium"-->
-<!--            android:gravity="center"-->
-<!--            android:text="Số điện thoại"-->
-<!--            android:textColor="@color/black" />-->
-
-<!--        <com.google.android.material.card.MaterialCardView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginHorizontal="20dp"-->
-<!--            android:layout_marginTop="10dp"-->
-<!--            android:clickable="true"-->
-<!--            android:focusable="true"-->
-<!--            app:cardBackgroundColor="@color/transparent"-->
-<!--            app:cardCornerRadius="10dp"-->
-<!--            app:cardElevation="0dp"-->
-<!--            app:strokeColor="@color/prime_2"-->
-<!--            app:strokeWidth="1dp">-->
-
-<!--            <EditText-->
-<!--                android:id="@+id/edPhoneNumber"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="center"-->
-<!--                android:layout_marginHorizontal="10dp"-->
-<!--                android:background="@color/transparent"-->
-<!--                android:hint="Nhập số điện thoại"-->
-<!--                android:paddingVertical="11dp"-->
-<!--                android:textColor="@color/black" />-->
-<!--        </com.google.android.material.card.MaterialCardView>-->
     </LinearLayout>
 
     <androidx.constraintlayout.widget.Guideline
@@ -195,7 +222,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
         android:gravity="center"
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@+id/btnSignUp">

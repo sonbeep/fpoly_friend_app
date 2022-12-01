@@ -22,7 +22,6 @@ import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.databinding.FragmentSwipeViewBinding;
 import com.ltmt5.fpoly_friend_app.help.UtilsMode;
-import com.ltmt5.fpoly_friend_app.model.Profile;
 import com.ltmt5.fpoly_friend_app.model.TinderCard;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.activity.MainActivity;
@@ -36,15 +35,13 @@ public class SwipeViewFragment extends Fragment {
     public static final String EXTRA_USER_PROFILE = "EXTRA_USER_PROFILE";
     public static final String EXTRA_SWIPE_VIEW_SOURCE = "EXTRA_SWIPE_VIEW_SOURCE";
     public static UserProfile mProfile;
-    FragmentSwipeViewBinding binding;
     public static List<UserProfile> userProfileList = new ArrayList<>();
+    FragmentSwipeViewBinding binding;
     MainActivity mainActivity;
     private Context mContext;
 
     public SwipeViewFragment() {
-
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,7 +79,7 @@ public class SwipeViewFragment extends Fragment {
                     .makeSceneTransitionAnimation(mainActivity,
                             Pair.create(binding.swipeView, "user_swipe_image_transition"));
 //            mainActivity.startActivity(getBundledIntent(userProfileList.get(userProfileList.indexOf(mProfile) - 2)), options.toBundle());
-            mainActivity.startActivity( new Intent(getContext(), ProfileActivity.class));
+            mainActivity.startActivity(new Intent(getContext(), ProfileActivity.class));
         });
     }
 
@@ -108,10 +105,14 @@ public class SwipeViewFragment extends Fragment {
                         .setRelativeScale(0.01f)
                         .setSwipeInMsgLayoutId(R.layout.tinder_swipe_in_msg_view)
                         .setSwipeOutMsgLayoutId(R.layout.tinder_swipe_out_msg_view));
-        mainActivity.getAllUserProfile();
+        Log.e(TAG, "initView");
+        userProfileList =  App.userProfileList;
+//        for (UserProfile profile : userProfileList) {
+//            binding.swipeView.addView(new TinderCard(mContext, profile, binding.swipeView));
+//        }
     }
 
-    public void setUpSwipeView(){
+    public void setUpSwipeView() {
         for (UserProfile profile : userProfileList) {
             binding.swipeView.addView(new TinderCard(mContext, profile, binding.swipeView));
         }
