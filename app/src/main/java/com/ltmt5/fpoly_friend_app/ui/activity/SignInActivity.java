@@ -80,14 +80,12 @@ public class SignInActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            signIn();
+//                            signIn();
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(SignInActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-//                            updateUI(null);
+                            Log.e(TAG, "signInWithEmail:failure", task.getException());
+                            Toast.makeText(SignInActivity.this, "Đăng nhập không thành công", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -115,18 +113,24 @@ public class SignInActivity extends AppCompatActivity {
 
 
     private void updateUI(FirebaseUser user) {
+        preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
+        preferenceManager.putString(Constants.KEY_USER_ID, user.getUid());
+        preferenceManager.putString(Constants.KEY_NAME, user.getDisplayName());
+        preferenceManager.putString(Constants.KEY_IMAGE, user.getPhotoUrl().toString());
+
         DatabaseReference myRef = database.getReference("user_profile/" + user.getUid());
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userProfile = snapshot.getValue(UserProfile.class);
-                if (userProfile != null) {
-                    Intent intent = new Intent(SignInActivity.this, MainActivity.class);
-                    startActivity(intent);
+                Intent intent;
+                assert userProfile != null;
+                if (userProfile.getAvailability() != -1) {
+                    intent = new Intent(SignInActivity.this, MainActivity.class);
                 } else {
-                    Intent intent = new Intent(SignInActivity.this, Question1Activity.class);
-                    startActivity(intent);
+                    intent = new Intent(SignInActivity.this, Question1Activity.class);
                 }
+                startActivity(intent);
             }
 
             @Override

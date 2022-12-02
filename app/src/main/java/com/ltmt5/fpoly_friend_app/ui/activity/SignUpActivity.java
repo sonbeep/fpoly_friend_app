@@ -21,6 +21,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
@@ -30,14 +31,17 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.ltmt5.fpoly_friend_app.BuildConfig;
 import com.ltmt5.fpoly_friend_app.databinding.ActivitySignUpBinding;
-import com.ltmt5.fpoly_friend_app.help.PublicData;
 import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
 import com.ltmt5.fpoly_friend_app.help.utilities.PreferenceManager;
+import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.dialog.SignUpDialog;
 
 import java.io.ByteArrayOutputStream;
@@ -51,6 +55,8 @@ public class SignUpActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     Uri imageUri;
     File fileCamera;
+    boolean isDone;
+    FirebaseDatabase database;
     private FirebaseAuth mAuth;
     private String encodedImage;
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -142,6 +148,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void initView() {
+        database = FirebaseDatabase.getInstance();
         preferenceManager = new PreferenceManager(getApplicationContext());
         mAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
@@ -162,14 +169,12 @@ public class SignUpActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             updateProfile();
-                            updateFireStore();
-                            if (isDone){
+//                            updateFireStore();
+                            if (isDone) {
                                 updateUI();
-                            }
-                            else {
+                            } else {
                                 showToast("Đã xảy ra lỗi");
                             }
-
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -181,7 +186,6 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void updateFireStore() {
-
         FirebaseFirestore database = FirebaseFirestore.getInstance();
         HashMap<String, Object> user = new HashMap<>();
         user.put(Constants.KEY_NAME, binding.edName.getText().toString());
@@ -198,41 +202,62 @@ public class SignUpActivity extends AppCompatActivity {
 
                 })
                 .addOnFailureListener(e -> {
-                        isDone = false;
-                    Log.e("AAA",e.getMessage());
-                    showToast(e.getMessage());
+                    isDone = false;
+                    Log.e("AAA", e.getMessage());
+//                    showToast(e.getMessage());
                 });
     }
-    boolean isDone = true;
 
     private void updateProfile() {
         String name = binding.edName.getText().toString().trim();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(name)
-                .setPhotoUri(imageUri)
-                .build();
-        PublicData.profileTemp.setImageUri(imageUri.toString());
+        String email = binding.edUsername.getText().toString().trim();
+        String password = binding.edPassword.getText().toString().trim();
 
-        user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.e(TAG, "User profile updated.");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        UserProfile userProfile = new UserProfile();
+
+        if (user != null) {
+            userProfile.setAvailability(-1);
+            userProfile.setUserId(user.getUid());
+            userProfile.setEmail(email);
+            userProfile.setPassword(password);
+//            userProfile.setImageUri(imageUri.toString());
+            userProfile.setImageUri(encodedImage);
+
+            DatabaseReference myRef = database.getReference("user_profile/" + user.getUid());
+            myRef.setValue(userProfile, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                    Log.e(TAG, "created user profile");
+                }
+            });
+
+            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                    .setDisplayName(name)
+                    .setPhotoUri(imageUri)
+                    .build();
+            user.updateProfile(profileUpdates)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                Log.e(TAG, "user updated");
+                            } else {
+                                isDone = false;
+                            }
                         }
-                        else {
-                            isDone = false;
-                        }
-                    }
-                });
+                    });
+
+        } else {
+            Log.e(TAG, "user null");
+        }
 
 
     }
 
     private void updateUI() {
         SignUpDialog signUpDialog = SignUpDialog.newInstance();
-        signUpDialog.showAllowingStateLoss(getSupportFragmentManager(), "back");
+        signUpDialog.showAllowingStateLoss(getSupportFragmentManager(), "sign_up");
         signUpDialog.setOnClickListener(new SignUpDialog.OnClickListener() {
             @Override
             public void onApply() {

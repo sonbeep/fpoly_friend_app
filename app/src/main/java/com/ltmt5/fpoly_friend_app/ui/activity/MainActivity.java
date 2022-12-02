@@ -229,17 +229,22 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public String convertBitmapToArray(Bitmap bm) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
-        byte[] b = baos.toByteArray();
-        return Base64.encodeToString(b, Base64.DEFAULT);
+
+    public String convertBitmapToArray(Bitmap bitmap) {
+        int previewWith = 150;
+        int previewHeight = bitmap.getHeight() * previewWith / bitmap.getWidth();
+        Bitmap previewBitmap  = Bitmap.createScaledBitmap(bitmap, previewWith, previewHeight, false);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        previewBitmap.compress(Bitmap.CompressFormat.JPEG,50,byteArrayOutputStream);
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
 
     public Bitmap getBitmapFromArray(String encoded) {
         byte[] imageAsBytes = Base64.decode(encoded.getBytes(), Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
+
 
 
 }
