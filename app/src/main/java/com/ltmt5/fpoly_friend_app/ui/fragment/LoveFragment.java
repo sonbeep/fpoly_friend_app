@@ -13,6 +13,7 @@ import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.adapter.FilterLoveAdapter;
 import com.ltmt5.fpoly_friend_app.adapter.LoveAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.FragmentLoveBinding;
+import com.ltmt5.fpoly_friend_app.help.utilities.PreferenceManager;
 import com.ltmt5.fpoly_friend_app.model.Chat;
 import com.ltmt5.fpoly_friend_app.ui.activity.MainActivity;
 
@@ -25,6 +26,8 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
     Context context;
     FilterLoveAdapter filterLoveAdapter;
     LoveAdapter loveAdapter;
+
+    private PreferenceManager preferenceManager;
 
     public static LoveFragment newInstance() {
         return new LoveFragment();

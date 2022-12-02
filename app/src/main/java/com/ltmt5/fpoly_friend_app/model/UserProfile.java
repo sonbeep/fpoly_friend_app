@@ -3,22 +3,19 @@ package com.ltmt5.fpoly_friend_app.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class UserProfile implements Parcelable {
+public class UserProfile implements Serializable {
 
-    public static final Creator<UserProfile> CREATOR = new Creator<UserProfile>() {
-        @Override
-        public UserProfile createFromParcel(Parcel in) {
-            return new UserProfile(in);
-        }
 
-        @Override
-        public UserProfile[] newArray(int size) {
-            return new UserProfile[size];
-        }
-    };
-    private int userId;
+    //availability = -1   đã đăng kí, chưa set up
+    //availability = 0   đã set up
+    //availability = 1   done
+
+
+    private int availability;
+    private String userId;
     private String name;
     private int age;
     private String gender;
@@ -26,6 +23,9 @@ public class UserProfile implements Parcelable {
     private List<String> hobbies;
     private List<String> image;
     private String description;
+    private String email;
+    private String password;
+    private String fcmToken;
     private String location;
     private String zodiac;
     private String personality;
@@ -34,7 +34,6 @@ public class UserProfile implements Parcelable {
     private String showPriority;
     private String imageUri;
     private String token;
-
 
     public UserProfile() {
     }
@@ -56,6 +55,7 @@ public class UserProfile implements Parcelable {
         this.imageUri = imageUri;
     }
 
+
     public UserProfile(String name, int age, String gender, String education, List<String> hobbies, List<String> image, String imageUri) {
         this.name = name;
         this.age = age;
@@ -66,30 +66,29 @@ public class UserProfile implements Parcelable {
         this.imageUri = imageUri;
     }
 
-    protected UserProfile(Parcel in) {
-        userId = in.readInt();
-        name = in.readString();
-        age = in.readInt();
-        gender = in.readString();
-        education = in.readString();
-        hobbies = in.createStringArrayList();
-        image = in.createStringArrayList();
-        description = in.readString();
-        location = in.readString();
-        zodiac = in.readString();
-        personality = in.readString();
-        sexualOrientation = in.readString();
-        favoriteSong = in.readString();
-        showPriority = in.readString();
-        imageUri = in.readString();
-        token = in.readString();
+    public UserProfile(int availability, String email, String fcmToken, String imageUri, String name, String password) {
+        this.availability = availability;
+        this.email = email;
+        this.fcmToken = fcmToken;
+        this.imageUri = imageUri;
+        this.name = name;
+        this.password = password;
     }
 
-    public int getUserId() {
+
+    public int getAvailability() {
+        return availability;
+    }
+
+    public void setAvailability(int availability) {
+        this.availability = availability;
+    }
+
+    public String getUserId() {
         return userId;
     }
 
-    public void setUserId(int userId) {
+    public void setUserId(String userId) {
         this.userId = userId;
     }
 
@@ -149,6 +148,30 @@ public class UserProfile implements Parcelable {
         this.description = description;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
+
     public String getLocation() {
         return location;
     }
@@ -195,31 +218,6 @@ public class UserProfile implements Parcelable {
 
     public void setShowPriority(String showPriority) {
         this.showPriority = showPriority;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(userId);
-        parcel.writeString(name);
-        parcel.writeInt(age);
-        parcel.writeString(gender);
-        parcel.writeString(education);
-        parcel.writeStringList(hobbies);
-        parcel.writeStringList(image);
-        parcel.writeString(description);
-        parcel.writeString(location);
-        parcel.writeString(zodiac);
-        parcel.writeString(personality);
-        parcel.writeString(sexualOrientation);
-        parcel.writeString(favoriteSong);
-        parcel.writeString(showPriority);
-        parcel.writeString(imageUri);
-        parcel.writeString(token);
     }
 
     public String getImageUri() {

@@ -23,8 +23,8 @@ public class SettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySettingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-//        initView();
-//        setClick();
+        initView();
+        setClick();
     }
 
     private void initView() {

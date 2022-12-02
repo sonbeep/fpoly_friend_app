@@ -1,8 +1,15 @@
 package com.ltmt5.fpoly_friend_app.ui.fragment;
 
+import static com.ltmt5.fpoly_friend_app.App.TAG;
+
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +19,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
@@ -29,10 +43,11 @@ import com.ltmt5.fpoly_friend_app.listener.ConversionListener;
 import com.ltmt5.fpoly_friend_app.model.Chat;
 import com.ltmt5.fpoly_friend_app.model.ChatMessage;
 import com.ltmt5.fpoly_friend_app.model.User;
+import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.activity.ChatActivity;
 import com.ltmt5.fpoly_friend_app.ui.activity.MainActivity;
-import com.ltmt5.fpoly_friend_app.ui.activity.UsersActivity;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -44,7 +59,12 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
     Context context;
     ChatAdapter chatAdapter;
     RecentlyAdapter recentlyAdapter;
-
+    FirebaseUser user;
+    DatabaseReference fcmToken;
+    DatabaseReference availability;
+    DatabaseReference userProfile;
+    List<UserProfile> userProfileList = new ArrayList<>();
+    ProgressDialog progressDialog;
     private PreferenceManager preferenceManager;
     private List<ChatMessage> conversions;
     private RecentConversionAdapter conversionAdapter;
@@ -90,30 +110,12 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
             binding.recChat.setVisibility(View.VISIBLE);
         }
     };
-    private FirebaseFirestore database;
+    private FirebaseFirestore firestore;
+    private FirebaseDatabase database;
     private DocumentReference documentReference;
 
     public static ChatFragment newInstance() {
         return new ChatFragment();
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        documentReference.update(Constants.KEY_AVAILABILITY, 0);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        documentReference.update(Constants.KEY_AVAILABILITY, 1);
     }
 
     @Override
@@ -126,21 +128,138 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
         return binding.getRoot();
     }
 
+    public List<UserProfile> getAllUser() {
+        List<UserProfile> userProfileList = new ArrayList<>();
+
+        userProfile.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                    if (userProfile != null) {
+                        UserProfile profile = new UserProfile(userProfile.getAvailability(), userProfile.getEmail(), userProfile.getFcmToken(), userProfile.getImageUri(), userProfile.getName(), userProfile.getPassword());
+                        userProfileList.add(profile);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "fail to load all user");
+            }
+        });
+        Log.e(TAG, "load size: " + userProfileList.size());
+        return userProfileList;
+    }
+
+    private void getUsers() {
+//        FirebaseFirestore database = FirebaseFirestore.getInstance();
+//        database.collection(Constants.KEY_COLLECTION_USERS)
+//                .get()
+//                .addOnCompleteListener(task -> {
+//                    progressDialog.dismiss();
+//                    String currenUserId = preferenceManager.getString(Constants.KEY_USER_ID);
+//                    if (task.isSuccessful() && task.getResult() != null) {
+//                        List<User> users = new ArrayList<>();
+//                        for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
+//                            if (currenUserId.equals(queryDocumentSnapshot.getId())) {
+//                                continue;
+//                            }
+//                            User user = new User();
+//                            user.name = queryDocumentSnapshot.getString(Constants.KEY_NAME);
+//                            user.email = queryDocumentSnapshot.getString(Constants.KEY_EMAIL);
+//                            user.image = queryDocumentSnapshot.getString(Constants.KEY_IMAGE);
+//                            user.token = queryDocumentSnapshot.getString(Constants.KEY_FCM_TOKEN);
+//                            user.id = queryDocumentSnapshot.getId();
+//                            users.add(user);
+//                        }
+//                        if (users.size() > 0) {
+//                            UserAdapters userAdapters = new UserAdapters(users, this);
+//                            binding.usersRecyclerView.setAdapter(userAdapters);
+//                            binding.usersRecyclerView.setVisibility(View.VISIBLE);
+//                        } else {
+//                            showErrorMessage();
+//                        }
+//                    } else {
+//                        showErrorMessage();
+//                    }
+//                });
+        progressDialog.show();
+        userProfileList.clear();
+        userProfile.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                progressDialog.dismiss();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                    if (userProfile != null) {
+                        UserProfile profile = new UserProfile(userProfile.getAvailability(), userProfile.getEmail(), userProfile.getFcmToken(), userProfile.getImageUri(), userProfile.getName(), userProfile.getPassword());
+                        userProfileList.add(profile);
+                        Log.e(TAG,"userProfileList.size(): "+userProfileList.size());
+                    }
+                }
+                recentlyAdapter.setData(userProfileList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "fail to load all user");
+            }
+        });
+    }
+
+    public String convertBitmapToArray(Bitmap bitmap) {
+        int previewWith = 150;
+        int previewHeight = bitmap.getHeight() * previewWith / bitmap.getWidth();
+        Bitmap previewBitmap = Bitmap.createScaledBitmap(bitmap, previewWith, previewHeight, false);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(bytes, Base64.DEFAULT);
+    }
+
+    public Bitmap getBitmapFromArray(String encoded) {
+        byte[] imageAsBytes = Base64.decode(encoded.getBytes(), Base64.DEFAULT);
+        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        availability.setValue(0);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        availability.setValue(1);
+    }
+
+
     private void initView() {
         context = App.context;
         mainActivity = (MainActivity) getActivity();
-
+        user = FirebaseAuth.getInstance().getCurrentUser();
         preferenceManager = new PreferenceManager(mainActivity);
-        database = FirebaseFirestore.getInstance();
-        documentReference = database.collection(Constants.KEY_COLLECTION_USERS)
-                .document(preferenceManager.getString(Constants.KEY_USER_ID));
 
+        firestore = FirebaseFirestore.getInstance();
+        database = FirebaseDatabase.getInstance();
 
-        recentlyAdapter = new RecentlyAdapter(getList(), context, this);
+        progressDialog = new ProgressDialog(mainActivity);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...");
+
+        availability = database.getReference("user_profile/" + user.getUid() + "/availability");
+        fcmToken = database.getReference("user_profile/" + user.getUid() + "/fcmToken");
+        userProfile = database.getReference("user_profile/");
+
+        recentlyAdapter = new RecentlyAdapter(context, this);
         binding.recRecently.setAdapter(recentlyAdapter);
         getToken();
         init();
         listenConversation();
+
+        getUsers();
 
 
     }
@@ -149,14 +268,13 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
         conversions = new ArrayList<>();
         conversionAdapter = new RecentConversionAdapter(conversions, this);
         binding.recChat.setAdapter(conversionAdapter);
-        database = FirebaseFirestore.getInstance();
     }
 
     private void listenConversation() {
-        database.collection(Constants.KEY_COLLECTION_CONVERSATION)
+        firestore.collection(Constants.KEY_COLLECTION_CONVERSATION)
                 .whereEqualTo(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID))
                 .addSnapshotListener(eventListener);
-        database.collection(Constants.KEY_COLLECTION_CONVERSATION)
+        firestore.collection(Constants.KEY_COLLECTION_CONVERSATION)
                 .whereEqualTo(Constants.KEY_RECEIVER_ID, preferenceManager.getString(Constants.KEY_USER_ID))
                 .addSnapshotListener(eventListener);
     }
@@ -167,13 +285,22 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
 
     private void updateToken(String token) {
         preferenceManager.putString(Constants.KEY_FCM_TOKEN, token);
-        FirebaseFirestore database = FirebaseFirestore.getInstance();
-        DocumentReference documentReference =
-                database.collection(Constants.KEY_COLLECTION_USERS).document(
-                        preferenceManager.getString(Constants.KEY_USER_ID)
-                );
-        documentReference.update(Constants.KEY_FCM_TOKEN, token)
-                .addOnFailureListener(e -> showToast("Unable to update token"));
+
+//        FirebaseFirestore database = FirebaseFirestore.getInstance();
+//        DocumentReference documentReference =
+//                database.collection(Constants.KEY_COLLECTION_USERS).document(
+//                        preferenceManager.getString(Constants.KEY_USER_ID)
+//                );
+//        documentReference.update(Constants.KEY_FCM_TOKEN, token)
+//                .addOnFailureListener(e -> showToast("Unable to update token"));
+
+
+        fcmToken.setValue(token, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                Log.e(TAG, "added token");
+            }
+        });
     }
 
     private void showToast(String message) {
@@ -201,9 +328,9 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
     }
 
     @Override
-    public void clickItem(Chat chat) {
+    public void clickItem(UserProfile userProfile) {
 //        startActivity(new Intent(getActivity(), StoryActivity.class));
-        startActivity(new Intent(getActivity(), UsersActivity.class));
+        startActivity(new Intent(getActivity(), ChatActivity.class).putExtra(Constants.KEY_USER, userProfile));
     }
 
     @Override
