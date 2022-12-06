@@ -53,7 +53,7 @@ public class TinderCard {
     @Resolve
     public void onResolved() {
         if (mProfile!=null){
-            Glide.with(mContext).load(Uri.parse(mProfile.getImageUri())).centerCrop().error(R.drawable.demo1).into(profileImageView);
+//            Glide.with(mContext).load(Uri.parse(mProfile.getImageUri())).centerCrop().error(R.drawable.demo1).into(profileImageView);
             nameAgeTxt.setText(mProfile.getName() + ", " + (2022 - mProfile.getAge()));
             locationNameTxt.setText(mProfile.getEducation());
             SwipeViewFragment.mProfile = mProfile;

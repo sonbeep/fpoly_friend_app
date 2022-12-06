@@ -10,9 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.ltmt5.fpoly_friend_app.databinding.ItemContainerRecentConversionBinding;
+import com.ltmt5.fpoly_friend_app.databinding.ItemMessageBinding;
 import com.ltmt5.fpoly_friend_app.listener.ConversionListener;
 import com.ltmt5.fpoly_friend_app.model.ChatMessage;
 import com.ltmt5.fpoly_friend_app.model.User;
+import com.ltmt5.fpoly_friend_app.model.UserProfile;
 
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class RecentConversionAdapter extends RecyclerView.Adapter<RecentConversi
     @Override
     public ConversionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ConversionViewHolder(
-                ItemContainerRecentConversionBinding.inflate(
+                ItemMessageBinding.inflate(
                         LayoutInflater.from(parent.getContext()),
                         parent,
                         false
@@ -53,22 +55,22 @@ public class RecentConversionAdapter extends RecyclerView.Adapter<RecentConversi
     }
 
     class ConversionViewHolder extends RecyclerView.ViewHolder {
-        ItemContainerRecentConversionBinding binding;
+        ItemMessageBinding binding;
 
-        ConversionViewHolder(ItemContainerRecentConversionBinding itemContainerRecentConversionBinding) {
+        ConversionViewHolder(ItemMessageBinding itemContainerRecentConversionBinding) {
             super(itemContainerRecentConversionBinding.getRoot());
             binding = itemContainerRecentConversionBinding;
         }
 
         void setData(ChatMessage chatMessage) {
-            binding.imageProfile.setImageBitmap(getConversionImage(chatMessage.conversionImage));
-            binding.textName.setText(chatMessage.conversionName);
-            binding.textRecentMessage.setText(chatMessage.message);
+            binding.cvAvatar.setImageBitmap(getConversionImage(chatMessage.conversionImage));
+            binding.tvName.setText(chatMessage.conversionName);
+            binding.tvDescription.setText(chatMessage.message);
             binding.getRoot().setOnClickListener(v -> {
-                User user = new User();
-                user.id = chatMessage.conversionId;
-                user.name = chatMessage.conversionName;
-                user.image = chatMessage.conversionImage;
+                UserProfile user = new UserProfile();
+                user.setUserId(chatMessage.conversionId);
+                user.setName(chatMessage.conversionName);
+                user.setImageUri(chatMessage.conversionImage);
                 conversionListener.onConversionClicked(user);
             });
         }

@@ -34,6 +34,7 @@
                 android:layout_centerInParent="true"
                 android:clickable="true"
                 android:focusable="true"
+                android:visibility="invisible"
                 app:cardBackgroundColor="@color/transparent"
                 app:cardCornerRadius="32dp"
                 app:cardElevation="0dp"
@@ -90,6 +91,7 @@
                 android:layout_centerInParent="true"
                 android:clickable="true"
                 android:focusable="true"
+                android:visibility="invisible"
                 app:cardBackgroundColor="@color/transparent"
                 app:cardCornerRadius="32dp"
                 app:cardElevation="0dp"
@@ -146,6 +148,7 @@
                 android:layout_centerInParent="true"
                 android:clickable="true"
                 android:focusable="true"
+                android:visibility="invisible"
                 app:cardBackgroundColor="@color/transparent"
                 app:cardCornerRadius="32dp"
                 app:cardElevation="0dp"
@@ -215,8 +218,8 @@
             android:layout_toEndOf="@+id/cvLogo"
             android:fontFamily="@font/poppins_semibold"
             android:text="Fpoly Friend"
-            android:textSize="18sp"
-            android:textColor="@color/prime_1" />
+            android:textColor="@color/prime_1"
+            android:textSize="18sp" />
     </RelativeLayout>
 
 

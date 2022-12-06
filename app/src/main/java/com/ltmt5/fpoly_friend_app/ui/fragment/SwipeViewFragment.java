@@ -1,6 +1,7 @@
 package com.ltmt5.fpoly_friend_app.ui.fragment;
 
 import static com.ltmt5.fpoly_friend_app.App.TAG;
+import static com.ltmt5.fpoly_friend_app.App.user;
 
 import android.app.ActivityOptions;
 import android.content.Context;
@@ -18,6 +19,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.databinding.FragmentSwipeViewBinding;
@@ -65,6 +69,7 @@ public class SwipeViewFragment extends Fragment {
         });
 
         binding.btnLike.setOnClickListener(v -> {
+            handleLikeClick();
             animateFab(binding.btnLike);
             binding.swipeView.doSwipe(true);
         });
@@ -78,8 +83,21 @@ public class SwipeViewFragment extends Fragment {
             ActivityOptions options = ActivityOptions
                     .makeSceneTransitionAnimation(mainActivity,
                             Pair.create(binding.swipeView, "user_swipe_image_transition"));
-//            mainActivity.startActivity(getBundledIntent(userProfileList.get(userProfileList.indexOf(mProfile) - 2)), options.toBundle());
-            mainActivity.startActivity(new Intent(getContext(), ProfileActivity.class));
+//            mProfile = userProfileList.get(userProfileList.indexOf(mProfile) - 2);
+            UserProfile userProfile = new UserProfile(mProfile.getUserId(),mProfile.getName(),mProfile.getAge(),mProfile.getGender(),mProfile.getEducation(),mProfile.getHobbies(),mProfile.getImageUri());
+            mainActivity.startActivity(getBundledIntent(userProfile), options.toBundle());
+//            mainActivity.startActivity(new Intent(getContext(), ProfileActivity.class));
+        });
+    }
+    FirebaseDatabase database;
+
+    private void handleLikeClick() {
+        DatabaseReference myRef = database.getReference("user_profile_match/" + user.getUid()+"/"+mProfile.getUserId());
+        myRef.setValue(mProfile, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                Log.e(TAG, "created user profile");
+            }
         });
     }
 
@@ -92,6 +110,7 @@ public class SwipeViewFragment extends Fragment {
 
     private void initView() {
         mContext = App.context;
+        database = FirebaseDatabase.getInstance();
         mainActivity = (MainActivity) getActivity();
         int bottomMargin = UtilsMode.dpToPx(0);
         Point windowSize = UtilsMode.getDisplaySize(getActivity().getWindowManager());
@@ -105,11 +124,11 @@ public class SwipeViewFragment extends Fragment {
                         .setRelativeScale(0.01f)
                         .setSwipeInMsgLayoutId(R.layout.tinder_swipe_in_msg_view)
                         .setSwipeOutMsgLayoutId(R.layout.tinder_swipe_out_msg_view));
-        Log.e(TAG, "initView");
         userProfileList =  App.userProfileList;
-//        for (UserProfile profile : userProfileList) {
-//            binding.swipeView.addView(new TinderCard(mContext, profile, binding.swipeView));
-//        }
+        Log.e(TAG,"ls:"+userProfileList.size());
+        for (UserProfile profile : userProfileList) {
+            binding.swipeView.addView(new TinderCard(mContext, profile, binding.swipeView));
+        }
     }
 
     public void setUpSwipeView() {
@@ -117,7 +136,6 @@ public class SwipeViewFragment extends Fragment {
             binding.swipeView.addView(new TinderCard(mContext, profile, binding.swipeView));
         }
     }
-
 
     private void animateFab(final View fab) {
         fab.animate().scaleX(0.7f).setDuration(100).withEndAction(() -> fab.animate().scaleX(1f).scaleY(1f));
