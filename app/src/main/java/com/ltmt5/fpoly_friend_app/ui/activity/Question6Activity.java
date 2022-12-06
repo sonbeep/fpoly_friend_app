@@ -13,18 +13,25 @@ import android.os.Handler;
 import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
 
-import com.google.gson.Gson;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.BuildConfig;
 import com.ltmt5.fpoly_friend_app.adapter.AddImageAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityQuestion6Binding;
@@ -45,6 +52,9 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
     ActivityQuestion6Binding binding;
     AddImageAdapter addImageAdapter;
     File fileCamera;
+    FirebaseStorage storage;
+    StorageReference storageRef;
+    List<Uri> uriList = new ArrayList<>();
     private Uri cameraUri;
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @SuppressLint("NotifyDataSetChanged")
@@ -53,6 +63,7 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
             if (result.getResultCode() == Activity.RESULT_OK) {
                 Bitmap bitmap = null;
                 if (result.getData() == null) {
+                    uriList.set(positionAdd, cameraUri);
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), cameraUri);
                     } catch (IOException e) {
@@ -60,6 +71,7 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
                     }
                 } else {
                     Uri imageUri = result.getData().getData();
+                    uriList.set(positionAdd, imageUri);
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), imageUri);
                     } catch (IOException e) {
@@ -67,6 +79,7 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
                     }
                 }
                 bitmapList.set(positionAdd, bitmap);
+
                 addImageAdapter.notifyDataSetChanged();
             }
         }
@@ -82,17 +95,20 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
     }
 
     private void initView() {
+        storage = FirebaseStorage.getInstance();
+        storageRef = storage.getReference().child("Image/" + App.user.getUid());
         bitmapList.clear();
         for (int i = 0; i < 6; i++) {
             bitmapList.add(null);
-
+            uriList.add(null);
         }
         addImageAdapter = new AddImageAdapter(bitmapList, this, this);
         binding.recAddImage.setAdapter(addImageAdapter);
+
     }
 
     private void setClick() {
-        ProgressDialog dialog= new ProgressDialog(this);
+        ProgressDialog dialog = new ProgressDialog(this);
         dialog.setCancelable(false);
         dialog.setMessage("Loading...");
 
@@ -105,9 +121,27 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
             Executor executor = Executors.newSingleThreadExecutor();
             Handler handler = new Handler(Looper.getMainLooper());
             executor.execute(() -> {
-                for (Bitmap bitmap:bitmapList){
-                    if (bitmap!=null){
-                        list.add(EncodeImage(bitmap));
+//                for (Bitmap bitmap : bitmapList) {
+//                    if (bitmap != null) {
+//                        list.add(EncodeImage(bitmap));
+//                    }
+//                }
+                for (int i = 0; i < uriList.size(); i++) {
+                    if (uriList.get(i) != null) {
+                        StorageReference storageRef2 = storageRef.child("image" + i);
+                        storageRef2.putFile(uriList.get(i)).addOnCompleteListener(this, new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                storageRef2.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Uri> task) {
+                                        list.add(task.getResult().toString());
+                                        Log.e("AAA", task.getResult().toString());
+                                    }
+                                });
+                            }
+                        });
+
                     }
                 }
                 handler.post(() -> {
@@ -144,12 +178,12 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
         return Base64.encodeToString(b, Base64.DEFAULT);
     }
 
-    private String EncodeImage(Bitmap bitmap){
+    private String EncodeImage(Bitmap bitmap) {
         int previewWith = 150;
         int previewHeight = bitmap.getHeight() * previewWith / bitmap.getWidth();
-        Bitmap previewBitmap  = Bitmap.createScaledBitmap(bitmap, previewWith, previewHeight, false);
+        Bitmap previewBitmap = Bitmap.createScaledBitmap(bitmap, previewWith, previewHeight, false);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        previewBitmap.compress(Bitmap.CompressFormat.JPEG,50,byteArrayOutputStream);
+        previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
         byte[] bytes = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
@@ -189,7 +223,9 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
 
     @Override
     public void deleteItem(int position) {
-        bitmapList.remove(position);
+        bitmapList.set(position, null);
+        uriList.set(position, null);
+        addImageAdapter.notifyDataSetChanged();
     }
 
     boolean checkBitmap() {

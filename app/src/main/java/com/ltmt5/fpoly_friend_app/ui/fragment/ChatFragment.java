@@ -1,6 +1,7 @@
 package com.ltmt5.fpoly_friend_app.ui.fragment;
 
 import static com.ltmt5.fpoly_friend_app.App.TAG;
+import static com.ltmt5.fpoly_friend_app.App.user;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -251,7 +252,7 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
 
         availability = database.getReference("user_profile/" + user.getUid() + "/availability");
         fcmToken = database.getReference("user_profile/" + user.getUid() + "/fcmToken");
-        userProfile = database.getReference("user_profile/");
+        userProfile = database.getReference("user_profile_match/" + user.getUid());
 
         recentlyAdapter = new RecentlyAdapter(context, this);
         binding.recRecently.setAdapter(recentlyAdapter);
@@ -329,12 +330,11 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
 
     @Override
     public void clickItem(UserProfile userProfile) {
-//        startActivity(new Intent(getActivity(), StoryActivity.class));
         startActivity(new Intent(getActivity(), ChatActivity.class).putExtra(Constants.KEY_USER, userProfile));
     }
 
     @Override
-    public void onConversionClicked(User user) {
+    public void onConversionClicked(UserProfile user) {
         Intent intent = new Intent(getActivity(), ChatActivity.class);
         intent.putExtra(Constants.KEY_USER, user);
         startActivity(intent);

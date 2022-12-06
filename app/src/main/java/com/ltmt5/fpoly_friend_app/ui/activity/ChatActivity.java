@@ -184,11 +184,6 @@ public class ChatActivity extends BaseActivity {
                         chatAdapter.notifyItemChanged(0, chatMessages.size());
                     }
                 }
-                if (isReceiverAvailable) {
-                    binding.textAvailability.setVisibility(View.VISIBLE);
-                } else {
-                    binding.textAvailability.setVisibility(View.GONE);
-                }
             }
 
             @Override
@@ -252,12 +247,12 @@ public class ChatActivity extends BaseActivity {
 
     private void loadReceiverDetails() {
         receiverUser2 = (UserProfile) getIntent().getSerializableExtra(Constants.KEY_USER);
-        binding.textName.setText(receiverUser2.getName());
+        binding.tvName.setText(receiverUser2.getName());
     }
 
     private void setListeners() {
-        binding.imageBack.setOnClickListener(v -> onBackPressed());
-        binding.layoutSend.setOnClickListener(v -> sendMessage());
+        binding.btnBack.setOnClickListener(v -> onBackPressed());
+        binding.btnSend.setOnClickListener(v -> sendMessage());
     }
 
     private String getReadableDateTime(Date date) {

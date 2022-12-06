@@ -75,6 +75,15 @@ public class UserProfile implements Serializable {
         this.password = password;
     }
 
+    public UserProfile(String userId, String name, int age, String gender, String education, List<String> hobbies, String imageUri) {
+        this.userId = userId;
+        this.name = name;
+        this.age = age;
+        this.gender = gender;
+        this.education = education;
+        this.hobbies = hobbies;
+        this.imageUri = imageUri;
+    }
 
     public int getAvailability() {
         return availability;

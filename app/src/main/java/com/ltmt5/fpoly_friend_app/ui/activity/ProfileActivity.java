@@ -73,13 +73,13 @@ public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter
         binding.recHobbies.setLayoutManager(layoutManager);
         binding.recHobbies.setAdapter(hobbiesAdapter);
 
-        //        imageLoader = App.getImageLoader();
+//                imageLoader = App.getImageLoader();
 
-//        userProfileInfo = (UserProfile) getIntent().getExtras().getParcelable(SwipeViewFragment.EXTRA_USER_PROFILE);
-//        swipeViewSource = getIntent().getExtras().getBoolean(SwipeViewFragment.EXTRA_SWIPE_VIEW_SOURCE);
+        userProfileInfo = (UserProfile) getIntent().getSerializableExtra(SwipeViewFragment.EXTRA_USER_PROFILE);
+        swipeViewSource = getIntent().getExtras().getBoolean(SwipeViewFragment.EXTRA_SWIPE_VIEW_SOURCE);
 
-        userProfileInfo = SwipeViewFragment.mProfile;
-        swipeViewSource = true;
+//        userProfileInfo = SwipeViewFragment.mProfile;
+//        swipeViewSource = true;
 
 
         binding.tvName.setText(userProfileInfo.getName());
@@ -176,7 +176,7 @@ public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter
                 View view = View.inflate(container.getContext(), R.layout.parallax_viewpager_item, null);
                 ImageView imageView = (ImageView) view.findViewById(R.id.item_img);
 //                Glide.with(context).load(bitmaps.get(position)).centerCrop().into(imageView);
-                Glide.with(context).load(Uri.parse(userProfileInfo.getImageUri())).centerCrop().error(R.drawable.demo1).into(imageView);
+//                Glide.with(context).load(Uri.parse(userProfileInfo.getImageUri())).centerCrop().error(R.drawable.demo1).into(imageView);
 //                imageLoader.downloadImage(userProfileInfo.parallax_viewpager_item.xml().get(position), imageView);
                 container.addView(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
                 return view;

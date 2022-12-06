@@ -10,18 +10,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.ltmt5.fpoly_friend_app.databinding.ItemLoveBinding;
 import com.ltmt5.fpoly_friend_app.model.Chat;
+import com.ltmt5.fpoly_friend_app.model.UserProfile;
 
 import java.util.List;
 
 public class LoveAdapter extends RecyclerView.Adapter<LoveAdapter.ViewHolder> {
-    private List<Chat> list;
+    private List<UserProfile> list;
     private final Context context;
     private final ItemClick itemClick;
 
-    public LoveAdapter(List<Chat> list, Context context, ItemClick itemClick) {
-        this.list = list;
+    public LoveAdapter(Context context, ItemClick itemClick) {
         this.context = context;
         this.itemClick = itemClick;
+    }
+
+    public void setData(List<UserProfile> list){
+        this.list = list;
+        notifyDataSetChanged();
     }
 
 
@@ -33,7 +38,7 @@ public class LoveAdapter extends RecyclerView.Adapter<LoveAdapter.ViewHolder> {
     }
 
     public interface ItemClick {
-        void clickItem(Chat chat);
+        void clickItem(UserProfile userProfile);
     }
 
     @Override
@@ -42,15 +47,15 @@ public class LoveAdapter extends RecyclerView.Adapter<LoveAdapter.ViewHolder> {
 
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<Chat> list) {
-        this.list = list;
-        notifyDataSetChanged();
-    }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        if (list==null){
+            return 0;
+        }
+        else {
+            return list.size();
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -61,10 +66,9 @@ public class LoveAdapter extends RecyclerView.Adapter<LoveAdapter.ViewHolder> {
             this.binding = binding;
         }
 
-        public void bindData(Chat chat) {
-            int drawableId = context.getResources().getIdentifier(chat.getAvatar(), "drawable", context.getPackageName());
-            binding.imgAvatar.setImageResource(drawableId);
-            binding.tvInfo.setText(chat.getName() + ", " + chat.getCount());
+        public void bindData(UserProfile userProfile) {
+            binding.tvInfo.setText(userProfile.getName() + ", " + userProfile.getAge());
+            binding.getRoot().setOnClickListener(view -> itemClick.clickItem(userProfile));
         }
     }
 }

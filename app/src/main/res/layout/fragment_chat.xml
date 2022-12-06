@@ -14,7 +14,7 @@
         android:layout_marginTop="50dp"
         android:fontFamily="@font/poppins_semibold"
         android:gravity="center"
-        android:text="@string/chats"
+        android:text="Tin nhắn"
         android:textColor="@color/black"
         android:textSize="18sp" />
 
@@ -24,7 +24,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/poppins_medium"
-        android:text="@string/t_ng_t_c_g_n_y"
+        android:text="Tương hợp mới"
         android:textColor="@color/black" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -43,7 +43,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/poppins_medium"
-        android:text="@string/t_t_c_o_n_chat"
+        android:text="Tin nhắn"
         android:textColor="@color/black" />
 
     <androidx.recyclerview.widget.RecyclerView

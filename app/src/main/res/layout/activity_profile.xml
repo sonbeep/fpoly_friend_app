@@ -118,7 +118,7 @@
                             android:fontFamily="@font/poppins"
                             android:includeFontPadding="false"
                             android:textColor="@color/black"
-                            tools:text="cách xa 5 km" />
+                            tools:text="thành phố Hà Nội" />
 
 
                     </LinearLayout>
@@ -237,6 +237,7 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
+            android:visibility="invisible"
             android:id="@+id/btnStar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

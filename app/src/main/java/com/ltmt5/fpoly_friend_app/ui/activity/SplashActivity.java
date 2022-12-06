@@ -46,9 +46,6 @@ public class SplashActivity extends AppCompatActivity {
                     if (userProfile != null) {
                         userProfileList.add(userProfile);
                     }
-                    Log.e(TAG, "userProfileList" + userProfileList.size());
-                    App.userProfileList.addAll(userProfileList);
-                    App.userProfileList.addAll(userProfileList);
                     App.userProfileList.addAll(userProfileList);
                 }
             }
@@ -60,7 +57,6 @@ public class SplashActivity extends AppCompatActivity {
         });
 
         new Handler().postDelayed(() -> {
-            Log.e(TAG, "profile list size: " + App.userProfileList.size());
             if (App.sharePref.isFirstTimeLaunch()) {
                 startActivity(new Intent(this, OnBoard1Activity.class));
             } else {
