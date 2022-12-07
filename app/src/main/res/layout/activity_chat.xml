@@ -52,6 +52,7 @@
     </com.google.android.material.card.MaterialCardView>
 
 
+    ///
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatRecyclerview"
         android:layout_width="match_parent"
@@ -62,7 +63,7 @@
         android:padding="@dimen/_20sdp"
         android:visibility="gone"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="@id/cvFooter"
+        app:layout_constraintBottom_toTopOf="@id/cvFooter"
         app:layout_constraintTop_toBottomOf="@id/cvHeader"
         app:stackFromEnd="true" />
 
