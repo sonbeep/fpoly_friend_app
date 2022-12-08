@@ -58,11 +58,6 @@ public class RecentlyAdapter extends RecyclerView.Adapter<RecentlyAdapter.ViewHo
         }
     }
 
-    public Bitmap getBitmapFromArray(String encoded) {
-        byte[] imageAsBytes = Base64.decode(encoded.getBytes(), Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
-    }
-
     public interface ItemClick {
         void clickItem(UserProfile userProfile);
     }
@@ -81,12 +76,7 @@ public class RecentlyAdapter extends RecyclerView.Adapter<RecentlyAdapter.ViewHo
             } else {
                 binding.btnAvailable.setVisibility(View.INVISIBLE);
             }
-            String bitmapDC = userProfile.getImageUri();
-            Bitmap bitmap = null;
-            if (bitmapDC != null) {
-                bitmap = getBitmapFromArray(bitmapDC);
-            }
-            Glide.with(context).load(bitmap).centerCrop().error(R.drawable.demo1).into(binding.imgAvatar);
+            Glide.with(context).load(userProfile.getImageUri()).centerCrop().error(R.drawable.demo1).into(binding.imgAvatar);
             binding.imgAvatar.setOnClickListener(view -> {
                 itemClick.clickItem(userProfile);
             });

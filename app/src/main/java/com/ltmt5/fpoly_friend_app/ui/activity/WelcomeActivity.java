@@ -52,7 +52,6 @@ public class WelcomeActivity extends AppCompatActivity {
             map.put("gender", PublicData.profileTemp.getGender());
             map.put("education", PublicData.profileTemp.getEducation());
             map.put("hobbies", PublicData.profileTemp.getHobbies());
-            map.put("image", PublicData.profileTemp.getImage());
             myRef.updateChildren(map, new DatabaseReference.CompletionListener() {
                 @Override
                 public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {

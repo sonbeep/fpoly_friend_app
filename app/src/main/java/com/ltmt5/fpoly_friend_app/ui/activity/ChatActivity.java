@@ -109,7 +109,7 @@ public class ChatActivity extends BaseActivity {
         preferenceManager = new PreferenceManager(getApplicationContext());
         chatMessages = new ArrayList<>();
         chatAdapter = new ChatAdapter(
-                getBitmapFromEncodesString(receiverUser2.getImageUri()),
+                receiverUser2.getImageUri(),
                 chatMessages,
                 preferenceManager.getString(Constants.KEY_USER_ID)
         );
@@ -180,7 +180,7 @@ public class ChatActivity extends BaseActivity {
                     receiverUser2.setFcmToken(userProfile.getFcmToken());
                     if (receiverUser2.getImageUri() == null) {
                         receiverUser2.setImageUri(userProfile.getImageUri());
-                        chatAdapter.setReceiverProfileImage(getBitmapFromEncodesString(receiverUser2.getImageUri()));
+                        chatAdapter.setReceiverProfileImage(receiverUser2.getImageUri());
                         chatAdapter.notifyItemChanged(0, chatMessages.size());
                     }
                 }

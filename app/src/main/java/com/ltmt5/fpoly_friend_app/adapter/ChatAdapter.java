@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.databinding.ItemContainerReceivedMessageBinding;
 import com.ltmt5.fpoly_friend_app.databinding.ItemContainerSentMessageBinding;
 import com.ltmt5.fpoly_friend_app.model.ChatMessage;
@@ -19,15 +21,15 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     public static final int VIEW_TYPE_RECEIVED = 2;
     private final List<ChatMessage> chatMessages;
     private final String senderId;
-    private Bitmap receiverProfileImage;
+    private String receiverProfileImage;
 
-    public ChatAdapter(Bitmap receiverProfileImage, List<ChatMessage> chatMessages, String senderId) {
+    public ChatAdapter(String receiverProfileImage, List<ChatMessage> chatMessages, String senderId) {
         this.receiverProfileImage = receiverProfileImage;
         this.chatMessages = chatMessages;
         this.senderId = senderId;
     }
 
-    public void setReceiverProfileImage(Bitmap bitmap) {
+    public void setReceiverProfileImage(String bitmap) {
         receiverProfileImage = bitmap;
     }
 
@@ -99,11 +101,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             binding = itemContainerReceivedMessageBinding;
         }
 
-        void setData(ChatMessage chatMessage, Bitmap receiverProfileImage) {
+        void setData(ChatMessage chatMessage, String receiverProfileImage) {
             binding.textMessage.setText(chatMessage.message);
             binding.textDateTime.setText(chatMessage.dateTime);
             if (receiverProfileImage != null) {
-                binding.imageProfile.setImageBitmap(receiverProfileImage);
+                Glide.with(App.context).load(receiverProfileImage).centerCrop().into( binding.imageProfile);
             }
 
         }

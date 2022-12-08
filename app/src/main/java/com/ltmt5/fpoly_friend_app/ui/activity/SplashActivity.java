@@ -24,8 +24,6 @@ import java.util.List;
 
 public class SplashActivity extends AppCompatActivity {
     ActivitySplashBinding binding;
-    FirebaseDatabase database;
-    List<UserProfile> userProfileList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,26 +34,6 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void initView() {
-        database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("user_profile/");
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
-                    if (userProfile != null) {
-                        userProfileList.add(userProfile);
-                    }
-                    App.userProfileList.addAll(userProfileList);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "profile list empty");
-            }
-        });
-
         new Handler().postDelayed(() -> {
             if (App.sharePref.isFirstTimeLaunch()) {
                 startActivity(new Intent(this, OnBoard1Activity.class));
