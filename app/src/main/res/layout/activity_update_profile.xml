@@ -63,6 +63,27 @@
                 tools:itemCount="6"
                 tools:listitem="@layout/item_add_image" />
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/btnAdd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginVertical="10dp"
+                app:cardBackgroundColor="@color/prime_1"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="0dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/poppins_medium"
+                    android:gravity="center"
+                    android:paddingHorizontal="10dp"
+                    android:paddingVertical="4dp"
+                    android:text="Thêm ảnh"
+                    android:textColor="@color/white" />
+            </com.google.android.material.card.MaterialCardView>
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -75,403 +96,90 @@
                 android:textSize="14sp" />
 
             <TextView
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@color/darkGrayLight"
                 android:fontFamily="@font/poppins_semibold"
-                android:gravity="center"
+                android:gravity="start"
+                android:paddingVertical="8dp"
+                android:paddingStart="20dp"
                 android:text="Thông tin cơ bản"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
 
-            <com.google.android.material.card.MaterialCardView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/transparent"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/prime_2"
-                app:strokeWidth="1dp">
+                android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/edName"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="10dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Họ tên"
+                        android:textColor="@color/black" />
+
+                    <TextView
+                        android:id="@+id/tvName"
+                        android:layout_toStartOf="@+id/tv1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Trống"
+                        android:layout_marginEnd="10dp"
+                        android:textColor="@color/black" />
+                    <ImageView
+                        android:id="@+id/tv1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_navigate_next"
+                        android:layout_alignParentEnd="true"
+                        />
+
+                </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
                     android:layout_marginHorizontal="10dp"
-                    android:background="@color/transparent"
-                    android:hint="Tên của bạn?"
-                    android:paddingVertical="11dp"
-                    android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+                    android:background="@color/prime_3"
+                    />
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/transparent"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/prime_2"
-                app:strokeWidth="1dp">
-
-                <EditText
-                    android:id="@+id/edAge"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
-                    android:background="@color/transparent"
-                    android:hint="Tuổi của bạn?"
-                    android:paddingVertical="11dp"
-                    android:inputType="number"
-                    android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
+                    android:layout_marginHorizontal="20dp"
+                    android:layout_marginVertical="10dp"
+                    android:orientation="horizontal">
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/transparent"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/prime_2"
-                app:strokeWidth="1dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Họ tên"
+                        android:textColor="@color/black" />
 
-                <EditText
-                    android:id="@+id/edGender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
-                    android:background="@color/transparent"
-                    android:hint="Giới tính của bạn?"
-                    android:paddingVertical="11dp"
-                    android:inputType="number"
-                    android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/transparent"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/prime_2"
-                app:strokeWidth="1dp">
-
-                <EditText
-                    android:id="@+id/edMajor"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
-                    android:background="@color/transparent"
-                    android:hint="Chuyên ngành của bạn?"
-                    android:paddingVertical="11dp"
-                    android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/transparent"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/prime_2"
-                app:strokeWidth="1dp">
-
-                <EditText
-                    android:id="@+id/edPhoneNumber"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
-                    android:background="@color/transparent"
-                    android:hint="Số điện thoại của bạn?"
-                    android:inputType="number"
-                    android:paddingVertical="11dp"
-                    android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/transparent"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/prime_2"
-                app:strokeWidth="1dp">
-
-                <EditText
-                    android:id="@+id/edEmail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
-                    android:background="@color/transparent"
-                    android:hint="Email của bạn?"
-                    android:paddingVertical="11dp"
-                    android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/transparent"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/prime_2"
-                app:strokeWidth="1dp">
-
-                <EditText
-                    android:id="@+id/edLocation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
-                    android:background="@color/transparent"
-                    android:hint="Địa chỉ của bạn?"
-                    android:paddingVertical="11dp"
-                    android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
-
-
-            <TextView
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_semibold"
-                android:gravity="center"
-                android:text="Giới thiệu bản thân"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/transparent"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/prime_2"
-                app:strokeWidth="1dp">
-
-                <EditText
-                    android:id="@+id/edDescription"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
-                    android:background="@color/transparent"
-                    android:hint="Mô tả về bạn"
-                    android:paddingVertical="11dp"
-                    android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_semibold"
-                android:gravity="center"
-                android:text="Sở thích"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/transparent"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/prime_2"
-                app:strokeWidth="1dp">
-
-                <EditText
-                    android:id="@+id/edHobbies"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
-                    android:background="@color/transparent"
-                    android:hint="Sở thích của bạn?"
-                    android:paddingVertical="11dp"
-                    android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                android:layout_marginTop="20dp"
-                android:layout_marginStart="20dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/poppins_semibold"
-                android:gravity="center"
-                android:text="Thông tin thêm về tôi"
-                android:textColor="@color/black"
-                android:textSize="20sp" />
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/transparent"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/prime_2"
-                app:strokeWidth="1dp">
-
-                <EditText
-                    android:id="@+id/edZodiac"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
-                    android:background="@color/transparent"
-                    android:hint="Cung hoàng đạo của bạn?"
-                    android:paddingVertical="11dp"
-                    android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/transparent"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/prime_2"
-                app:strokeWidth="1dp">
-
-                <EditText
-                    android:id="@+id/edPersonality"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
-                    android:background="@color/transparent"
-                    android:hint="Kiểu tính cách của bạn?"
-                    android:paddingVertical="11dp"
-                    android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/transparent"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/prime_2"
-                app:strokeWidth="1dp">
-
-                <EditText
-                    android:id="@+id/edSexualOrientation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
-                    android:background="@color/transparent"
-                    android:hint="Xu hướng tính dục của bạn?"
-                    android:paddingVertical="11dp"
-                    android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/transparent"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/prime_2"
-                app:strokeWidth="1dp">
-
-                <EditText
-                    android:id="@+id/edFavoriteSong"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
-                    android:background="@color/transparent"
-                    android:hint="Bài hát yêu thích của bạn?"
-                    android:paddingVertical="11dp"
-                    android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
-                android:layout_marginTop="10dp"
-                android:clickable="true"
-                android:focusable="true"
-                app:cardBackgroundColor="@color/transparent"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="0dp"
-                app:strokeColor="@color/prime_2"
-                app:strokeWidth="1dp">
-
-                <EditText
-                    android:id="@+id/edShowPriority"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginHorizontal="10dp"
-                    android:background="@color/transparent"
-                    android:hint="Ưu tiên hiển thị cho bạn?"
-                    android:paddingVertical="11dp"
-                    android:textColor="@color/black" />
-            </com.google.android.material.card.MaterialCardView>
-
+                    <TextView
+                        android:id="@+id/tvAge"
+                        android:layout_toStartOf="@+id/tv2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Trống"
+                        android:layout_marginEnd="10dp"
+                        android:textColor="@color/black" />
+                    <ImageView
+                        android:id="@+id/tv2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_navigate_next"
+                        android:layout_alignParentEnd="true"
+                        />
+                </RelativeLayout>
+            </LinearLayout>
 
 
             <com.google.android.material.card.MaterialCardView

@@ -27,7 +27,7 @@ public class Question3Activity extends AppCompatActivity {
 //            }
         });
         binding.btnMale.setOnClickListener(v -> {
-            mGender = "Male";
+            mGender = "Nam";
 
             binding.btnMale.setCardBackgroundColor(ContextCompat.getColor(this, R.color.prime_1));
             binding.tvMale.setTextColor(ContextCompat.getColor(this, R.color.white));
@@ -43,7 +43,7 @@ public class Question3Activity extends AppCompatActivity {
         });
 
         binding.btnFemale.setOnClickListener(v -> {
-            mGender = "Female";
+            mGender = "Nữ";
 
             binding.btnFemale.setCardBackgroundColor(ContextCompat.getColor(this, R.color.prime_1));
             binding.tvFemale.setTextColor(ContextCompat.getColor(this, R.color.white));
@@ -58,7 +58,7 @@ public class Question3Activity extends AppCompatActivity {
         });
 
         binding.btnOther.setOnClickListener(v -> {
-            mGender = "Other";
+            mGender = "Khác";
 
             binding.btnOther.setCardBackgroundColor(ContextCompat.getColor(this, R.color.prime_1));
             binding.tvOther.setTextColor(ContextCompat.getColor(this, R.color.white));

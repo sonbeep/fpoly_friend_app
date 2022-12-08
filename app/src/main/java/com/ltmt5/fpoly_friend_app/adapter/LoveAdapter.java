@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.ltmt5.fpoly_friend_app.databinding.ItemLoveBinding;
 import com.ltmt5.fpoly_friend_app.model.Chat;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
@@ -67,6 +68,7 @@ public class LoveAdapter extends RecyclerView.Adapter<LoveAdapter.ViewHolder> {
         }
 
         public void bindData(UserProfile userProfile) {
+            Glide.with(context).load(userProfile.getImageUri()).centerCrop().into(binding.imgAvatar);
             binding.tvInfo.setText(userProfile.getName() + ", " + userProfile.getAge());
             binding.getRoot().setOnClickListener(view -> itemClick.clickItem(userProfile));
         }

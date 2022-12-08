@@ -50,7 +50,7 @@ public class Question5Activity extends AppCompatActivity implements HobbiesAdapt
         layoutManager.setFlexDirection(FlexDirection.ROW);
         layoutManager.setJustifyContent(JustifyContent.CENTER);
         layoutManager.setAlignItems(AlignItems.CENTER);
-        hobbiesAdapter = new HobbiesAdapter(getList(), this, this);
+        hobbiesAdapter = new HobbiesAdapter(this, this);
         hobbiesAdapter.setData(getList());
         binding.recHobbies.setLayoutManager(layoutManager);
         binding.recHobbies.setAdapter(hobbiesAdapter);

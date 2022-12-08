@@ -51,7 +51,6 @@ public class SignUpActivity extends AppCompatActivity {
     ActivitySignUpBinding binding;
     ProgressDialog progressDialog;
     Uri imageUri;
-    File fileCamera;
     boolean isDone;
     FirebaseDatabase database;
     FirebaseStorage storage;

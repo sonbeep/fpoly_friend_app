@@ -37,11 +37,9 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
     FragmentLoveBinding binding;
     MainActivity mainActivity;
     Context context;
-    FilterLoveAdapter filterLoveAdapter;
     LoveAdapter loveAdapter;
     FirebaseDatabase database;
     List<UserProfile> userProfileList = new ArrayList<>();
-    private PreferenceManager preferenceManager;
 
     public static LoveFragment newInstance() {
         return new LoveFragment();
@@ -61,8 +59,6 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
         context = App.context;
         database = FirebaseDatabase.getInstance();
         mainActivity = (MainActivity) getActivity();
-        filterLoveAdapter = new FilterLoveAdapter(getList(), context, this);
-        binding.recFilter.setAdapter(filterLoveAdapter);
 
         loveAdapter = new LoveAdapter(context, this);
         binding.recLove.setAdapter(loveAdapter);
@@ -90,22 +86,6 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
 
     private void setClick() {
 
-    }
-
-    private List<Chat> getList() {
-        List<Chat> list = new ArrayList<>();
-        list.add(new Chat("img_love", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "18"));
-        list.add(new Chat("img_love", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "18"));
-        list.add(new Chat("img_love", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "18"));
-        list.add(new Chat("img_love", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "18"));
-        list.add(new Chat("img_love", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "18"));
-        list.add(new Chat("img_love", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "18"));
-        list.add(new Chat("img_love", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "18"));
-        list.add(new Chat("img_love", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "18"));
-        list.add(new Chat("img_love", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "18"));
-        list.add(new Chat("img_love", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "18"));
-        list.add(new Chat("img_love", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "18"));
-        return list;
     }
 
     @Override
