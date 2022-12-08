@@ -42,10 +42,8 @@ import java.util.List;
 public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter.ItemClick {
     ActivityProfileBinding binding;
     UserProfile userProfileInfo;
-    List<Bitmap> bitmaps = new ArrayList<>();
     Context context;
     private boolean swipeViewSource;
-    private ImageLoader imageLoader;
     private CardView profileImageCard;
     HobbiesAdapter hobbiesAdapter;
 
@@ -60,43 +58,35 @@ public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter
 
     private void initView() {
         context = App.context;
-//        for (Bitmap bitmap : Question6Activity.bitmapList) {
-//            if (bitmap != null) {
-//                bitmaps.add(bitmap);
-//            }
-//        }
         FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(this);
         layoutManager.setFlexDirection(FlexDirection.ROW);
         layoutManager.setJustifyContent(JustifyContent.CENTER);
         layoutManager.setAlignItems(AlignItems.CENTER);
-        hobbiesAdapter = new HobbiesAdapter(getList(), this, this);
+        hobbiesAdapter = new HobbiesAdapter(this, this);
         binding.recHobbies.setLayoutManager(layoutManager);
         binding.recHobbies.setAdapter(hobbiesAdapter);
-
-//                imageLoader = App.getImageLoader();
 
         userProfileInfo = (UserProfile) getIntent().getSerializableExtra(SwipeViewFragment.EXTRA_USER_PROFILE);
         swipeViewSource = getIntent().getExtras().getBoolean(SwipeViewFragment.EXTRA_SWIPE_VIEW_SOURCE);
 
-//        userProfileInfo = SwipeViewFragment.mProfile;
-//        swipeViewSource = true;
-
 
         binding.tvName.setText(userProfileInfo.getName());
-        binding.tvAge.setText( userProfileInfo.getAge()+"");
-        binding.tvDistance.setText("cách xa 5 km");
+        binding.tvAge.setText(""+(2022-userProfileInfo.getAge()));
+        binding.tvDistance.setText(userProfileInfo.getEducation());
 
         profileImageCard = findViewById(R.id.user_swipe_card_view);
-        binding.tvDescription.setText(userProfileInfo.getName());
 
-        hobbiesAdapter.setData(getList());
-
-//        if (!swipeViewSource) {
-//            TextView matchValue = findViewById(R.id.profile_match_text_view);
-//            matchValue.setText("match in " + 87 + "%!");
-//            matchValue.setVisibility(View.VISIBLE);
-//            binding.profileMatchHeart.setVisibility(View.VISIBLE);
-//        }
+        if (userProfileInfo.getDescription()!=null){
+            binding.tvDescription.setText(userProfileInfo.getDescription());
+        }
+        else {
+            binding.tvDescription.setText(userProfileInfo.getGender());
+        }
+        List<Hobbies> hobbies = new ArrayList<>();
+        for (String s:userProfileInfo.getHobbies()){
+            hobbies.add(new Hobbies(s));
+        }
+        hobbiesAdapter.setData(hobbies);
 
         if (!swipeViewSource) binding.profileFab.setVisibility(View.VISIBLE);
 
@@ -147,17 +137,6 @@ public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter
         initViewPager(userProfileInfo);
     }
 
-    List<Hobbies> getList() {
-        List<Hobbies> list = new ArrayList<>();
-        list.add(new Hobbies("Thế hệ 9x"));
-        list.add(new Hobbies("Harry Potter"));
-        list.add(new Hobbies("SoundCloud"));
-        list.add(new Hobbies("Spa"));
-        list.add(new Hobbies("Chăm sóc bản thân"));
-        list.add(new Hobbies("Heavy Metal"));
-        return list;
-    }
-
     private void initViewPager(final UserProfile userProfileInfo) {
         PagerAdapter adapter = new PagerAdapter() {
 
@@ -175,7 +154,7 @@ public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter
             public Object instantiateItem(ViewGroup container, int position) {
                 View view = View.inflate(container.getContext(), R.layout.parallax_viewpager_item, null);
                 ImageView imageView = (ImageView) view.findViewById(R.id.item_img);
-//                Glide.with(context).load(bitmaps.get(position)).centerCrop().into(imageView);
+                Glide.with(context).load(userProfileInfo.getImageUri()).centerCrop().into(imageView);
 //                Glide.with(context).load(Uri.parse(userProfileInfo.getImageUri())).centerCrop().error(R.drawable.demo1).into(imageView);
 //                imageLoader.downloadImage(userProfileInfo.parallax_viewpager_item.xml().get(position), imageView);
                 container.addView(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);

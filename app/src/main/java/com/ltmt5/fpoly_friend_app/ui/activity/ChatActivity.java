@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -248,6 +249,7 @@ public class ChatActivity extends BaseActivity {
     private void loadReceiverDetails() {
         receiverUser2 = (UserProfile) getIntent().getSerializableExtra(Constants.KEY_USER);
         binding.tvName.setText(receiverUser2.getName());
+        Glide.with(this).load(receiverUser2.getImageUri()).centerCrop().into(binding.cvAvatar);
     }
 
     private void setListeners() {

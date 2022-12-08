@@ -20,8 +20,7 @@ public class HobbiesAdapter extends RecyclerView.Adapter<HobbiesAdapter.ViewHold
     private final ItemClick itemClick;
     private List<Hobbies> list;
 
-    public HobbiesAdapter(List<Hobbies> list, Context context, ItemClick itemClick) {
-        this.list = list;
+    public HobbiesAdapter( Context context, ItemClick itemClick) {
         this.context = context;
         this.itemClick = itemClick;
     }

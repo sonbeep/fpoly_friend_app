@@ -1,12 +1,8 @@
 package com.ltmt5.fpoly_friend_app.model;
 
-import static com.ltmt5.fpoly_friend_app.App.TAG;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.util.Base64;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,8 +19,6 @@ import com.mindorks.placeholderview.annotations.swipe.SwipeIn;
 import com.mindorks.placeholderview.annotations.swipe.SwipeInState;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOut;
 import com.mindorks.placeholderview.annotations.swipe.SwipeOutState;
-
-import java.io.ByteArrayOutputStream;
 
 
 @Layout(R.layout.adapter_tinder_card)
@@ -43,20 +37,22 @@ public class TinderCard {
     public Context mContext;
     public SwipePlaceHolderView mSwipeView;
     Bitmap bitmap;
+    int pos;
 
-    public TinderCard(Context context, UserProfile profile, SwipePlaceHolderView swipeView) {
+    public TinderCard(Context context, UserProfile profile, SwipePlaceHolderView swipeView, int mPos) {
         mContext = context;
         mProfile = profile;
         mSwipeView = swipeView;
+        this.pos = mPos;
     }
 
     @Resolve
     public void onResolved() {
-        if (mProfile!=null){
+        if (mProfile != null) {
             Glide.with(mContext).load(mProfile.getImageUri()).centerCrop().error(R.drawable.demo1).into(profileImageView);
             nameAgeTxt.setText(mProfile.getName() + ", " + (2022 - mProfile.getAge()));
             locationNameTxt.setText(mProfile.getEducation());
-            SwipeViewFragment.mProfile = mProfile;
+//            SwipeViewFragment.mProfile = mProfile;
         }
 
     }
@@ -65,6 +61,7 @@ public class TinderCard {
     public void onSwipedOut() {
         Log.d("EVENT", "onSwipedOut");
         mSwipeView.addView(this);
+        SwipeViewFragment.mPos = pos+1;
     }
 
     @SwipeCancelState
@@ -75,7 +72,10 @@ public class TinderCard {
     @SwipeIn
     public void onSwipeIn() {
         Log.d("EVENT", "onSwipedIn");
+        mSwipeView.addView(this);
+        SwipeViewFragment.mPos = pos + 1;
     }
+
 
     @SwipeInState
     public void onSwipeInState() {
@@ -87,15 +87,4 @@ public class TinderCard {
         Log.d("EVENT", "onSwipeOutState");
     }
 
-    public String convertBitmapToArray(Bitmap bm) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
-        byte[] b = baos.toByteArray();
-        return Base64.encodeToString(b, Base64.DEFAULT);
-    }
-
-    public Bitmap getBitmapFromArray(String encoded) {
-        byte[] imageAsBytes = Base64.decode(encoded.getBytes(), Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
-    }
 }

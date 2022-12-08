@@ -40,8 +40,10 @@ public class SwipeViewFragment extends Fragment {
     public static final String EXTRA_SWIPE_VIEW_SOURCE = "EXTRA_SWIPE_VIEW_SOURCE";
     public static UserProfile mProfile;
     public static List<UserProfile> userProfileList = new ArrayList<>();
+    public static int mPos = 0;
     FragmentSwipeViewBinding binding;
     MainActivity mainActivity;
+    FirebaseDatabase database;
     private Context mContext;
 
     public SwipeViewFragment() {
@@ -53,7 +55,6 @@ public class SwipeViewFragment extends Fragment {
         binding = FragmentSwipeViewBinding.inflate(inflater);
         return binding.getRoot();
     }
-
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -83,16 +84,21 @@ public class SwipeViewFragment extends Fragment {
             ActivityOptions options = ActivityOptions
                     .makeSceneTransitionAnimation(mainActivity,
                             Pair.create(binding.swipeView, "user_swipe_image_transition"));
-//            mProfile = userProfileList.get(userProfileList.indexOf(mProfile) - 2);
-            UserProfile userProfile = new UserProfile(mProfile.getUserId(),mProfile.getName(),mProfile.getAge(),mProfile.getGender(),mProfile.getEducation(),mProfile.getHobbies(),mProfile.getImageUri());
+            if (mPos < 0 || mPos > userProfileList.size() - 1) {
+                mPos = userProfileList.size() - 1;
+            }
+            mProfile = userProfileList.get(mPos);
+            UserProfile userProfile = new UserProfile(mProfile.getUserId(), mProfile.getName(), mProfile.getAge(), mProfile.getGender(), mProfile.getEducation(), mProfile.getHobbies(), mProfile.getImageUri());
             mainActivity.startActivity(getBundledIntent(userProfile), options.toBundle());
-//            mainActivity.startActivity(new Intent(getContext(), ProfileActivity.class));
         });
     }
-    FirebaseDatabase database;
 
     private void handleLikeClick() {
-        DatabaseReference myRef = database.getReference("user_profile_match/" + user.getUid()+"/"+mProfile.getUserId());
+        if (mPos < 0 || mPos > userProfileList.size() - 1) {
+            mPos = userProfileList.size() - 1;
+        }
+        mProfile = userProfileList.get(mPos);
+        DatabaseReference myRef = database.getReference("user_profile_match/" + user.getUid() + "/" + mProfile.getUserId());
         myRef.setValue(mProfile, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
@@ -124,16 +130,10 @@ public class SwipeViewFragment extends Fragment {
                         .setRelativeScale(0.01f)
                         .setSwipeInMsgLayoutId(R.layout.tinder_swipe_in_msg_view)
                         .setSwipeOutMsgLayoutId(R.layout.tinder_swipe_out_msg_view));
-        userProfileList =  App.userProfileList;
-        Log.e(TAG,"ls app:"+userProfileList.size());
-        for (UserProfile profile : userProfileList) {
-            binding.swipeView.addView(new TinderCard(mContext, profile, binding.swipeView));
-        }
-    }
-
-    public void setUpSwipeView() {
-        for (UserProfile profile : userProfileList) {
-            binding.swipeView.addView(new TinderCard(mContext, profile, binding.swipeView));
+        userProfileList = App.userProfileList;
+        Log.e(TAG, "ls app:" + userProfileList.size());
+        for (int i = 0; i < userProfileList.size(); i++) {
+            binding.swipeView.addView(new TinderCard(mContext, userProfileList.get(i), binding.swipeView, i));
         }
     }
 

@@ -18,8 +18,7 @@ public class FilterLoveAdapter extends RecyclerView.Adapter<FilterLoveAdapter.Vi
     private final Context context;
     private final ItemClick itemClick;
 
-    public FilterLoveAdapter(List<Chat> list, Context context, ItemClick itemClick) {
-        this.list = list;
+    public FilterLoveAdapter( Context context, ItemClick itemClick) {
         this.context = context;
         this.itemClick = itemClick;
     }

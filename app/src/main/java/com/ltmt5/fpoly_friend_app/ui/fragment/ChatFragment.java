@@ -153,37 +153,6 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
     }
 
     private void getUsers() {
-//        FirebaseFirestore database = FirebaseFirestore.getInstance();
-//        database.collection(Constants.KEY_COLLECTION_USERS)
-//                .get()
-//                .addOnCompleteListener(task -> {
-//                    progressDialog.dismiss();
-//                    String currenUserId = preferenceManager.getString(Constants.KEY_USER_ID);
-//                    if (task.isSuccessful() && task.getResult() != null) {
-//                        List<User> users = new ArrayList<>();
-//                        for (QueryDocumentSnapshot queryDocumentSnapshot : task.getResult()) {
-//                            if (currenUserId.equals(queryDocumentSnapshot.getId())) {
-//                                continue;
-//                            }
-//                            User user = new User();
-//                            user.name = queryDocumentSnapshot.getString(Constants.KEY_NAME);
-//                            user.email = queryDocumentSnapshot.getString(Constants.KEY_EMAIL);
-//                            user.image = queryDocumentSnapshot.getString(Constants.KEY_IMAGE);
-//                            user.token = queryDocumentSnapshot.getString(Constants.KEY_FCM_TOKEN);
-//                            user.id = queryDocumentSnapshot.getId();
-//                            users.add(user);
-//                        }
-//                        if (users.size() > 0) {
-//                            UserAdapters userAdapters = new UserAdapters(users, this);
-//                            binding.usersRecyclerView.setAdapter(userAdapters);
-//                            binding.usersRecyclerView.setVisibility(View.VISIBLE);
-//                        } else {
-//                            showErrorMessage();
-//                        }
-//                    } else {
-//                        showErrorMessage();
-//                    }
-//                });
         progressDialog.show();
         userProfileList.clear();
         userProfile.addValueEventListener(new ValueEventListener() {
