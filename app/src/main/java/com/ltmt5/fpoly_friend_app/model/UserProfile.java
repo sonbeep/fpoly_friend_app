@@ -18,6 +18,7 @@ public class UserProfile implements Serializable {
     private String userId;
     private String name;
     private int age;
+    private int phone;
     private String gender;
     private String education;
     private List<String> hobbies;
@@ -243,5 +244,13 @@ public class UserProfile implements Serializable {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public int getPhone() {
+        return phone;
+    }
+
+    public void setPhone(int phone) {
+        this.phone = phone;
     }
 }

@@ -215,9 +215,6 @@ public class MainActivity extends AppCompatActivity {
                     if (userProfile != null) {
                         userProfileList.add(userProfile);
                     }
-                    Log.e(TAG, "userProfileList" + userProfileList.size());
-                    App.userProfileList.addAll(userProfileList);
-                    App.userProfileList.addAll(userProfileList);
                     App.userProfileList.addAll(userProfileList);
                 }
             }

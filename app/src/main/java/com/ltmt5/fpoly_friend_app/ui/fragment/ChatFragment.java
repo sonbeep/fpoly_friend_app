@@ -131,7 +131,6 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
 
     public List<UserProfile> getAllUser() {
         List<UserProfile> userProfileList = new ArrayList<>();
-
         userProfile.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -227,13 +226,13 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
     @Override
     public void onPause() {
         super.onPause();
-        availability.setValue(0);
+//        availability.setValue(0);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        availability.setValue(1);
+//        availability.setValue(1);
     }
 
 
@@ -295,13 +294,15 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
 //        documentReference.update(Constants.KEY_FCM_TOKEN, token)
 //                .addOnFailureListener(e -> showToast("Unable to update token"));
 
+        if (App.currentUser.getToken()==null){
+            fcmToken.setValue(token, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                    Log.e(TAG, "added token");
+                }
+            });
+        }
 
-        fcmToken.setValue(token, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                Log.e(TAG, "added token");
-            }
-        });
     }
 
     private void showToast(String message) {
@@ -310,22 +311,6 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
 
     private void setClick() {
 
-    }
-
-    private List<Chat> getList() {
-        List<Chat> list = new ArrayList<>();
-        list.add(new Chat("img_recently", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "1"));
-        list.add(new Chat("img_recently", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "1"));
-        list.add(new Chat("img_recently", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "1"));
-        list.add(new Chat("img_recently", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "1"));
-        list.add(new Chat("img_recently", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "1"));
-        list.add(new Chat("img_recently", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "1"));
-        list.add(new Chat("img_recently", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "1"));
-        list.add(new Chat("img_recently", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "1"));
-        list.add(new Chat("img_recently", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "1"));
-        list.add(new Chat("img_recently", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "1"));
-        list.add(new Chat("img_recently", "Người dùng giấu tên", "Có hoạt động gần đây, tương tác liền", "08:43", "1"));
-        return list;
     }
 
     @Override

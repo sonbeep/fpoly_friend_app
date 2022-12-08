@@ -58,10 +58,9 @@ public class UserFragment extends Fragment {
     }
 
     private void initView() {
-        FirebaseUser user = App.user;
-        if (user != null) {
-            binding.tvName.setText(user.getDisplayName());
-            Glide.with(context).load(user.getPhotoUrl()).error(R.drawable.demo).centerCrop().into(binding.profileImage);
+        if (App.currentUser != null) {
+            binding.tvName.setText(App.currentUser.getName()+" "+(2022-App.currentUser.getAge()));
+            Glide.with(context).load(App.currentUser.getImageUri()).error(R.drawable.demo).centerCrop().into(binding.profileImage);
         } else {
             Log.e(TAG, "user null");
         }
@@ -70,7 +69,6 @@ public class UserFragment extends Fragment {
     private void setClick() {
         binding.tvVIP.setOnClickListener(view -> {
             Toast.makeText(getActivity(), "Coming soon", Toast.LENGTH_SHORT).show();
-            Log.e("AAA", "Coming soon");
         });
 
         binding.btnAdd.setOnClickListener(view -> {

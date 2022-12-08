@@ -1,5 +1,7 @@
 package com.ltmt5.fpoly_friend_app.ui.activity;
 
+import static com.ltmt5.fpoly_friend_app.App.user;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -9,8 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -26,12 +26,12 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
-import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.BuildConfig;
 import com.ltmt5.fpoly_friend_app.adapter.AddImageAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityQuestion6Binding;
@@ -42,8 +42,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 
 public class Question6Activity extends AppCompatActivity implements AddImageAdapter.ItemClick {
 
@@ -53,7 +51,6 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
     AddImageAdapter addImageAdapter;
     File fileCamera;
     FirebaseStorage storage;
-    StorageReference storageRef;
     List<Uri> uriList = new ArrayList<>();
     private Uri cameraUri;
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
@@ -95,8 +92,8 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
     }
 
     private void initView() {
+        user = FirebaseAuth.getInstance().getCurrentUser();
         storage = FirebaseStorage.getInstance();
-        storageRef = storage.getReference().child("Image/" + App.user.getUid());
         bitmapList.clear();
         for (int i = 0; i < 6; i++) {
             bitmapList.add(null);
@@ -117,39 +114,29 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
 //            if (checkBitmap()) {
             dialog.show();
             List<String> list = new ArrayList<>();
-
-            Executor executor = Executors.newSingleThreadExecutor();
-            Handler handler = new Handler(Looper.getMainLooper());
-            executor.execute(() -> {
 //                for (Bitmap bitmap : bitmapList) {
 //                    if (bitmap != null) {
 //                        list.add(EncodeImage(bitmap));
 //                    }
 //                }
-                for (int i = 0; i < uriList.size(); i++) {
-                    if (uriList.get(i) != null) {
-                        StorageReference storageRef2 = storageRef.child("image" + i);
-                        storageRef2.putFile(uriList.get(i)).addOnCompleteListener(this, new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                storageRef2.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Uri> task) {
-                                        list.add(task.getResult().toString());
-                                        Log.e("AAA", task.getResult().toString());
-                                    }
+            for (int i = 0; i < uriList.size(); i++) {
+                if (uriList.get(i) != null) {
+                    StorageReference storageRef = storage.getReference().child("image_uri/" + user.getUid() + "/" + i);
+                    storageRef.putFile(uriList.get(i)).addOnCompleteListener(this, new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            dialog.dismiss();
+                            if (task.isSuccessful()) {
+                                storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                                    list.add(uri.toString());
                                 });
                             }
-                        });
-
-                    }
+                        }
+                    });
                 }
-                handler.post(() -> {
-                    dialog.dismiss();
-                    PublicData.profileTemp.setImage(list);
-                    startActivity(new Intent(this, WelcomeActivity.class));
-                });
-            });
+            }
+            PublicData.profileTemp.setImage(list);
+            startActivity(new Intent(this, WelcomeActivity.class));
 //            }
         });
     }
@@ -160,7 +147,10 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
         TedPermission.create().setPermissionListener(new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-                launcher.launch(getIntentImage());
+                Intent pickIntent = new Intent();
+                pickIntent.setType("image/*");
+                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+                launcher.launch(pickIntent);
             }
 
             @Override
@@ -183,7 +173,7 @@ public class Question6Activity extends AppCompatActivity implements AddImageAdap
         int previewHeight = bitmap.getHeight() * previewWith / bitmap.getWidth();
         Bitmap previewBitmap = Bitmap.createScaledBitmap(bitmap, previewWith, previewHeight, false);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+        previewBitmap.compress(Bitmap.CompressFormat.PNG, 50, byteArrayOutputStream);
         byte[] bytes = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(bytes, Base64.DEFAULT);
     }

@@ -23,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.databinding.ActivitySignInBinding;
 import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
 import com.ltmt5.fpoly_friend_app.help.utilities.PreferenceManager;
@@ -34,6 +35,7 @@ public class SignInActivity extends AppCompatActivity {
     FirebaseDatabase database;
     UserProfile userProfile;
     private FirebaseAuth mAuth;
+    FirebaseUser user;
     private PreferenceManager preferenceManager;
 
     @Override
@@ -52,6 +54,34 @@ public class SignInActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Loading...");
+    }
+    void loadUser(){
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        progressDialog.show();
+        DatabaseReference myRef = database.getReference("user_profile/");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                progressDialog.dismiss();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                    if (userProfile != null) {
+                        if (user.getUid().equals(user.getUid())){
+                            App.currentUser = userProfile;
+                            Log.e(TAG,"name:"+userProfile.getName());
+                        }
+                        App.userProfileList.add(userProfile);
+                    }
+                }
+                Log.e(TAG, "list profile size: " + App.userProfileList.size());
+                startActivity(new Intent(SignInActivity.this, MainActivity.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "profile list empty");
+            }
+        });
     }
 
     private void setClick() {
@@ -115,22 +145,21 @@ public class SignInActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
         preferenceManager.putString(Constants.KEY_USER_ID, user.getUid());
-        preferenceManager.putString(Constants.KEY_NAME, user.getDisplayName());
-        preferenceManager.putString(Constants.KEY_IMAGE, user.getPhotoUrl().toString());
+//        preferenceManager.putString(Constants.KEY_NAME, user.getDisplayName());
+//        preferenceManager.putString(Constants.KEY_IMAGE, user.getPhotoUrl().toString());
 
         DatabaseReference myRef = database.getReference("user_profile/" + user.getUid());
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userProfile = snapshot.getValue(UserProfile.class);
-                Intent intent;
-                assert userProfile != null;
-                if (userProfile.getAvailability() != -1) {
-                    intent = new Intent(SignInActivity.this, MainActivity.class);
-                } else {
-                    intent = new Intent(SignInActivity.this, Question1Activity.class);
+                if (userProfile != null){
+                    if (userProfile.getAvailability() != -1) {
+                        loadUser();
+                    } else {
+                        startActivity( new Intent(SignInActivity.this, Question1Activity.class));
+                    }
                 }
-                startActivity(intent);
             }
 
             @Override

@@ -87,7 +87,7 @@
             android:alpha="0.7"
             android:fontFamily="@font/poppins_medium"
             android:gravity="center"
-            android:text="Họ tên"
+            android:text="Số điện thoại"
             android:textColor="@color/black" />
 
         <com.google.android.material.card.MaterialCardView
@@ -104,13 +104,14 @@
             app:strokeWidth="1dp">
 
             <EditText
-                android:id="@+id/edName"
+                android:id="@+id/edPhone"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="10dp"
                 android:background="@color/transparent"
-                android:hint="Nhập họ tên"
+                android:inputType="number"
+                android:hint="Nhập số điện thoại"
                 android:paddingVertical="11dp"
                 android:textColor="@color/black" />
         </com.google.android.material.card.MaterialCardView>

@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.databinding.ItemContainerRecentConversionBinding;
 import com.ltmt5.fpoly_friend_app.databinding.ItemMessageBinding;
 import com.ltmt5.fpoly_friend_app.listener.ConversionListener;
@@ -63,7 +65,8 @@ public class RecentConversionAdapter extends RecyclerView.Adapter<RecentConversi
         }
 
         void setData(ChatMessage chatMessage) {
-            binding.cvAvatar.setImageBitmap(getConversionImage(chatMessage.conversionImage));
+//            binding.cvAvatar.setImageBitmap(getConversionImage(chatMessage.conversionImage));
+            Glide.with(App.context).load(chatMessage.conversionImage).centerCrop().into(binding.cvAvatar);
             binding.tvName.setText(chatMessage.conversionName);
             binding.tvDescription.setText(chatMessage.message);
             binding.getRoot().setOnClickListener(v -> {
