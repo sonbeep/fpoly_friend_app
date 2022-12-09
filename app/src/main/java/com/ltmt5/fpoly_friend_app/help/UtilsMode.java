@@ -47,7 +47,6 @@ public class UtilsMode {
         InputStream is;
         try {
             AssetManager manager = context.getAssets();
-            Log.d(TAG, "path " + jsonFileName);
             is = manager.open(jsonFileName);
             int size = is.available();
             byte[] buffer = new byte[size];

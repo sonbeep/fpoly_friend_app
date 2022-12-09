@@ -8,10 +8,8 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -20,63 +18,57 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.FileProvider;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.ltmt5.fpoly_friend_app.App;
-import com.ltmt5.fpoly_friend_app.BuildConfig;
 import com.ltmt5.fpoly_friend_app.adapter.AddImageAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityUpdateProfileBinding;
+import com.ltmt5.fpoly_friend_app.model.Hobbies;
+import com.ltmt5.fpoly_friend_app.model.UserProfile;
+import com.ltmt5.fpoly_friend_app.ui.dialog.UpdateProfileDialog;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class UpdateProfileActivity extends AppCompatActivity implements AddImageAdapter.ItemClick {
     public static int positionAdd = 0;
-    public static List<Bitmap> bitmapList = new ArrayList<>();
+    public static List<Uri> uriList = new ArrayList<>();
     ActivityUpdateProfileBinding binding;
     AddImageAdapter addImageAdapter;
-    File fileCamera;
     Context context;
-    private Uri cameraUri;
+    FirebaseUser user;
     ProgressDialog progressDialog;
+    FirebaseDatabase database;
+    FirebaseStorage storage;
+    StorageReference storageRef;
+    UserProfile userProfile;
+    private Uri imageUri;
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Activity.RESULT_OK) {
-                Bitmap bitmap = null;
-                if (result.getData() == null) {
-                    bitmap = getBitmapFromUri(cameraUri);
-                } else {
-                    Uri imageUri = result.getData().getData();
-                    bitmap = getBitmapFromUri(imageUri);
+                if (result.getData() != null) {
+                    imageUri = result.getData().getData();
                 }
-                bitmapList.set(positionAdd, bitmap);
+                uriList.add(imageUri);
                 addImageAdapter.notifyDataSetChanged();
             }
         }
     });
-
-    public Bitmap getBitmapFromUri(Uri uri) {
-        Bitmap bitmap = null;
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), uri);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,50 +77,213 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
         setContentView(binding.getRoot());
         initView();
         setClick();
+        loadUser();
+    }
+
+    private void loadUser() {
+        progressDialog.show();
+        DatabaseReference myRef = database.getReference("user_profile/" + user.getUid());
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                progressDialog.dismiss();
+                userProfile = snapshot.getValue(UserProfile.class);
+//                Log.e(TAG,"name test"+userProfile.getName());
+                getData();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "load user for update fail");
+            }
+        });
+    }
+
+    private void getData() {
+
+
+        //name
+        if (userProfile.getName() != null) {
+            binding.tvName.setText(userProfile.getName());
+        }
+        //age
+        if (userProfile.getAge() < 1900 || userProfile.getAge() > 2022) {
+            binding.tvAge.setText("Trống");
+        } else {
+            binding.tvAge.setText("" + userProfile.getAge());
+        }
+
+        //gender
+
+        if (userProfile.getGender() != null) {
+            binding.tvGender.setText(userProfile.getGender());
+        }
+
+        //education
+
+        if (userProfile.getEducation() != null) {
+            binding.tvEducation.setText(userProfile.getEducation());
+        }
+
+        //hoobies
+
+        if (userProfile.getHobbies() != null) {
+            binding.tvHoobies.setText(userProfile.getHobbies().get(0));
+        }
+
+        //description
+
+        if (userProfile.getDescription() != null) {
+            binding.tvDescription.setText(userProfile.getDescription());
+        }
+
+        //location
+
+        if (userProfile.getLocation() != null) {
+            binding.tvLocation.setText(userProfile.getLocation());
+        }
+
+        //zodiac
+
+        if (userProfile.getZodiac() != null) {
+            binding.tvZodiac.setText(userProfile.getZodiac());
+        }
+
+//        personality
+
+        if (userProfile.getPersonality() == null) {
+            binding.tvPersonality.setText(userProfile.getPersonality());
+        }
+
+//        favorite
+
+        if (userProfile.getFavoriteSong() == null) {
+            binding.tvFavoriteSong.setText(userProfile.getFavoriteSong());
+        }
+
+//        orient
+
+        if (userProfile.getSexualOrientation() == null) {
+            binding.tvSexualOrientation.setText(userProfile.getSexualOrientation());
+        }
+
+//        priority
+
+        if (userProfile.getShowPriority() == null) {
+            binding.tvShowPriority.setText(userProfile.getShowPriority());
+        }
+
+
     }
 
     private void initView() {
         context = App.context;
-        bitmapList.clear();
+        storage = FirebaseStorage.getInstance();
+        database = FirebaseDatabase.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...");
+        uriList.clear();
         for (int i = 0; i < 6; i++) {
-            bitmapList.add(null);
+            uriList.add(null);
 
         }
-        addImageAdapter = new AddImageAdapter(bitmapList, context, this);
+        addImageAdapter = new AddImageAdapter(context, this);
         binding.recAddImage.setAdapter(addImageAdapter);
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Loading...");
+
     }
 
     private void setClick() {
         binding.btnNext.setOnClickListener(v -> {
-//            if (checkBitmap()) {
-//            }
-            handleNextClick();
+            onBackPressed();
         });
         binding.btnBack.setOnClickListener(view -> onBackPressed());
+
+        binding.name.setOnClickListener(view -> {
+            openDialog("name", binding.tvName.getText().toString().trim());
+        });
+        binding.age.setOnClickListener(view -> {
+            openDialog("age", binding.tvAge.getText().toString().trim());
+        });
+        binding.gender.setOnClickListener(view -> {
+            openDialog("gender", binding.tvGender.getText().toString().trim());
+        });
+        binding.education.setOnClickListener(view -> {
+            openDialog("education", binding.tvEducation.getText().toString().trim());
+        });
+        binding.hoobies.setOnClickListener(view -> {
+            openDialog("hoobies", binding.tvHoobies.getText().toString().trim());
+        });
+        binding.description.setOnClickListener(view -> {
+            openDialog("description", binding.tvDescription.getText().toString().trim());
+        });
+        binding.location.setOnClickListener(view -> {
+            openDialog("location", binding.tvLocation.getText().toString().trim());
+        });
+        binding.zodiac.setOnClickListener(view -> {
+            openDialog("zodiac", binding.tvZodiac.getText().toString().trim());
+        });
+        binding.personality.setOnClickListener(view -> {
+            openDialog("personality", binding.tvPersonality.getText().toString().trim());
+        });
+        binding.favoriteSong.setOnClickListener(view -> {
+            openDialog("favoriteSong", binding.tvFavoriteSong.getText().toString().trim());
+        });
+        binding.sexualOrientation.setOnClickListener(view -> {
+            openDialog("sexualOrientation", binding.tvSexualOrientation.getText().toString().trim());
+        });
+        binding.showPriority.setOnClickListener(view -> {
+            openDialog("showPriority", binding.tvShowPriority.getText().toString().trim());
+        });
     }
 
-    private void handleNextClick() {
+    public void openDialog(String name, String data) {
+        UpdateProfileDialog updateProfileDialog = UpdateProfileDialog.newInstance(name, data);
+        updateProfileDialog.showAllowingStateLoss(getSupportFragmentManager(), "update");
+        updateProfileDialog.setOnClickListener(new UpdateProfileDialog.OnClickListener() {
+            @Override
+            public void onApply(String data, List<Hobbies> list) {
+                if (data == null) {
+                    handleUpdate(name, list);
+                } else {
+                    handleUpdate(name, data);
+                }
+
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+        });
+    }
+
+    void handleUpdate(String name, String data) {
         progressDialog.show();
-        String name = binding.edName.getText().toString().trim();
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        DatabaseReference myRef = database.getReference("user_profile/" + user.getUid() + "/" + name);
+        myRef.setValue(data, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                progressDialog.dismiss();
+                Log.e(TAG, "created user profile");
+            }
+        });
+    }
 
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                .setDisplayName(name)
-                .build();
-
-        user.updateProfile(profileUpdates)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        progressDialog.dismiss();
-                        if (task.isSuccessful()) {
-                            Log.e(TAG, "User profile updated.");
-                        }
-                    }
-                });
+    void handleUpdate(String name, List<Hobbies> list) {
+        progressDialog.show();
+        DatabaseReference myRef = database.getReference("user_profile/" + user.getUid() + "/" + name);
+        myRef.setValue(list, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                progressDialog.dismiss();
+                Log.e(TAG, "created user profile");
+            }
+        });
     }
 
     @Override
@@ -137,7 +292,10 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
         TedPermission.create().setPermissionListener(new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-                launcher.launch(getIntentImage());
+                Intent pickIntent = new Intent();
+                pickIntent.setType("image/*");
+                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+                launcher.launch(pickIntent);
             }
 
             @Override
@@ -148,47 +306,19 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
 
     }
 
-    private Uri createCameraUri() {
-        String nameTest = "camera_" + System.currentTimeMillis();
-        try {
-            fileCamera = File.createTempFile(nameTest, ".png");
-        } catch (IOException e) {
-            return null;
-        }
-        return FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".provider", fileCamera);
-    }
-
-    public Intent getIntentImage() {
-        cameraUri = createCameraUri();
-        Intent pickIntent = new Intent();
-        pickIntent.setType("image/*");
-        pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-        pickIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        pickIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        pickIntent.putExtra(Intent.EXTRA_INDEX, 0);
-
-
-        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri);
-        String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
-        Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePhotoIntent});
-        return chooserIntent;
-    }
-
     @Override
     public void deleteItem(int position) {
-        bitmapList.remove(position);
+//        bitmapList.remove(position);
     }
 
     boolean checkBitmap() {
         boolean isDone = true;
         int count = 0;
-        for (Bitmap bitmap : bitmapList) {
-            if (bitmap != null) {
-                count++;
-            }
-        }
+//        for (Bitmap bitmap : bitmapList) {
+//            if (bitmap != null) {
+//                count++;
+//            }
+//        }
         if (count < 2) {
             Toast.makeText(this, "Vui lòng chọn ít nhất 2 ảnh", Toast.LENGTH_SHORT).show();
             isDone = false;

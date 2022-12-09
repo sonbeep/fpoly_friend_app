@@ -104,6 +104,10 @@ dependencies {
     // Normal
     implementation 'io.github.ParkSangGwon:tedpermission-normal:3.3.0'
 
+    //ripple
+
+    implementation 'com.github.traex.rippleeffect:library:1.3'
+
     // Firebase
     implementation platform('com.google.firebase:firebase-bom:30.4.1')
     implementation 'com.google.firebase:firebase-config'
