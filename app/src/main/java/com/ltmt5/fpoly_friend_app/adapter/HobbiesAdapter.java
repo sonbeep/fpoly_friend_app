@@ -18,13 +18,17 @@ import java.util.List;
 public class HobbiesAdapter extends RecyclerView.Adapter<HobbiesAdapter.ViewHolder> {
     private final Context context;
     private final ItemClick itemClick;
+    boolean isMultiple;
     private List<Hobbies> list;
 
-    public HobbiesAdapter( Context context, ItemClick itemClick) {
+    public HobbiesAdapter(Context context, ItemClick itemClick) {
         this.context = context;
         this.itemClick = itemClick;
     }
 
+    public void setMultiple(boolean multiple) {
+        isMultiple = multiple;
+    }
 
     @NonNull
     @Override
@@ -39,11 +43,16 @@ public class HobbiesAdapter extends RecyclerView.Adapter<HobbiesAdapter.ViewHold
 
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<Hobbies> list) {
-        this.list = list;
+    public void setData(List<Hobbies> mList, String data) {
+        this.list = mList;
+        for (Hobbies hobbies : list) {
+            if (hobbies.getName().contains(data)) {
+                hobbies.setSelected(true);
+            }
+        }
         notifyDataSetChanged();
     }
+
 
     @Override
     public int getItemCount() {
@@ -78,8 +87,22 @@ public class HobbiesAdapter extends RecyclerView.Adapter<HobbiesAdapter.ViewHold
             }
             binding.tv1.setText(hobbies.getName());
             binding.btnHobbies.setOnClickListener(v -> {
+                hobbies.setSelected(true);
+                if (!isMultiple) {
+                    handleClick(hobbies);
+                }
                 itemClick.clickItem(hobbies);
             });
+
+        }
+
+        private void handleClick(Hobbies hoobies) {
+            for (int i = 0; i < list.size(); i++) {
+                if (!hoobies.equals(list.get(i))) {
+                    list.get(i).setSelected(false);
+                }
+            }
+            notifyDataSetChanged();
         }
     }
 }

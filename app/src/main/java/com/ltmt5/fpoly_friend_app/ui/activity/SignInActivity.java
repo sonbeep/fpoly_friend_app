@@ -54,9 +54,10 @@ public class SignInActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Loading...");
+        user = FirebaseAuth.getInstance().getCurrentUser();
     }
     void loadUser(){
-        user = FirebaseAuth.getInstance().getCurrentUser();
+
         progressDialog.show();
         DatabaseReference myRef = database.getReference("user_profile/");
         myRef.addValueEventListener(new ValueEventListener() {
@@ -66,7 +67,7 @@ public class SignInActivity extends AppCompatActivity {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
                     if (userProfile != null) {
-                        if (user.getUid().equals(user.getUid())){
+                        if (userProfile.getUserId().equals(user.getUid())){
                             App.currentUser = userProfile;
                             Log.e(TAG,"name:"+userProfile.getName());
                         }
@@ -146,6 +147,7 @@ public class SignInActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
         preferenceManager.putString(Constants.KEY_USER_ID, user.getUid());
+        Log.e(TAG,"uId: "+user.getUid());
 //        preferenceManager.putString(Constants.KEY_NAME, user.getDisplayName());
 //        preferenceManager.putString(Constants.KEY_IMAGE, user.getPhotoUrl().toString());
 

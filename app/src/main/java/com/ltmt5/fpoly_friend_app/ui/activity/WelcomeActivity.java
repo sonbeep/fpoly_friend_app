@@ -39,7 +39,6 @@ public class WelcomeActivity extends AppCompatActivity {
 
     private void setClick() {
         DatabaseReference myRef = database.getReference("user_profile/" + user.getUid());
-        Log.d(TAG, "id" + user.getUid());
         binding.btnNext.setOnClickListener(v -> {
             ProgressDialog dialog = new ProgressDialog(WelcomeActivity.this);
             dialog.setCancelable(false);

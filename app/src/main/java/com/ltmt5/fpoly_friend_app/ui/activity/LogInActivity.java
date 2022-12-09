@@ -57,10 +57,12 @@ public class LogInActivity extends AppCompatActivity {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                         UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
                         if (userProfile != null) {
-                            if (user.getUid().equals(user.getUid())){
-                                App.currentUser = userProfile;
+                            if (userProfile.getUserId()!=null){
+                                if (userProfile.getUserId().equals(user.getUid())){
+                                    App.currentUser = userProfile;
+                                }
+                                App.userProfileList.add(userProfile);
                             }
-                            App.userProfileList.add(userProfile);
                         }
                     }
                     Log.e(TAG, "list profile size: " + App.userProfileList.size());

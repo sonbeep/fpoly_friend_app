@@ -86,7 +86,7 @@ public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter
         for (String s:userProfileInfo.getHobbies()){
             hobbies.add(new Hobbies(s));
         }
-        hobbiesAdapter.setData(hobbies);
+        hobbiesAdapter.setData(hobbies,"none");
 
         if (!swipeViewSource) binding.profileFab.setVisibility(View.VISIBLE);
 

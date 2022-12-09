@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
 
                         // Log and toast
 //                        String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d(TAG, token);
 //                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
@@ -178,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         String name = user.getDisplayName();
-        Log.d(TAG, "id: " + user.getUid());
         String email = user.getEmail();
         Uri photoUrl = user.getPhotoUrl();
         if (photoUrl != null) {
