@@ -87,8 +87,13 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 progressDialog.dismiss();
-                userProfile = snapshot.getValue(UserProfile.class);
-//                Log.e(TAG,"name test"+userProfile.getName());
+                try {
+                    userProfile = snapshot.getValue(UserProfile.class);
+                }
+                catch (Exception e){
+                    Log.e(TAG,""+e);
+
+                }
                 getData();
             }
 
@@ -264,14 +269,28 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
 
     void handleUpdate(String name, String data) {
         progressDialog.show();
-        DatabaseReference myRef = database.getReference("user_profile/" + user.getUid() + "/" + name);
-        myRef.setValue(data, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                progressDialog.dismiss();
-                Log.e(TAG, "created user profile");
-            }
-        });
+        if (name.equals("age")){
+            int age = Integer.parseInt(data);
+            DatabaseReference myRef = database.getReference("user_profile/" + user.getUid() + "/" + name);
+            myRef.setValue(age, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                    progressDialog.dismiss();
+                    Log.e(TAG, "created user profile");
+                }
+            });
+        }
+        else {
+            DatabaseReference myRef = database.getReference("user_profile/" + user.getUid() + "/" + name);
+            myRef.setValue(data, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                    progressDialog.dismiss();
+                    Log.e(TAG, "created user profile");
+                }
+            });
+        }
+
     }
 
     void handleUpdate(String name, List<Hobbies> list) {
