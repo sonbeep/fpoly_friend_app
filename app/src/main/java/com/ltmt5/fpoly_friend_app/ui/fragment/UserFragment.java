@@ -4,7 +4,6 @@ import static com.ltmt5.fpoly_friend_app.App.TAG;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,11 +14,11 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseUser;
 import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.adapter.SliderAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.FragmentUserBinding;
-import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.activity.MainActivity;
 import com.ltmt5.fpoly_friend_app.ui.activity.SettingActivity;
 import com.ltmt5.fpoly_friend_app.ui.activity.UpdateProfileActivity;
@@ -58,24 +57,18 @@ public class UserFragment extends Fragment {
         return binding.getRoot();
     }
 
-    UserProfile userProfile;
     private void initView() {
-        userProfile = mainActivity.userProfile;
-        if (userProfile != null) {
-            Bitmap bitmap = mainActivity.getBitmapFromArray(userProfile.getImage().get(0));
-            binding.tvName.setText(userProfile.getName());
-//            Glide.with(context).load(mainActivity.profile.getImageUrl()).error(R.drawable.demo).centerCrop().into(binding.profileImage);
-            Glide.with(context).load(bitmap).centerCrop().into(binding.profileImage);
-        }
-        else {
-            Log.e(TAG,"null");
+        if (App.currentUser != null) {
+            binding.tvName.setText(App.currentUser.getName()+" "+(2022-App.currentUser.getAge()));
+            Glide.with(context).load(App.currentUser.getImageUri()).error(R.drawable.demo).centerCrop().into(binding.profileImage);
+        } else {
+            Log.e(TAG, "user null");
         }
     }
 
     private void setClick() {
         binding.tvVIP.setOnClickListener(view -> {
             Toast.makeText(getActivity(), "Coming soon", Toast.LENGTH_SHORT).show();
-            Log.e("AAA", "Coming soon");
         });
 
         binding.btnAdd.setOnClickListener(view -> {

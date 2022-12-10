@@ -38,26 +38,21 @@ import java.util.List;
 
 public class AddFragment extends Fragment implements AddImageAdapter.ItemClick {
     public static int positionAdd = 0;
-    public static List<Bitmap> bitmapList = new ArrayList<>();
+    public static List<Uri> bitmapList = new ArrayList<>();
     FragmentAddBinding binding;
     AddImageAdapter addImageAdapter;
-    File fileCamera;
     MainActivity mainActivity;
-    private Uri cameraUri;
+    private Uri imageUri;
     Context context;
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Activity.RESULT_OK) {
-                Bitmap bitmap = null;
-                if (result.getData() == null) {
-                    bitmap = mainActivity.getBitmapFromUri(cameraUri);
-                } else {
-                    Uri imageUri = result.getData().getData();
-                    bitmap = mainActivity.getBitmapFromUri(imageUri);
+                if (result.getData() != null) {
+                    imageUri = result.getData().getData();
                 }
-                bitmapList.set(positionAdd, bitmap);
+                bitmapList.set(positionAdd, imageUri);
                 addImageAdapter.notifyDataSetChanged();
             }
         }
@@ -81,8 +76,9 @@ public class AddFragment extends Fragment implements AddImageAdapter.ItemClick {
             bitmapList.add(null);
 
         }
-        addImageAdapter = new AddImageAdapter(bitmapList, context, this);
-        binding.recAddImage.setAdapter(addImageAdapter);
+//        addImageAdapter = new AddImageAdapter(bitmapList, context, this);
+//        binding.recAddImage.setAdapter(addImageAdapter);
+//        addImageAdapter.setData(bitmapList);
     }
 
     private void setClick() {
@@ -98,7 +94,10 @@ public class AddFragment extends Fragment implements AddImageAdapter.ItemClick {
         TedPermission.create().setPermissionListener(new PermissionListener() {
             @Override
             public void onPermissionGranted() {
-                launcher.launch(getIntentImage());
+                Intent pickIntent = new Intent();
+                pickIntent.setType("image/*");
+                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+                launcher.launch(pickIntent);
             }
 
             @Override
@@ -109,51 +108,14 @@ public class AddFragment extends Fragment implements AddImageAdapter.ItemClick {
 
     }
 
-    private Uri createCameraUri() {
-        String nameTest = "camera_" + System.currentTimeMillis();
-        try {
-            fileCamera = File.createTempFile(nameTest, ".png");
-        } catch (IOException e) {
-            return null;
-        }
-        return FileProvider.getUriForFile(getActivity(), BuildConfig.APPLICATION_ID + ".provider", fileCamera);
-    }
-
-    public Intent getIntentImage() {
-        cameraUri = createCameraUri();
-        Intent pickIntent = new Intent();
-        pickIntent.setType("image/*");
-        pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-        pickIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-        pickIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        pickIntent.putExtra(Intent.EXTRA_INDEX, 0);
-
-
-        Intent takePhotoIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        takePhotoIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraUri);
-        String pickTitle = "Select or take a new Picture"; // Or get from strings.xml
-        Intent chooserIntent = Intent.createChooser(pickIntent, pickTitle);
-        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{takePhotoIntent});
-        return chooserIntent;
-    }
-
     @Override
     public void deleteItem(int position) {
-        bitmapList.remove(position);
-    }
+        if (bitmapList.size()<=2){
+            Toast.makeText(mainActivity, "Bạn cần có tối thiểu 2 ảnh", Toast.LENGTH_SHORT).show();
+        }
+        else  {
+            bitmapList.remove(position);
+        }
 
-    boolean checkBitmap() {
-        boolean isDone = true;
-        int count = 0;
-        for (Bitmap bitmap : bitmapList) {
-            if (bitmap != null) {
-                count++;
-            }
-        }
-        if (count < 2) {
-            Toast.makeText(getActivity(), "Vui lòng chọn ít nhất 2 ảnh", Toast.LENGTH_SHORT).show();
-            isDone = false;
-        }
-        return isDone;
     }
 }

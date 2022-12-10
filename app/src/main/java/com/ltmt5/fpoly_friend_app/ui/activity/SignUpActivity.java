@@ -2,13 +2,26 @@ package com.ltmt5.fpoly_friend_app.ui.activity;
 
 import static com.ltmt5.fpoly_friend_app.App.TAG;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -16,13 +29,60 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.gun0912.tedpermission.PermissionListener;
+import com.gun0912.tedpermission.normal.TedPermission;
 import com.ltmt5.fpoly_friend_app.databinding.ActivitySignUpBinding;
+import com.ltmt5.fpoly_friend_app.help.utilities.PreferenceManager;
+import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.dialog.SignUpDialog;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SignUpActivity extends AppCompatActivity {
     ActivitySignUpBinding binding;
-    private FirebaseAuth mAuth;
     ProgressDialog progressDialog;
+    Uri imageUri;
+    boolean isDone;
+    FirebaseDatabase database;
+    FirebaseStorage storage;
+    StorageReference storageRef;
+    private FirebaseAuth mAuth;
+    private String encodedImage;
+    ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+        @SuppressLint("NotifyDataSetChanged")
+        @Override
+        public void onActivityResult(ActivityResult result) {
+            if (result.getResultCode() == Activity.RESULT_OK) {
+                Bitmap bitmap = null;
+                if (result.getData() != null) {
+                    imageUri = result.getData().getData();
+                    bitmap = getBitmapFromUri(imageUri);
+                }
+                encodedImage = EncodeImage(bitmap);
+                binding.imageProfile.setImageBitmap(bitmap);
+                binding.textAddImage.setVisibility(View.INVISIBLE);
+            }
+        }
+    });
+
+    private String EncodeImage(Bitmap bitmap) {
+        int previewWith = 150;
+        int previewHeight = bitmap.getHeight() * previewWith / bitmap.getWidth();
+        Bitmap previewBitmap = Bitmap.createScaledBitmap(bitmap, previewWith, previewHeight, false);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(bytes, Base64.DEFAULT);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,31 +99,35 @@ public class SignUpActivity extends AppCompatActivity {
             String email = binding.edUsername.getText().toString().trim();
             String password = binding.edPassword.getText().toString().trim();
 //            if(validate(email,password)){
-                handleSignUpClick(email, password);
+            handleSignUpClick(email, password);
 //            }
         });
         binding.btnBack.setOnClickListener(view -> onBackPressed());
+        binding.imageProfile.setOnClickListener(view -> {
+            TedPermission.create().setPermissionListener(new PermissionListener() {
+                @Override
+                public void onPermissionGranted() {
+                    Intent pickIntent = new Intent();
+                    pickIntent.setType("image/*");
+                    pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+                    launcher.launch(pickIntent);
+                }
+
+                @Override
+                public void onPermissionDenied(List<String> deniedPermissions) {
+
+                }
+            }).setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]").setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE).check();
+
+
+        });
     }
 
-    private boolean validate(String email, String password) {
-        boolean isDone = true;
-        String emailPattern = "[a-zA-Z0-9._-]+@fpt.edu.vn";
-        if (email.equals("") || password.equals("")) {
-            Toast.makeText(this, "Email, password không được để trống", Toast.LENGTH_SHORT).show();
-            isDone = false;
-        }
-        if (password.length() < 8) {
-            Toast.makeText(this, "Password quá ngắn", Toast.LENGTH_SHORT).show();
-            isDone = false;
-        }
-        if (!email.matches(emailPattern)) {
-            Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
-            isDone = false;
-        }
-        return isDone;
-    }
 
     private void initView() {
+        storage = FirebaseStorage.getInstance();
+
+        database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
         progressDialog = new ProgressDialog(this);
@@ -73,6 +137,7 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void handleSignUpClick(String email, String password) {
+        isDone = true;
         progressDialog.show();
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -82,10 +147,16 @@ public class SignUpActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
-                            updateUI();
+                            updateProfile();
+//                            updateFireStore();
+                            if (isDone) {
+                                updateUI();
+                            } else {
+                                showToast("Đã xảy ra lỗi");
+                            }
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                            Log.e(TAG, "createUserWithEmail:failure", task.getException());
                             Toast.makeText(SignUpActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                         }
@@ -93,11 +164,54 @@ public class SignUpActivity extends AppCompatActivity {
                 });
     }
 
+    private void updateProfile() {
+        int phone = Integer.parseInt(binding.edPhone.getText().toString().trim());
+        String email = binding.edUsername.getText().toString().trim();
+        String password = binding.edPassword.getText().toString().trim();
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        UserProfile userProfile = new UserProfile();
+
+        if (user != null) {
+            userProfile.setAvailability(-1);
+            userProfile.setUserId(user.getUid());
+            userProfile.setPhone(phone);
+            userProfile.setEmail(email);
+            userProfile.setPassword(password);
+            userProfile.setName("người dùng 1");
+            userProfile.setAge(18);
+            userProfile.setGender("other");
+            userProfile.setEducation("không tìm thấy");
+            userProfile.setHobbies(new ArrayList<>());
+            //            Log.e("AAA","uri: "+imageUri.toString());
+            storageRef = storage.getReference().child("image_uri/" + user.getUid() + "/uImage");
+            storageRef.putFile(imageUri).addOnCompleteListener(this, task -> {
+                if (task.isSuccessful()) {
+                    storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        userProfile.setImageUri(uri.toString());
+                        DatabaseReference myRef = database.getReference("user_profile/" + user.getUid());
+                        myRef.setValue(userProfile, new DatabaseReference.CompletionListener() {
+                            @Override
+                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                                Log.e(TAG, "created user profile");
+                            }
+                        });
+                    });
+                } else {
+                    Log.e(TAG, "fail");
+                }
+            });
+        } else {
+            Log.e(TAG, "user null");
+        }
+
+
+    }
+
     private void updateUI() {
         SignUpDialog signUpDialog = SignUpDialog.newInstance();
-        signUpDialog.showAllowingStateLoss(getSupportFragmentManager(), "back");
+        signUpDialog.showAllowingStateLoss(getSupportFragmentManager(), "sign_up");
         signUpDialog.setOnClickListener(new SignUpDialog.OnClickListener() {
-
             @Override
             public void onApply() {
                 startActivity(new Intent(SignUpActivity.this, SignInActivity.class));
@@ -109,4 +223,42 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
     }
+
+    public Bitmap getBitmapFromUri(Uri uri) {
+        Bitmap bitmap = null;
+        try {
+            bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), uri);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return bitmap;
+    }
+
+    private void showToast(String meesage) {
+        Toast.makeText(this, meesage, Toast.LENGTH_SHORT).show();
+    }
+
+    private boolean validate() {
+        String phone = binding.edPhone.getText().toString().trim();
+        String email = binding.edUsername.getText().toString().trim();
+        String password = binding.edPassword.getText().toString().trim();
+        String emailPattern = "[a-zA-Z0-9._-]+@fpt.edu.vn";
+        if (email.equals("") || password.equals("") || phone.equals("")) {
+            Toast.makeText(this, "Không được để trống", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (password.length() < 8) {
+            Toast.makeText(this, "Password quá ngắn", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (!email.matches(emailPattern)) {
+            Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (encodedImage == null) {
+            Toast.makeText(this, "Ảnh không hợp lệ", Toast.LENGTH_SHORT).show();
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
 }

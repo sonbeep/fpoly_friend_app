@@ -40,7 +40,7 @@ public class Question5Activity extends AppCompatActivity implements HobbiesAdapt
                 list.add(hobbies.getName());
             }
             PublicData.profileTemp.setHobbies(list);
-            startActivity(new Intent(this, Question6Activity.class));
+            startActivity(new Intent(this, WelcomeActivity.class));
 //            }
         });
     }
@@ -50,8 +50,8 @@ public class Question5Activity extends AppCompatActivity implements HobbiesAdapt
         layoutManager.setFlexDirection(FlexDirection.ROW);
         layoutManager.setJustifyContent(JustifyContent.CENTER);
         layoutManager.setAlignItems(AlignItems.CENTER);
-        hobbiesAdapter = new HobbiesAdapter(getList(), this, this);
-        hobbiesAdapter.setData(getList());
+        hobbiesAdapter = new HobbiesAdapter(this, this);
+        hobbiesAdapter.setData(getList(),"none");
         binding.recHobbies.setLayoutManager(layoutManager);
         binding.recHobbies.setAdapter(hobbiesAdapter);
     }

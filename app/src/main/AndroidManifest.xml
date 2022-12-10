@@ -10,6 +10,9 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
+
+
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -24,7 +27,7 @@
         tools:targetApi="31">
 
         <service
-            android:name=".fcm.MyFirebaseMessagingService"
+            android:name=".fcm.MessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
@@ -39,15 +42,31 @@
             android:resource="@color/prime_1" />
 
 
+<!--        <activity-->
+<!--            android:name=".ui.activity.StoryActivity"-->
+<!--            android:exported="false">-->
+<!--            <meta-data-->
+<!--                android:name="android.app.lib_name"-->
+<!--                android:value="" />-->
+<!--        </activity>-->
         <activity
-            android:name=".ui.activity.StoryActivity"
+            android:name=".ui.activity.UpdateProfileActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
         <activity
-            android:name=".ui.activity.UpdateProfileActivity"
+            android:name=".ui.activity.ChatActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name=".ui.activity.UsersActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -162,11 +181,6 @@
         <activity
             android:name=".ui.activity.LogInActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -195,7 +209,11 @@
         <activity
             android:name=".ui.activity.SplashActivity"
             android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

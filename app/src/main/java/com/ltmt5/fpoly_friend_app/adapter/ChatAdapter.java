@@ -1,73 +1,113 @@
 package com.ltmt5.fpoly_friend_app.adapter;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ltmt5.fpoly_friend_app.databinding.ItemMessageBinding;
-import com.ltmt5.fpoly_friend_app.model.Chat;
+import com.bumptech.glide.Glide;
+import com.ltmt5.fpoly_friend_app.App;
+import com.ltmt5.fpoly_friend_app.databinding.ItemContainerReceivedMessageBinding;
+import com.ltmt5.fpoly_friend_app.databinding.ItemContainerSentMessageBinding;
+import com.ltmt5.fpoly_friend_app.model.ChatMessage;
 
 import java.util.List;
 
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> {
-    private List<Chat> list;
-    private final Context context;
-    private final ItemClick itemClick;
+public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public ChatAdapter(List<Chat> list, Context context, ItemClick itemClick) {
-        this.list = list;
-        this.context = context;
-        this.itemClick = itemClick;
+    public static final int VIEW_TYPE_SENT = 1;
+    public static final int VIEW_TYPE_RECEIVED = 2;
+    private final List<ChatMessage> chatMessages;
+    private final String senderId;
+    private String receiverProfileImage;
+
+    public ChatAdapter(String receiverProfileImage, List<ChatMessage> chatMessages, String senderId) {
+        this.receiverProfileImage = receiverProfileImage;
+        this.chatMessages = chatMessages;
+        this.senderId = senderId;
     }
 
+    public void setReceiverProfileImage(String bitmap) {
+        receiverProfileImage = bitmap;
+    }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        ItemMessageBinding binding = ItemMessageBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
-        return new ViewHolder(binding);
-    }
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType == VIEW_TYPE_SENT) {
+            return new SentMessageViewHolder(
+                    ItemContainerSentMessageBinding.inflate(
+                            LayoutInflater.from(parent.getContext()),
+                            parent,
+                            false
+                    )
+            );
+        } else {
+            return new ReceivedMessageViewHolder(
+                    ItemContainerReceivedMessageBinding.inflate(
+                            LayoutInflater.from(parent.getContext()),
+                            parent,
+                            false
+                    )
+            );
+        }
 
-    public interface ItemClick {
-        void clickItem(Chat chat);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        holder.bindData(list.get(position));
-
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<Chat> list) {
-        this.list = list;
-        notifyDataSetChanged();
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == VIEW_TYPE_SENT) {
+            ((SentMessageViewHolder) holder).setData(chatMessages.get(position));
+        } else {
+            ((ReceivedMessageViewHolder) holder).setData(chatMessages.get(position), receiverProfileImage);
+        }
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return chatMessages.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        ItemMessageBinding binding;
+    @Override
+    public int getItemViewType(int position) {
+        if (chatMessages.get(position).senderId.equals(senderId)) {
+            return VIEW_TYPE_SENT;
+        } else {
+            return VIEW_TYPE_RECEIVED;
+        }
+    }
 
-        public ViewHolder(ItemMessageBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
+    static class SentMessageViewHolder extends RecyclerView.ViewHolder {
+        private final ItemContainerSentMessageBinding binding;
+
+        SentMessageViewHolder(ItemContainerSentMessageBinding itemContainerSentMessageBinding) {
+            super(itemContainerSentMessageBinding.getRoot());
+            binding = itemContainerSentMessageBinding;
         }
 
-        public void bindData(Chat chat) {
-            int drawableId = context.getResources().getIdentifier(chat.getAvatar(), "drawable", context.getPackageName());
-            binding.imgAvatar.setImageResource(drawableId);
-            binding.tvName.setText(chat.getName());
-            binding.tvDescription.setText(chat.getDescription());
-            binding.tvTime.setText(chat.getTime());
-            binding.tvCount.setText(chat.getCount());
+        void setData(ChatMessage chatMessage) {
+            binding.textMessage.setText(chatMessage.message);
+            binding.textDateTime.setText(chatMessage.dateTime);
+        }
+    }
+
+    static class ReceivedMessageViewHolder extends RecyclerView.ViewHolder {
+        private final ItemContainerReceivedMessageBinding binding;
+
+        public ReceivedMessageViewHolder(ItemContainerReceivedMessageBinding itemContainerReceivedMessageBinding) {
+            super(itemContainerReceivedMessageBinding.getRoot());
+            binding = itemContainerReceivedMessageBinding;
+        }
+
+        void setData(ChatMessage chatMessage, String receiverProfileImage) {
+            binding.textMessage.setText(chatMessage.message);
+            binding.textDateTime.setText(chatMessage.dateTime);
+            if (receiverProfileImage != null) {
+                Glide.with(App.context).load(receiverProfileImage).centerCrop().into( binding.imageProfile);
+            }
+
         }
     }
 }

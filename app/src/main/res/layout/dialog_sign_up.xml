@@ -1,21 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <com.google.android.material.card.MaterialCardView
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
+        android:layout_width="350dp"
+        android:layout_height="200dp"
         android:layout_gravity="center"
         app:cardBackgroundColor="@color/white"
         app:cardCornerRadius="8dp"
-        app:cardElevation="10dp">
+        app:cardElevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center"
+            android:layout_gravity="center"
             android:orientation="vertical">
 
 
@@ -66,7 +70,7 @@
                     android:id="@+id/btnApply"
                     android:layout_width="80dp"
                     android:layout_height="35dp"
-                    android:layout_marginStart="20dp"
+                    android:layout_marginStart="40dp"
                     android:clickable="true"
                     android:focusable="true"
                     app:cardBackgroundColor="@color/prime_1"
@@ -88,4 +92,4 @@
 
     </com.google.android.material.card.MaterialCardView>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

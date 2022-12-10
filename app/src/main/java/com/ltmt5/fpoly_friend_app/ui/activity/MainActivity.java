@@ -2,7 +2,6 @@ package com.ltmt5.fpoly_friend_app.ui.activity;
 
 import static com.ltmt5.fpoly_friend_app.App.TAG;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,6 +28,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityMainBinding;
 import com.ltmt5.fpoly_friend_app.model.Profile;
@@ -97,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
         user = FirebaseAuth.getInstance().getCurrentUser();
         swipeViewFragment = new SwipeViewFragment();
         getUserProfile();
-        getAllUserProfile();
 
         binding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         loadFragment(swipeViewFragment);
@@ -117,10 +116,22 @@ public class MainActivity extends AppCompatActivity {
 
                         // Log and toast
 //                        String msg = getString(R.string.msg_token_fmt, token);
-                        Log.d(TAG, token);
 //                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
                     }
                 });
+
+        checkList();
+    }
+
+    public void checkList() {
+        if (App.userProfileList == null) {
+            App.userProfileList = new ArrayList<>();
+            getAllUserProfile();
+        } else {
+            if (App.userProfileList.size() == 0) {
+                getAllUserProfile();
+            }
+        }
     }
 
     public void loadFragment(Fragment fragment) {
@@ -166,7 +177,6 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         String name = user.getDisplayName();
-        Log.d(TAG, "id: " + user.getUid());
         String email = user.getEmail();
         Uri photoUrl = user.getPhotoUrl();
         if (photoUrl != null) {
@@ -192,10 +202,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getAllUserProfile() {
-        ProgressDialog dialog = new ProgressDialog(MainActivity.this);
-        dialog.setCancelable(false);
-        dialog.setMessage("Loading...");
-        dialog.show();
+        List<UserProfile> userProfileList = new ArrayList<>();
+        database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("user_profile/");
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -203,33 +211,35 @@ public class MainActivity extends AppCompatActivity {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
                     if (userProfile != null) {
-                        userProfile.setAvt(getBitmapFromArray(userProfile.getImage().get(0)));
-                        userProfiles.add(userProfile);
+                        userProfileList.add(userProfile);
                     }
+                    App.userProfileList.addAll(userProfileList);
                 }
-                SwipeViewFragment.userProfileList = userProfiles;
-                swipeViewFragment.setUpSwipeView();
-                dialog.dismiss();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainActivity.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "profile list empty");
             }
         });
     }
 
-    public String convertBitmapToArray(Bitmap bm) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bm.compress(Bitmap.CompressFormat.PNG, 100, baos); //bm is the bitmap object
-        byte[] b = baos.toByteArray();
-        return Base64.encodeToString(b, Base64.DEFAULT);
+
+    public String convertBitmapToArray(Bitmap bitmap) {
+        int previewWith = 150;
+        int previewHeight = bitmap.getHeight() * previewWith / bitmap.getWidth();
+        Bitmap previewBitmap  = Bitmap.createScaledBitmap(bitmap, previewWith, previewHeight, false);
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        previewBitmap.compress(Bitmap.CompressFormat.JPEG,50,byteArrayOutputStream);
+        byte[] bytes = byteArrayOutputStream.toByteArray();
+        return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
 
     public Bitmap getBitmapFromArray(String encoded) {
         byte[] imageAsBytes = Base64.decode(encoded.getBytes(), Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
+
 
 
 }

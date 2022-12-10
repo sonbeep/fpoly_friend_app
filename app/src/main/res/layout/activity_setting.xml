@@ -304,13 +304,13 @@
                             app:cardBackgroundColor="@color/white"
                             app:cardCornerRadius="32dp"
                             app:cardElevation="5dp">
+                                <ImageView
+                                    android:layout_width="24dp"
+                                    android:layout_height="24dp"
+                                    android:layout_gravity="center"
+                                    android:layout_margin="10dp"
+                                    android:src="@drawable/bolt" />
 
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_gravity="center"
-                                android:layout_margin="10dp"
-                                android:src="@drawable/bolt" />
                         </com.google.android.material.card.MaterialCardView>
 
                         <TextView

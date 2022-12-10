@@ -19,6 +19,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityWelcomeBinding;
 import com.ltmt5.fpoly_friend_app.help.PublicData;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class WelcomeActivity extends AppCompatActivity {
     ActivityWelcomeBinding binding;
     FirebaseDatabase database;
@@ -35,19 +38,20 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void setClick() {
-        Intent intent = getIntent();
-        if (intent != null) {
-            String text = intent.getStringExtra(PublicData.TEXT_WELCOME);
-            binding.tv1.setText(text);
-        }
         DatabaseReference myRef = database.getReference("user_profile/" + user.getUid());
-        Log.d(TAG, "id" + user.getUid());
         binding.btnNext.setOnClickListener(v -> {
             ProgressDialog dialog = new ProgressDialog(WelcomeActivity.this);
             dialog.setCancelable(false);
             dialog.setMessage("Loading...");
             dialog.show();
-            myRef.setValue(PublicData.profileTemp, new DatabaseReference.CompletionListener() {
+            Map<String, Object> map = new HashMap<>();
+            map.put("availability", 0);
+            map.put("name", PublicData.profileTemp.getName());
+            map.put("age", PublicData.profileTemp.getAge());
+            map.put("gender", PublicData.profileTemp.getGender());
+            map.put("education", PublicData.profileTemp.getEducation());
+            map.put("hobbies", PublicData.profileTemp.getHobbies());
+            myRef.updateChildren(map, new DatabaseReference.CompletionListener() {
                 @Override
                 public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                     dialog.dismiss();

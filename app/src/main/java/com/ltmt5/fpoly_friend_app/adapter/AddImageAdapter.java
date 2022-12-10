@@ -3,6 +3,7 @@ package com.ltmt5.fpoly_friend_app.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +20,9 @@ import java.util.List;
 public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.ViewHolder> {
     private final Context context;
     private final ItemClick itemClick;
-    private List<Bitmap> list;
+    private List<Uri> list;
 
-    public AddImageAdapter(List<Bitmap> list, Context context, ItemClick itemClick) {
-        this.list = list;
+    public AddImageAdapter( Context context, ItemClick itemClick) {
         this.context = context;
         this.itemClick = itemClick;
     }
@@ -42,7 +42,7 @@ public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.ViewHo
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setData(List<Bitmap> list) {
+    public void setData(List<Uri> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -71,16 +71,16 @@ public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.ViewHo
             this.binding = binding;
         }
 
-        public void bindData(Bitmap bitmap, int position) {
-            if (bitmap != null) {
-                Glide.with(context).load(bitmap).centerCrop().into(binding.imgAddImage);
-                binding.btnDelete.setVisibility(View.VISIBLE);
+        public void bindData(Uri uri, int position) {
+            if (uri != null) {
+                Glide.with(context).load(uri).centerCrop().into(binding.imgAddImage);
+//                binding.btnDelete.setVisibility(View.VISIBLE);
             } else {
                 binding.imgAddImage.setImageResource(R.drawable.ic_add);
-                binding.btnDelete.setVisibility(View.GONE);
+//                binding.btnDelete.setVisibility(View.GONE);
             }
             binding.btnAddImage.setOnClickListener(view -> {
-                if (bitmap == null) {
+                if (uri == null) {
                     itemClick.clickItem(position);
                 }
             });

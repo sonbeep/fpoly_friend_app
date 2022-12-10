@@ -6,114 +6,121 @@
     android:layout_height="match_parent"
     tools:context=".ui.activity.LogInActivity">
 
-    <ImageView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/img_sign_in" />
+        android:visibility="invisible">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.77" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/gl_hor2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.57" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/ng_nh_p_b_ng_gmail_c_a_sinh_vi_n_fpoly_ch_ng_t_i_c_th_x_c_th_c_danh_t_nh_c_a_b_n"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toTopOf="@id/gl_hor2" />
-
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/btnLogIn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="10dp"
-        android:clickable="true"
-        android:focusable="true"
-        app:cardBackgroundColor="@color/white"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="0dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/guideline1"
-        app:strokeColor="@color/black"
-        app:strokeWidth="1dp">
-
-        <RelativeLayout
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img_sign_in" />
 
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_marginVertical="14dp"
-                android:layout_marginStart="30dp"
-                android:src="@drawable/ic_google" />
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.77" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/gl_hor2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.57" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/ng_nh_p_b_ng_gmail_c_a_sinh_vi_n_fpoly_ch_ng_t_i_c_th_x_c_th_c_danh_t_nh_c_a_b_n"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toTopOf="@id/gl_hor2" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/btnLogIn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="10dp"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="@color/white"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/guideline1"
+            app:strokeColor="@color/black"
+            app:strokeWidth="1dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:layout_marginVertical="14dp"
+                    android:layout_marginStart="30dp"
+                    android:src="@drawable/ic_google" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:fontFamily="@font/roboto_medium"
+                    android:text="ĐĂNG NHẬP VỚI GOOGLE"
+                    android:textColor="@color/prime_3"
+                    android:textSize="18sp" />
+
+            </RelativeLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/btnLogIn">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:fontFamily="@font/roboto_medium"
-                android:text="ĐĂNG NHẬP VỚI GOOGLE"
-                android:textColor="@color/prime_3"
-                android:textSize="18sp" />
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/b_n_ch_a_ng_k_t_i_kho_n"
+                android:textColor="@color/black" />
 
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/btnSignUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:fontFamily="@font/poppins_medium"
+                android:text="@string/ng_k"
+                android:textColor="@color/white" />
 
+        </LinearLayout>
 
-    </com.google.android.material.card.MaterialCardView>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogIn">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/btnError"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginTop="50dp"
             android:fontFamily="@font/poppins_medium"
-            android:text="@string/b_n_ch_a_ng_k_t_i_kho_n"
-            android:textColor="@color/black" />
+            android:gravity="center"
+            android:text="Sự cố khi đăng nhập ?"
+            android:textColor="@color/white"
+            app:layout_constraintTop_toBottomOf="@+id/btnLogIn" />
 
-        <TextView
-            android:id="@+id/btnSignUp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:fontFamily="@font/poppins_medium"
-            android:text="@string/ng_k"
-            android:textColor="@color/white" />
-
-    </LinearLayout>
-
-
-    <TextView
-        android:id="@+id/btnError"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="50dp"
-        android:fontFamily="@font/poppins_medium"
-        android:gravity="center"
-        android:text="Sự cố khi đăng nhập ?"
-        android:textColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@+id/btnLogIn" />
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
