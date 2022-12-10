@@ -50,6 +50,9 @@ public class WelcomeActivity extends AppCompatActivity {
             map.put("age", PublicData.profileTemp.getAge());
             map.put("gender", PublicData.profileTemp.getGender());
             map.put("education", PublicData.profileTemp.getEducation());
+            if (PublicData.profileTemp.getHobbies()==null){
+                PublicData.profileTemp.getHobbies().add("Trống");
+            }
             map.put("hobbies", PublicData.profileTemp.getHobbies());
             myRef.updateChildren(map, new DatabaseReference.CompletionListener() {
                 @Override

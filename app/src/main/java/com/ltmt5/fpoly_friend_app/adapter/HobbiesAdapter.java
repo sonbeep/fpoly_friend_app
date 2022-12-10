@@ -87,8 +87,8 @@ public class HobbiesAdapter extends RecyclerView.Adapter<HobbiesAdapter.ViewHold
             }
             binding.tv1.setText(hobbies.getName());
             binding.btnHobbies.setOnClickListener(v -> {
-                hobbies.setSelected(true);
                 if (!isMultiple) {
+                    hobbies.setSelected(true);
                     handleClick(hobbies);
                 }
                 itemClick.clickItem(hobbies);

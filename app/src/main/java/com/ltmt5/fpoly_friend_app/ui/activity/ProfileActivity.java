@@ -83,10 +83,12 @@ public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter
             binding.tvDescription.setText(userProfileInfo.getGender());
         }
         List<Hobbies> hobbies = new ArrayList<>();
-        for (String s:userProfileInfo.getHobbies()){
-            hobbies.add(new Hobbies(s));
+        if (userProfileInfo.getHobbies()!=null){
+            for (String s:userProfileInfo.getHobbies()){
+                hobbies.add(new Hobbies(s));
+            }
+            hobbiesAdapter.setData(hobbies,"none");
         }
-        hobbiesAdapter.setData(hobbies,"none");
 
         if (!swipeViewSource) binding.profileFab.setVisibility(View.VISIBLE);
 
