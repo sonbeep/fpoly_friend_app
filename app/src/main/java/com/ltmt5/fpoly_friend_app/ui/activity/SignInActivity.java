@@ -65,13 +65,18 @@ public class SignInActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 progressDialog.dismiss();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
-                    if (userProfile != null) {
-                        if (userProfile.getUserId().equals(user.getUid())){
-                            App.currentUser = userProfile;
-                            Log.e(TAG,"name:"+userProfile.getName());
+                    try {
+                        UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                        if (userProfile != null) {
+                            if (userProfile.getUserId().equals(user.getUid())){
+                                App.currentUser = userProfile;
+                                Log.e(TAG,"name:"+userProfile.getName());
+                            }
+                            App.userProfileList.add(userProfile);
                         }
-                        App.userProfileList.add(userProfile);
+                    }
+                    catch (Exception e) {
+                        Log.e("AAA", "" + e);
                     }
                 }
                 Log.e(TAG, "list profile size: " + App.userProfileList.size());
