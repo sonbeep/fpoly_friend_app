@@ -88,6 +88,7 @@ public class UpdateProfileDialog extends BaseDialogFragment implements HobbiesAd
                 binding.tv1.setText("Sở thích");
                 binding.cvEd.setVisibility(View.GONE);
                 hobbiesAdapter.setData(getHoobies(), data);
+                hobbiesAdapter.setMultiple(true);
                 list.add(new Hobbies(data));
                 break;
             case "description":
