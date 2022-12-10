@@ -38,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.ltmt5.fpoly_friend_app.databinding.ActivitySignUpBinding;
+import com.ltmt5.fpoly_friend_app.model.Hobbies;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.dialog.SignUpDialog;
 
@@ -174,16 +175,18 @@ public class SignUpActivity extends AppCompatActivity {
         UserProfile userProfile = new UserProfile();
 
         if (user != null) {
+            List<String> list = new ArrayList<>();
+            list.add("Trống");
             userProfile.setAvailability(-1);
             userProfile.setUserId(user.getUid());
             userProfile.setPhone(phone);
             userProfile.setEmail(email);
             userProfile.setPassword(password);
             userProfile.setName("người dùng 1");
-            userProfile.setAge(18);
+            userProfile.setAge(2002);
             userProfile.setGender("other");
             userProfile.setEducation("không tìm thấy");
-            userProfile.setHobbies(new ArrayList<>());
+            userProfile.setHobbies(list);
             //            Log.e("AAA","uri: "+imageUri.toString());
             storageRef = storage.getReference().child("image_uri/" + user.getUid() + "/uImage");
             storageRef.putFile(imageUri).addOnCompleteListener(this, task -> {

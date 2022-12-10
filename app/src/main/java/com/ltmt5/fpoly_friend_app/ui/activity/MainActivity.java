@@ -191,7 +191,13 @@ public class MainActivity extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                userProfile = snapshot.getValue(UserProfile.class);
+                try {
+                    userProfile = snapshot.getValue(UserProfile.class);
+                }
+                catch (Exception e){
+                    Log.e(TAG,""+e);
+                }
+
             }
 
             @Override
