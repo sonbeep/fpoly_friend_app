@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,6 +29,9 @@ import com.ltmt5.fpoly_friend_app.databinding.ActivitySignInBinding;
 import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
 import com.ltmt5.fpoly_friend_app.help.utilities.PreferenceManager;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SignInActivity extends AppCompatActivity {
     ActivitySignInBinding binding;
@@ -167,6 +171,9 @@ public class SignInActivity extends AppCompatActivity {
                     } else {
                         startActivity( new Intent(SignInActivity.this, Question1Activity.class));
                     }
+                }
+                else {
+                    Toast.makeText(SignInActivity.this, "Email đã bị vô hiệu hóa", Toast.LENGTH_SHORT).show();
                 }
             }
 

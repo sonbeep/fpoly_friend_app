@@ -94,7 +94,9 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
                     Log.e(TAG,""+e);
 
                 }
-                getData();
+                if (userProfile!=null){
+                    getData();
+                }
             }
 
             @Override
