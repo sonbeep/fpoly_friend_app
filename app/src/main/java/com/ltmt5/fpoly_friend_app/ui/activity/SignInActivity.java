@@ -74,9 +74,11 @@ public class SignInActivity extends AppCompatActivity {
                         if (userProfile != null) {
                             if (userProfile.getUserId().equals(user.getUid())){
                                 App.currentUser = userProfile;
-                                Log.e(TAG,"name:"+userProfile.getName());
                             }
-                            App.userProfileList.add(userProfile);
+                            else {
+                                App.userProfileList.add(userProfile);
+                            }
+
                         }
                     }
                     catch (Exception e) {
