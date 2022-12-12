@@ -47,18 +47,17 @@ import com.ltmt5.fpoly_friend_app.model.User;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.activity.ChatActivity;
 import com.ltmt5.fpoly_friend_app.ui.activity.MainActivity;
+import com.ltmt5.fpoly_friend_app.ui.activity.StoryActivity;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-//public class ChatFragment extends Fragment implements ChatAdapter.ItemClick, RecentlyAdapter.ItemClick {
 public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick, ConversionListener {
     FragmentChatBinding binding;
     MainActivity mainActivity;
     Context context;
-    ChatAdapter chatAdapter;
     RecentlyAdapter recentlyAdapter;
     FirebaseUser user;
     DatabaseReference fcmToken;
@@ -113,7 +112,6 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
     };
     private FirebaseFirestore firestore;
     private FirebaseDatabase database;
-    private DocumentReference documentReference;
 
     public static ChatFragment newInstance() {
         return new ChatFragment();
@@ -129,29 +127,6 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
         return binding.getRoot();
     }
 
-    public List<UserProfile> getAllUser() {
-        List<UserProfile> userProfileList = new ArrayList<>();
-        userProfile.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
-                    if (userProfile != null) {
-                        UserProfile profile = new UserProfile(userProfile.getAvailability(), userProfile.getEmail(), userProfile.getFcmToken(), userProfile.getImageUri(), userProfile.getName(), userProfile.getPassword());
-                        userProfileList.add(profile);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "fail to load all user");
-            }
-        });
-        Log.e(TAG, "load size: " + userProfileList.size());
-        return userProfileList;
-    }
-
     private void getUsers() {
         progressDialog.show();
         userProfileList.clear();
@@ -162,9 +137,7 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
                     if (userProfile != null) {
-                        UserProfile profile = new UserProfile(userProfile.getAvailability(), userProfile.getEmail(), userProfile.getFcmToken(), userProfile.getImageUri(), userProfile.getName(), userProfile.getPassword());
-                        userProfileList.add(profile);
-                        Log.e(TAG,"userProfileList.size(): "+userProfileList.size());
+                        userProfileList.add(userProfile);
                     }
                 }
                 recentlyAdapter.setData(userProfileList);
@@ -284,7 +257,8 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
 
     @Override
     public void clickItem(UserProfile userProfile) {
-        startActivity(new Intent(getActivity(), ChatActivity.class).putExtra(Constants.KEY_USER, userProfile));
+//        startActivity(new Intent(getActivity(), ChatActivity.class).putExtra(Constants.KEY_USER, userProfile));
+        startActivity(new Intent(getActivity(), StoryActivity.class).putExtra(Constants.KEY_USER, userProfile));
     }
 
     @Override

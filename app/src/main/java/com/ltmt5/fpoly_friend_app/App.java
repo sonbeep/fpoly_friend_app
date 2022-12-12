@@ -16,6 +16,7 @@ import java.util.List;
 
 public class App extends Application {
     public static final String CHANNEL_ID = "push_notification_id";
+    public static final String STORY = "STORY";
     public static Context context;
     public static SharePref sharePref;
     public static String TAG = "AAA";

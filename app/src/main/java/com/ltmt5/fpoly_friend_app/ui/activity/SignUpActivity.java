@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
@@ -38,7 +37,6 @@ import com.google.firebase.storage.StorageReference;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.ltmt5.fpoly_friend_app.databinding.ActivitySignUpBinding;
-import com.ltmt5.fpoly_friend_app.model.Hobbies;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.dialog.SignUpDialog;
 
@@ -147,23 +145,15 @@ public class SignUpActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success");
                             updateProfile();
-//                            updateFireStore();
-                            if (isDone) {
-//                                updateUI();
-                            } else {
-                                showToast("Đã xảy ra lỗi");
-                            }
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.e(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(SignUpActivity.this, "Authentication failed.",
+                            progressDialog.dismiss();
+                            Log.e(TAG, "Authentication failed.", task.getException());
+                            Toast.makeText(SignUpActivity.this, "Đăng kí không thành công",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
-        new Handler().postDelayed(() -> {
-            progressDialog.dismiss();
-        }, 5000);
     }
 
     private void updateProfile() {
@@ -198,17 +188,21 @@ public class SignUpActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                                 Log.e(TAG, "created user profile");
+                                showToast("Đăng kí thành công");
+                                updateUI();
                             }
                         });
                     });
                 } else {
                     Log.e(TAG, "fail");
+                    showToast("Đã xảy ra lỗi");
                 }
             });
         } else {
             Log.e(TAG, "user null");
+            showToast("Đã xảy ra lỗi");
         }
-
+        progressDialog.dismiss();
 
     }
 

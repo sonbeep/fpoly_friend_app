@@ -74,11 +74,12 @@ public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.ViewHo
         public void bindData(Uri uri, int position) {
             if (uri != null) {
                 Glide.with(context).load(uri).centerCrop().into(binding.imgAddImage);
-//                binding.btnDelete.setVisibility(View.VISIBLE);
-            } else {
-                binding.imgAddImage.setImageResource(R.drawable.ic_add);
-//                binding.btnDelete.setVisibility(View.GONE);
+                binding.btnDelete.setVisibility(View.VISIBLE);
             }
+//            else {
+//                binding.imgAddImage.setImageResource(R.drawable.ic_add);
+//                binding.btnDelete.setVisibility(View.GONE);
+//            }
             binding.btnAddImage.setOnClickListener(view -> {
                 if (uri == null) {
                     itemClick.clickItem(position);
