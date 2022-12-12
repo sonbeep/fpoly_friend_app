@@ -37,7 +37,6 @@ import com.ltmt5.fpoly_friend_app.ui.fragment.AddFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.ChatFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.LoveFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.SwipeViewFragment;
-import com.ltmt5.fpoly_friend_app.ui.fragment.UserFragment;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
