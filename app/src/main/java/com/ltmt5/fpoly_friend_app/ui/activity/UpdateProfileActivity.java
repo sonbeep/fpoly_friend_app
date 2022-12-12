@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -33,9 +34,9 @@ import com.google.firebase.storage.StorageReference;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
 import com.ltmt5.fpoly_friend_app.App;
+import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.adapter.AddImageAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityUpdateProfileBinding;
-import com.ltmt5.fpoly_friend_app.model.Hobbies;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.dialog.UpdateProfileDialog;
 
@@ -64,11 +65,34 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
                 if (result.getData() != null) {
                     imageUri = result.getData().getData();
                 }
-                uriList.add(imageUri);
-                addImageAdapter.notifyDataSetChanged();
+//                uriList.add(imageUri);
+//                addImageAdapter.notifyDataSetChanged();
+                Glide.with(context).load(imageUri).error(R.drawable.demo).centerCrop().into(binding.imageProfile);
+                updateImgage();
             }
         }
     });
+
+    private void updateImgage() {
+        progressDialog.show();
+        storageRef = storage.getReference().child("image_uri/" + user.getUid() + "/uImage");
+        storageRef.putFile(imageUri).addOnCompleteListener(this, task -> {
+            if (task.isSuccessful()) {
+                storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                    DatabaseReference myRef = database.getReference("user_profile/" + user.getUid()+"/imageUri");
+                    myRef.setValue(uri.toString(), new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                            Log.e(TAG,"changed image");
+                        }
+                    });
+                });
+            } else {
+                Log.e(TAG, "fail");
+            }
+        });
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,12 +113,11 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
                 progressDialog.dismiss();
                 try {
                     userProfile = snapshot.getValue(UserProfile.class);
-                }
-                catch (Exception e){
-                    Log.e(TAG,""+e);
+                } catch (Exception e) {
+                    Log.e(TAG, "" + e);
 
                 }
-                if (userProfile!=null){
+                if (userProfile != null) {
                     getData();
                 }
             }
@@ -107,7 +130,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
     }
 
     private void getData() {
-
+        Glide.with(context).load(userProfile.getImageUri()).error(R.drawable.demo).centerCrop().into(binding.imageProfile);
 
         //name
         if (userProfile.getName() != null) {
@@ -196,15 +219,23 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
             uriList.add(null);
 
         }
-        addImageAdapter = new AddImageAdapter(context, this);
-        binding.recAddImage.setAdapter(addImageAdapter);
+//        addImageAdapter = new AddImageAdapter(context, this);
+//        binding.recAddImage.setAdapter(addImageAdapter);
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Loading...");
 
+
     }
 
     private void setClick() {
+        binding.btnAdd.setOnClickListener(view -> {
+            Intent pickIntent = new Intent();
+            pickIntent.setType("image/*");
+            pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+            launcher.launch(pickIntent);
+        });
+
         binding.btnNext.setOnClickListener(v -> {
             onBackPressed();
         });
@@ -223,7 +254,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
             openDialog("education", binding.tvEducation.getText().toString().trim());
         });
         binding.hoobies.setOnClickListener(view -> {
-            openDialog("hoobies", binding.tvHoobies.getText().toString().trim());
+            openDialog("hobbies", binding.tvHoobies.getText().toString().trim());
         });
         binding.description.setOnClickListener(view -> {
             openDialog("description", binding.tvDescription.getText().toString().trim());
@@ -253,8 +284,9 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
         updateProfileDialog.showAllowingStateLoss(getSupportFragmentManager(), "update");
         updateProfileDialog.setOnClickListener(new UpdateProfileDialog.OnClickListener() {
             @Override
-            public void onApply(String data, List<Hobbies> list) {
+            public void onApply(String data, List<String> list) {
                 if (data == null) {
+                    Log.e(TAG, "ok");
                     handleUpdate(name, list);
                 } else {
                     handleUpdate(name, data);
@@ -269,9 +301,10 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
         });
     }
 
+
     void handleUpdate(String name, String data) {
         progressDialog.show();
-        if (name.equals("age")){
+        if (name.equals("age")) {
             int age = Integer.parseInt(data);
             DatabaseReference myRef = database.getReference("user_profile/" + user.getUid() + "/" + name);
             myRef.setValue(age, new DatabaseReference.CompletionListener() {
@@ -281,8 +314,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
                     Log.e(TAG, "created user profile");
                 }
             });
-        }
-        else {
+        } else {
             DatabaseReference myRef = database.getReference("user_profile/" + user.getUid() + "/" + name);
             myRef.setValue(data, new DatabaseReference.CompletionListener() {
                 @Override
@@ -295,7 +327,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
 
     }
 
-    void handleUpdate(String name, List<Hobbies> list) {
+    void handleUpdate(String name, List<String> list) {
         progressDialog.show();
         DatabaseReference myRef = database.getReference("user_profile/" + user.getUid() + "/" + name);
         myRef.setValue(list, new DatabaseReference.CompletionListener() {

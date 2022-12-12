@@ -1,9 +1,12 @@
 package com.ltmt5.fpoly_friend_app.ui.dialog;
 
+import static com.ltmt5.fpoly_friend_app.App.TAG;
+
 import android.app.Dialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +34,7 @@ public class UpdateProfileDialog extends BaseDialogFragment implements HobbiesAd
     String data = "none";
     HobbiesAdapter hobbiesAdapter;
     List<Hobbies> list;
+    List<String> stringList;
 
     public UpdateProfileDialog() {
     }
@@ -59,6 +63,7 @@ public class UpdateProfileDialog extends BaseDialogFragment implements HobbiesAd
 
     private void initView() {
         list = new ArrayList<>();
+        stringList = new ArrayList<>();
         FlexboxLayoutManager layoutManager = new FlexboxLayoutManager(App.context);
         layoutManager.setFlexDirection(FlexDirection.ROW);
         layoutManager.setJustifyContent(JustifyContent.CENTER);
@@ -84,7 +89,7 @@ public class UpdateProfileDialog extends BaseDialogFragment implements HobbiesAd
                 hobbiesAdapter.setData(getListEducation(), data);
                 list.add(new Hobbies(data));
                 break;
-            case "hoobies":
+            case "hobbies":
                 binding.tv1.setText("Sở thích");
                 binding.cvEd.setVisibility(View.GONE);
                 hobbiesAdapter.setData(getHoobies(), data);
@@ -144,8 +149,8 @@ public class UpdateProfileDialog extends BaseDialogFragment implements HobbiesAd
         });
         binding.btnApply.setOnClickListener(v -> {
             String data = null;
-            if (!name.equals("hoobies")) {
-                if (name.equals("gender")||name.equals("education")||name.equals("sexualOrientation")||name.equals("zodiac")||name.equals("showPriority")) {
+            if (!name.equals("hobbies")) {
+                if (name.equals("gender") || name.equals("education") || name.equals("sexualOrientation") || name.equals("zodiac") || name.equals("showPriority")) {
                     if (list.size() != 0) {
                         data = list.get(0).getName();
                     }
@@ -153,7 +158,11 @@ public class UpdateProfileDialog extends BaseDialogFragment implements HobbiesAd
                     data = binding.ed1.getText().toString().trim();
                 }
             }
-            onClickListener.onApply(data, list);
+            Log.e(TAG, "ls: " + list.size());
+            for (Hobbies hobbies : list) {
+                stringList.add(hobbies.getName());
+            }
+            onClickListener.onApply(data, stringList);
             dismiss();
         });
     }
@@ -289,7 +298,7 @@ public class UpdateProfileDialog extends BaseDialogFragment implements HobbiesAd
 
     @Override
     public void clickItem(Hobbies hobbies) {
-        if (!name.equals("hoobies")) {
+        if (!name.equals("hobbies")) {
             list.clear();
             list.add(hobbies);
         } else {
@@ -303,7 +312,7 @@ public class UpdateProfileDialog extends BaseDialogFragment implements HobbiesAd
 
 
     public interface OnClickListener {
-        void onApply(String data, List<Hobbies> list);
+        void onApply(String data, List<String> list);
 
         void onCancel();
     }

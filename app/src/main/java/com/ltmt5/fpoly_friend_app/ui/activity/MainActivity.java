@@ -209,6 +209,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getAllUserProfile() {
+        App.userProfileList = new ArrayList<>();
         List<UserProfile> userProfileList = new ArrayList<>();
         database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("user_profile/");

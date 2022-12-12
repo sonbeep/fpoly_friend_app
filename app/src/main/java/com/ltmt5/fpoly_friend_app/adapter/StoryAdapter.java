@@ -2,6 +2,7 @@ package com.ltmt5.fpoly_friend_app.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +18,9 @@ import java.util.List;
 
 public class StoryAdapter extends PagerAdapter {
     private Context context;
-    private List<Bitmap> list;
+    private List<String> list;
 
-    public StoryAdapter(Context context, List<Bitmap> list) {
+    public StoryAdapter(Context context, List<String> list) {
         this.context = context;
         this.list = list;
     }
