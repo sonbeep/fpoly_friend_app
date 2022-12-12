@@ -117,8 +117,6 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
                             Log.e(TAG, "" + e);
                         }
                     }
-                    Log.e(TAG, "ls" + uriList.size());
-                    Log.e(TAG, "userProfile.getUserId()" + userProfile.getUserId());
                     startStory();
                 }
 

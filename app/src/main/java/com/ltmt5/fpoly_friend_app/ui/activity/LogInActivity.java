@@ -62,7 +62,10 @@ public class LogInActivity extends AppCompatActivity {
                                     if (userProfile.getUserId().equals(user.getUid())) {
                                         App.currentUser = userProfile;
                                     }
-                                    App.userProfileList.add(userProfile);
+                                    else {
+                                        App.userProfileList.add(userProfile);
+                                    }
+
                                 }
                             }
                         } catch (Exception e) {
