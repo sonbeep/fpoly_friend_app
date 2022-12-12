@@ -54,9 +54,8 @@
         android:layout_marginTop="10dp"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/item_message"
-        tools:itemCount="10"/>
-
+        tools:itemCount="10"
+        tools:listitem="@layout/item_message" />
 
 
 </LinearLayout>

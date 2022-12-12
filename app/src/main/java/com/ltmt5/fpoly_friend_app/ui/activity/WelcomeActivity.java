@@ -1,11 +1,8 @@
 package com.ltmt5.fpoly_friend_app.ui.activity;
 
-import static com.ltmt5.fpoly_friend_app.App.TAG;
-
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -50,7 +47,7 @@ public class WelcomeActivity extends AppCompatActivity {
             map.put("age", PublicData.profileTemp.getAge());
             map.put("gender", PublicData.profileTemp.getGender());
             map.put("education", PublicData.profileTemp.getEducation());
-            if (PublicData.profileTemp.getHobbies()==null){
+            if (PublicData.profileTemp.getHobbies() == null) {
                 PublicData.profileTemp.getHobbies().add("Trống");
             }
             map.put("hobbies", PublicData.profileTemp.getHobbies());

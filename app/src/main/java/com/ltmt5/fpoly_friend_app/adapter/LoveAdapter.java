@@ -1,6 +1,5 @@
 package com.ltmt5.fpoly_friend_app.adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -10,22 +9,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.ltmt5.fpoly_friend_app.databinding.ItemLoveBinding;
-import com.ltmt5.fpoly_friend_app.model.Chat;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
 
 import java.util.List;
 
 public class LoveAdapter extends RecyclerView.Adapter<LoveAdapter.ViewHolder> {
-    private List<UserProfile> list;
     private final Context context;
     private final ItemClick itemClick;
+    private List<UserProfile> list;
 
     public LoveAdapter(Context context, ItemClick itemClick) {
         this.context = context;
         this.itemClick = itemClick;
     }
 
-    public void setData(List<UserProfile> list){
+    public void setData(List<UserProfile> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -38,25 +36,24 @@ public class LoveAdapter extends RecyclerView.Adapter<LoveAdapter.ViewHolder> {
         return new ViewHolder(binding);
     }
 
-    public interface ItemClick {
-        void clickItem(UserProfile userProfile);
-    }
-
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         holder.bindData(list.get(position));
 
     }
 
-
     @Override
     public int getItemCount() {
-        if (list==null){
+        if (list == null) {
             return 0;
-        }
-        else {
+        } else {
             return list.size();
         }
+    }
+
+
+    public interface ItemClick {
+        void clickItem(UserProfile userProfile);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

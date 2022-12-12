@@ -79,11 +79,11 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
         storageRef.putFile(imageUri).addOnCompleteListener(this, task -> {
             if (task.isSuccessful()) {
                 storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-                    DatabaseReference myRef = database.getReference("user_profile/" + user.getUid()+"/imageUri");
+                    DatabaseReference myRef = database.getReference("user_profile/" + user.getUid() + "/imageUri");
                     myRef.setValue(uri.toString(), new DatabaseReference.CompletionListener() {
                         @Override
                         public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                            Log.e(TAG,"changed image");
+                            Log.e(TAG, "changed image");
                         }
                     });
                 });

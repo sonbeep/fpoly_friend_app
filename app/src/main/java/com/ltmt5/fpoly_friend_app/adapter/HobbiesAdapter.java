@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.databinding.ItemHobbiesBinding;
 import com.ltmt5.fpoly_friend_app.model.Hobbies;
-import com.ltmt5.fpoly_friend_app.ui.dialog.UpdateProfileDialog;
 
 import java.util.List;
 
@@ -91,8 +90,7 @@ public class HobbiesAdapter extends RecyclerView.Adapter<HobbiesAdapter.ViewHold
                 if (!isMultiple) {
                     hobbies.setSelected(true);
                     handleClick(hobbies);
-                }
-                else {
+                } else {
                     hobbies.setSelected(!hobbies.isSelected());
                     notifyDataSetChanged();
                 }

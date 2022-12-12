@@ -61,8 +61,7 @@ public class LogInActivity extends AppCompatActivity {
                                 if (userProfile.getUserId() != null) {
                                     if (userProfile.getUserId().equals(user.getUid())) {
                                         App.currentUser = userProfile;
-                                    }
-                                    else {
+                                    } else {
                                         App.userProfileList.add(userProfile);
                                     }
 

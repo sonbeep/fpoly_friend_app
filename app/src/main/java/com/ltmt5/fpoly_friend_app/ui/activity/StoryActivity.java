@@ -2,26 +2,15 @@ package com.ltmt5.fpoly_friend_app.ui.activity;
 
 import static com.ltmt5.fpoly_friend_app.App.TAG;
 
-import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
-import android.nfc.Tag;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
@@ -29,7 +18,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.adapter.StoryAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityStoryBinding;
@@ -37,7 +25,6 @@ import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
 import com.ltmt5.fpoly_friend_app.model.StoryItem;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,14 +36,13 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
     StoryAdapter storyAdapter;
     long pressTime = 0L;
     long limit = 500L;
-    String userId ;
+    String userId;
     UserProfile userProfile;
     ActivityStoryBinding binding;
 
     ProgressDialog progressDialog;
-    private FirebaseDatabase database;
-
     List<String> uriList = new ArrayList<>();
+    private FirebaseDatabase database;
     private int counter = 0;
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         @Override
@@ -100,7 +86,7 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
 
     private void getImage() {
         uriList.clear();
-        if (userProfile!=null){
+        if (userProfile != null) {
             progressDialog.show();
             DatabaseReference myRef = database.getReference("user_image/" + userProfile.getUserId());
             myRef.addValueEventListener(new ValueEventListener() {
@@ -131,8 +117,8 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
 
     }
 
-    void startStory(){
-        if (uriList.size()!=0){
+    void startStory() {
+        if (uriList.size() != 0) {
             binding.stories.setStoriesCount(uriList.size()); // <- set stories
             binding.stories.setStoryDuration(5000L); // <- set a story duration
             binding.stories.setStoriesListener(this); // <- set listener

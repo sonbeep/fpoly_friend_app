@@ -11,11 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.ltmt5.fpoly_friend_app.App;
-import com.ltmt5.fpoly_friend_app.databinding.ItemContainerRecentConversionBinding;
 import com.ltmt5.fpoly_friend_app.databinding.ItemMessageBinding;
 import com.ltmt5.fpoly_friend_app.listener.ConversionListener;
 import com.ltmt5.fpoly_friend_app.model.ChatMessage;
-import com.ltmt5.fpoly_friend_app.model.User;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
 
 import java.util.List;

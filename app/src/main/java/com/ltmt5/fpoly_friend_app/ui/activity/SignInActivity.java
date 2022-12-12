@@ -9,7 +9,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,16 +29,13 @@ import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
 import com.ltmt5.fpoly_friend_app.help.utilities.PreferenceManager;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class SignInActivity extends AppCompatActivity {
     ActivitySignInBinding binding;
     ProgressDialog progressDialog;
     FirebaseDatabase database;
     UserProfile userProfile;
-    private FirebaseAuth mAuth;
     FirebaseUser user;
+    private FirebaseAuth mAuth;
     private PreferenceManager preferenceManager;
 
     @Override
@@ -60,7 +56,8 @@ public class SignInActivity extends AppCompatActivity {
         progressDialog.setMessage("Loading...");
         user = FirebaseAuth.getInstance().getCurrentUser();
     }
-    void loadUser(){
+
+    void loadUser() {
 
         progressDialog.show();
         DatabaseReference myRef = database.getReference("user_profile/");
@@ -72,16 +69,14 @@ public class SignInActivity extends AppCompatActivity {
                     try {
                         UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
                         if (userProfile != null) {
-                            if (userProfile.getUserId().equals(user.getUid())){
+                            if (userProfile.getUserId().equals(user.getUid())) {
                                 App.currentUser = userProfile;
-                            }
-                            else {
+                            } else {
                                 App.userProfileList.add(userProfile);
                             }
 
                         }
-                    }
-                    catch (Exception e) {
+                    } catch (Exception e) {
                         Log.e("AAA", "" + e);
                     }
                 }
@@ -158,7 +153,7 @@ public class SignInActivity extends AppCompatActivity {
     private void updateUI(FirebaseUser user) {
         preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
         preferenceManager.putString(Constants.KEY_USER_ID, user.getUid());
-        Log.e(TAG,"uId: "+user.getUid());
+        Log.e(TAG, "uId: " + user.getUid());
 //        preferenceManager.putString(Constants.KEY_NAME, user.getDisplayName());
 //        preferenceManager.putString(Constants.KEY_IMAGE, user.getPhotoUrl().toString());
 
@@ -167,14 +162,13 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userProfile = snapshot.getValue(UserProfile.class);
-                if (userProfile != null){
+                if (userProfile != null) {
                     if (userProfile.getAvailability() != -1) {
                         loadUser();
                     } else {
-                        startActivity( new Intent(SignInActivity.this, Question1Activity.class));
+                        startActivity(new Intent(SignInActivity.this, Question1Activity.class));
                     }
-                }
-                else {
+                } else {
                     Toast.makeText(SignInActivity.this, "Email đã bị vô hiệu hóa", Toast.LENGTH_SHORT).show();
                 }
             }

@@ -172,8 +172,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/_16sdp"
                     android:layout_marginEnd="@dimen/_16sdp"
-                    android:background="#FFFFFF"
                     android:layout_marginBottom="100dp"
+                    android:background="#FFFFFF"
                     android:orientation="vertical">
 
                     <TextView
@@ -216,7 +216,6 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/btnSkip"
-            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -224,6 +223,7 @@
             android:layout_toStartOf="@+id/btnStar"
             android:clickable="true"
             android:focusable="true"
+            android:visibility="invisible"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="32dp"
             app:cardElevation="10dp"
@@ -238,13 +238,13 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:visibility="invisible"
             android:id="@+id/btnStar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:clickable="true"
             android:focusable="true"
+            android:visibility="invisible"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="32dp"
             app:cardElevation="10dp"
@@ -261,7 +261,6 @@
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/btnLike"
-            android:visibility="invisible"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -269,6 +268,7 @@
             android:layout_toEndOf="@+id/btnStar"
             android:clickable="true"
             android:focusable="true"
+            android:visibility="invisible"
             app:cardBackgroundColor="@color/white"
             app:cardCornerRadius="32dp"
             app:cardElevation="10dp"

@@ -75,7 +75,7 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
                     if (userProfile.getHobbies() != null) {
                         for (String s : userProfile.getHobbies()) {
                             if (s.contains(query)) {
-                                if (!userListFind.contains(userProfile)){
+                                if (!userListFind.contains(userProfile)) {
                                     userListFind.add(userProfile);
                                 }
                             }

@@ -14,7 +14,6 @@ import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.google.firebase.auth.FirebaseUser;
 import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.adapter.SliderAdapter;
@@ -59,7 +58,7 @@ public class UserFragment extends Fragment {
 
     private void initView() {
         if (App.currentUser != null) {
-            binding.tvName.setText(App.currentUser.getName()+" "+(2022-App.currentUser.getAge()));
+            binding.tvName.setText(App.currentUser.getName() + " " + (2022 - App.currentUser.getAge()));
             Glide.with(context).load(App.currentUser.getImageUri()).error(R.drawable.demo).centerCrop().into(binding.profileImage);
         } else {
             Log.e(TAG, "user null");

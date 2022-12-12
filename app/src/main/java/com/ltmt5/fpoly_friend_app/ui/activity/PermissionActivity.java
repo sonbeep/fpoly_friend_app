@@ -1,13 +1,11 @@
 package com.ltmt5.fpoly_friend_app.ui.activity;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.ltmt5.fpoly_friend_app.R;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.ltmt5.fpoly_friend_app.databinding.ActivityPermissionBinding;
-import com.ltmt5.fpoly_friend_app.databinding.ActivitySignUpBinding;
 
 public class PermissionActivity extends AppCompatActivity {
 
