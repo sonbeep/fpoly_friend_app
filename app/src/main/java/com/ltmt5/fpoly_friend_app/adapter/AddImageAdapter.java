@@ -2,7 +2,6 @@ package com.ltmt5.fpoly_friend_app.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.databinding.ItemAddImageBinding;
 
 import java.util.List;
@@ -22,7 +20,7 @@ public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.ViewHo
     private final ItemClick itemClick;
     private List<Uri> list;
 
-    public AddImageAdapter( Context context, ItemClick itemClick) {
+    public AddImageAdapter(Context context, ItemClick itemClick) {
         this.context = context;
         this.itemClick = itemClick;
     }

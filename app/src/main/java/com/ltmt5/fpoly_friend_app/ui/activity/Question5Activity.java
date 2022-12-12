@@ -51,7 +51,7 @@ public class Question5Activity extends AppCompatActivity implements HobbiesAdapt
         layoutManager.setJustifyContent(JustifyContent.CENTER);
         layoutManager.setAlignItems(AlignItems.CENTER);
         hobbiesAdapter = new HobbiesAdapter(this, this);
-        hobbiesAdapter.setData(getList(),"hoobies");
+        hobbiesAdapter.setData(getList(), "hoobies");
         binding.recHobbies.setLayoutManager(layoutManager);
         binding.recHobbies.setAdapter(hobbiesAdapter);
         hobbiesAdapter.setMultiple(true);
@@ -115,8 +115,6 @@ public class Question5Activity extends AppCompatActivity implements HobbiesAdapt
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void clickItem(Hobbies hobbies) {
-        hobbies.setSelected(!hobbies.isSelected());
-        hobbiesAdapter.notifyDataSetChanged();
         if (hobbies.isSelected()) {
             hobbiesList.add(hobbies);
         } else {

@@ -110,8 +110,8 @@
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="10dp"
                 android:background="@color/transparent"
-                android:inputType="number"
                 android:hint="Nhập số điện thoại"
+                android:inputType="number"
                 android:paddingVertical="11dp"
                 android:textColor="@color/black" />
         </com.google.android.material.card.MaterialCardView>

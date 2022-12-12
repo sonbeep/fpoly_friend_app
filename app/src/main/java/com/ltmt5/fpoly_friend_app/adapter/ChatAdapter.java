@@ -1,6 +1,5 @@
 package com.ltmt5.fpoly_friend_app.adapter;
 
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
@@ -105,7 +104,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             binding.textMessage.setText(chatMessage.message);
             binding.textDateTime.setText(chatMessage.dateTime);
             if (receiverProfileImage != null) {
-                Glide.with(App.context).load(receiverProfileImage).centerCrop().into( binding.imageProfile);
+                Glide.with(App.context).load(receiverProfileImage).centerCrop().into(binding.imageProfile);
             }
 
         }

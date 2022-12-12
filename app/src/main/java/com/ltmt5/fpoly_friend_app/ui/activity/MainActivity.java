@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
                         // Get new FCM registration token
                         String token = task.getResult();
-                        Log.e(TAG,"token: "+token);
+                        Log.e(TAG, "token: " + token);
 
                         // Log and toast
 //                        String msg = getString(R.string.msg_token_fmt, token);
@@ -194,9 +194,8 @@ public class MainActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 try {
                     userProfile = snapshot.getValue(UserProfile.class);
-                }
-                catch (Exception e){
-                    Log.e(TAG,""+e);
+                } catch (Exception e) {
+                    Log.e(TAG, "" + e);
                 }
 
             }
@@ -236,9 +235,9 @@ public class MainActivity extends AppCompatActivity {
     public String convertBitmapToArray(Bitmap bitmap) {
         int previewWith = 150;
         int previewHeight = bitmap.getHeight() * previewWith / bitmap.getWidth();
-        Bitmap previewBitmap  = Bitmap.createScaledBitmap(bitmap, previewWith, previewHeight, false);
+        Bitmap previewBitmap = Bitmap.createScaledBitmap(bitmap, previewWith, previewHeight, false);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        previewBitmap.compress(Bitmap.CompressFormat.JPEG,50,byteArrayOutputStream);
+        previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
         byte[] bytes = byteArrayOutputStream.toByteArray();
         return Base64.encodeToString(bytes, Base64.DEFAULT);
     }
@@ -247,7 +246,6 @@ public class MainActivity extends AppCompatActivity {
         byte[] imageAsBytes = Base64.decode(encoded.getBytes(), Base64.DEFAULT);
         return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
-
 
 
 }

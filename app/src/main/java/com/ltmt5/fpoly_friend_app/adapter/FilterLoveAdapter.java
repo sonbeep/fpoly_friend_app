@@ -14,11 +14,11 @@ import com.ltmt5.fpoly_friend_app.model.Chat;
 import java.util.List;
 
 public class FilterLoveAdapter extends RecyclerView.Adapter<FilterLoveAdapter.ViewHolder> {
-    private List<Chat> list;
     private final Context context;
     private final ItemClick itemClick;
+    private List<Chat> list;
 
-    public FilterLoveAdapter( Context context, ItemClick itemClick) {
+    public FilterLoveAdapter(Context context, ItemClick itemClick) {
         this.context = context;
         this.itemClick = itemClick;
     }
@@ -29,10 +29,6 @@ public class FilterLoveAdapter extends RecyclerView.Adapter<FilterLoveAdapter.Vi
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         ItemRecommentBinding binding = ItemRecommentBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ViewHolder(binding);
-    }
-
-    public interface ItemClick {
-        void clickItem(Chat chat);
     }
 
     @Override
@@ -50,6 +46,10 @@ public class FilterLoveAdapter extends RecyclerView.Adapter<FilterLoveAdapter.Vi
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public interface ItemClick {
+        void clickItem(Chat chat);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

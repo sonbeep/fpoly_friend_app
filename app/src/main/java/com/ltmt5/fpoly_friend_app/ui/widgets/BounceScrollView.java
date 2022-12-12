@@ -303,12 +303,12 @@ public class BounceScrollView extends NestedScrollView {
         }
     }
 
-    public void setScrollHorizontally(boolean horizontal) {
-        this.isHorizontal = horizontal;
-    }
-
     public boolean isScrollHorizontally() {
         return isHorizontal;
+    }
+
+    public void setScrollHorizontally(boolean horizontal) {
+        this.isHorizontal = horizontal;
     }
 
     public float getDamping() {
@@ -331,12 +331,12 @@ public class BounceScrollView extends NestedScrollView {
         }
     }
 
-    public void setIncrementalDamping(boolean incrementalDamping) {
-        mIncrementalDamping = incrementalDamping;
-    }
-
     public boolean isIncrementalDamping() {
         return mIncrementalDamping;
+    }
+
+    public void setIncrementalDamping(boolean incrementalDamping) {
+        mIncrementalDamping = incrementalDamping;
     }
 
     public void setBounceInterpolator(@NonNull Interpolator interpolator) {
@@ -362,15 +362,6 @@ public class BounceScrollView extends NestedScrollView {
     }
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
-    private static class DefaultQuartOutInterpolator implements Interpolator {
-
-        @Override
-        public float getInterpolation(float input) {
-            return (float) (1.0f - Math.pow(1 - input, 4));
-        }
-    }
-
-    ////////////////////////////////////////////////////////////////////////////////////////////////
     public interface OnScrollListener {
         void onScrolling(int scrollX, int scrollY);
     }
@@ -381,5 +372,14 @@ public class BounceScrollView extends NestedScrollView {
          * @param fromStart LTR, the left is start; RTL, the right is start.
          */
         void onOverScrolling(boolean fromStart, int overScrolledDistance);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    private static class DefaultQuartOutInterpolator implements Interpolator {
+
+        @Override
+        public float getInterpolation(float input) {
+            return (float) (1.0f - Math.pow(1 - input, 4));
+        }
     }
 }

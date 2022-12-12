@@ -42,6 +42,15 @@ public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.ContactViewHol
         return likeList.size();
     }
 
+    @Override
+    public void onBindViewHolder(ContactViewHolder holder, final int position) {
+        final Like item = likeList.get(position);
+        holder.likeName.setText(item.getName());
+
+        Glide.with(context)
+                .load(item.getPicture())
+                .into(holder.likeImage);
+    }
 
     class ContactViewHolder extends RecyclerView.ViewHolder {
         LinearLayout likeLayout;
@@ -57,17 +66,6 @@ public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.ContactViewHol
             likeImage = itemView.findViewById(R.id.circle_image_like);
 
         }
-    }
-
-
-    @Override
-    public void onBindViewHolder(ContactViewHolder holder, final int position) {
-        final Like item = likeList.get(position);
-        holder.likeName.setText(item.getName());
-
-        Glide.with(context)
-                .load(item.getPicture())
-                .into(holder.likeImage);
     }
 }
 

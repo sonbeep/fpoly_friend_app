@@ -3,8 +3,6 @@ package com.ltmt5.fpoly_friend_app.ui.activity;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Fade;
@@ -12,7 +10,6 @@ import android.transition.Transition;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,7 +18,6 @@ import androidx.interpolator.view.animation.LinearOutSlowInInterpolator;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.bumptech.glide.Glide;
-import com.github.ybq.parallaxviewpager.ParallaxViewPager;
 import com.google.android.flexbox.AlignItems;
 import com.google.android.flexbox.FlexDirection;
 import com.google.android.flexbox.FlexboxLayoutManager;
@@ -30,9 +26,7 @@ import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.adapter.HobbiesAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityProfileBinding;
-import com.ltmt5.fpoly_friend_app.help.ImageLoader;
 import com.ltmt5.fpoly_friend_app.model.Hobbies;
-import com.ltmt5.fpoly_friend_app.model.Profile;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.fragment.SwipeViewFragment;
 
@@ -43,9 +37,9 @@ public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter
     ActivityProfileBinding binding;
     UserProfile userProfileInfo;
     Context context;
+    HobbiesAdapter hobbiesAdapter;
     private boolean swipeViewSource;
     private CardView profileImageCard;
-    HobbiesAdapter hobbiesAdapter;
 
     @SuppressLint({"RestrictedApi", "MissingInflatedId"})
     @Override
@@ -71,23 +65,22 @@ public class ProfileActivity extends AppCompatActivity implements HobbiesAdapter
 
 
         binding.tvName.setText(userProfileInfo.getName());
-        binding.tvAge.setText(""+(2022-userProfileInfo.getAge()));
+        binding.tvAge.setText("" + (2022 - userProfileInfo.getAge()));
         binding.tvDistance.setText(userProfileInfo.getEducation());
 
         profileImageCard = findViewById(R.id.user_swipe_card_view);
 
-        if (userProfileInfo.getDescription()!=null){
+        if (userProfileInfo.getDescription() != null) {
             binding.tvDescription.setText(userProfileInfo.getDescription());
-        }
-        else {
+        } else {
             binding.tvDescription.setText(userProfileInfo.getGender());
         }
         List<Hobbies> hobbies = new ArrayList<>();
-        if (userProfileInfo.getHobbies()!=null){
-            for (String s:userProfileInfo.getHobbies()){
+        if (userProfileInfo.getHobbies() != null) {
+            for (String s : userProfileInfo.getHobbies()) {
                 hobbies.add(new Hobbies(s));
             }
-            hobbiesAdapter.setData(hobbies,"none");
+            hobbiesAdapter.setData(hobbies, "none");
         }
 
         if (!swipeViewSource) binding.profileFab.setVisibility(View.VISIBLE);

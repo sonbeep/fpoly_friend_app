@@ -31,8 +31,9 @@ public class Constants {
     public static final String REMOTE_MSG_REGISTRATION = "registration_ids";
 
     private static HashMap<String, String> remoteMsgHeaders = null;
-    private static HashMap<String, String> getRemoteMsgHeaders(){
-        if (remoteMsgHeaders == null){
+
+    private static HashMap<String, String> getRemoteMsgHeaders() {
+        if (remoteMsgHeaders == null) {
             remoteMsgHeaders = new HashMap<>();
             remoteMsgHeaders.put(
                     REMOTE_MSG_AUTHORIZATION,

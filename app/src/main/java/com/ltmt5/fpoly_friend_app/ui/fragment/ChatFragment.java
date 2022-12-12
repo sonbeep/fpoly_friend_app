@@ -1,7 +1,6 @@
 package com.ltmt5.fpoly_friend_app.ui.fragment;
 
 import static com.ltmt5.fpoly_friend_app.App.TAG;
-import static com.ltmt5.fpoly_friend_app.App.user;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -28,22 +27,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.ltmt5.fpoly_friend_app.App;
-import com.ltmt5.fpoly_friend_app.adapter.ChatAdapter;
 import com.ltmt5.fpoly_friend_app.adapter.RecentConversionAdapter;
 import com.ltmt5.fpoly_friend_app.adapter.RecentlyAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.FragmentChatBinding;
 import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
 import com.ltmt5.fpoly_friend_app.help.utilities.PreferenceManager;
 import com.ltmt5.fpoly_friend_app.listener.ConversionListener;
-import com.ltmt5.fpoly_friend_app.model.Chat;
 import com.ltmt5.fpoly_friend_app.model.ChatMessage;
-import com.ltmt5.fpoly_friend_app.model.User;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.activity.ChatActivity;
 import com.ltmt5.fpoly_friend_app.ui.activity.MainActivity;
@@ -236,7 +231,7 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
 //        documentReference.update(Constants.KEY_FCM_TOKEN, token)
 //                .addOnFailureListener(e -> showToast("Unable to update token"));
 
-        if (App.currentUser.getToken()==null){
+        if (App.currentUser.getToken() == null) {
             fcmToken.setValue(token, new DatabaseReference.CompletionListener() {
                 @Override
                 public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {

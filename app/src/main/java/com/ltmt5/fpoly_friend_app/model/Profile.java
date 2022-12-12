@@ -7,18 +7,26 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Profile implements Parcelable {
+    public static final Creator<Profile> CREATOR = new Creator<Profile>() {
+        @Override
+        public Profile createFromParcel(Parcel in) {
+            return new Profile(in);
+        }
+
+        @Override
+        public Profile[] newArray(int size) {
+            return new Profile[size];
+        }
+    };
     @SerializedName("name")
     @Expose
     private String name;
-
     @SerializedName("url")
     @Expose
     private String imageUrl;
-
     @SerializedName("age")
     @Expose
     private Integer age;
-
     @SerializedName("location")
     private String location;
 
@@ -38,18 +46,6 @@ public class Profile implements Parcelable {
         }
         location = in.readString();
     }
-
-    public static final Creator<Profile> CREATOR = new Creator<Profile>() {
-        @Override
-        public Profile createFromParcel(Parcel in) {
-            return new Profile(in);
-        }
-
-        @Override
-        public Profile[] newArray(int size) {
-            return new Profile[size];
-        }
-    };
 
     public String getName() {
         return name;

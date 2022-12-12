@@ -73,6 +73,7 @@ public class SliderAdapter extends SliderViewAdapter<SliderAdapter.SliderAdapter
     public int getCount() {
         return 6;
     }
+
     class SliderAdapterVH extends ViewHolder {
         View itemView;
         ImageView imageViewSlider;

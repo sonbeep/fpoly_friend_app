@@ -51,7 +51,7 @@ public class SwipeAdapter extends BaseAdapter {
             int drawableId = context.getResources().getIdentifier(chat.getAvatar(), "drawable", context.getPackageName());
             imgAvatar.setImageResource(drawableId);
 
-            tvInfo.setText(chat.getName()+", "+chat.getCount());
+            tvInfo.setText(chat.getName() + ", " + chat.getCount());
 
         }
         return view;

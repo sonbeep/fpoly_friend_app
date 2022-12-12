@@ -11,8 +11,6 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 
-
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -66,16 +64,8 @@
         </activity>
 
         <activity
-            android:name=".ui.activity.UsersActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
             android:name=".ui.activity.SettingActivity"
-            android:exported="false"
-            >
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
@@ -96,13 +86,6 @@
         </activity>
         <activity
             android:name=".ui.activity.ForgotPasswordActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".ui.activity.Question6Activity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

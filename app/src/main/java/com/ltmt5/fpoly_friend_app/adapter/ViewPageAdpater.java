@@ -19,7 +19,7 @@ public class ViewPageAdpater extends FragmentStatePagerAdapter {
     @NonNull
     @Override
     public Fragment getItem(int position) {
-        if(position >= 0 && position < fragmentList.size()) {
+        if (position >= 0 && position < fragmentList.size()) {
             return fragmentList.get(position);
         }
         return new Fragment();
