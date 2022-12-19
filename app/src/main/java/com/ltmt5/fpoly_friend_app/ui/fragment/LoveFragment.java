@@ -16,6 +16,7 @@ import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -107,6 +108,8 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
         recomentAdapter = new RecomentAdapter(context, this);
         binding.recFind.setAdapter(recomentAdapter);
         recomentAdapter.setData(getList());
+
+        user = FirebaseAuth.getInstance().getCurrentUser();
 
         database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("user_profile_match/" + user.getUid());

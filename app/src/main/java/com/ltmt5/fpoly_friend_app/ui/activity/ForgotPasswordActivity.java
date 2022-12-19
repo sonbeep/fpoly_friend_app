@@ -12,17 +12,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
-import com.google.firebase.auth.PhoneAuthOptions;
-import com.google.firebase.auth.PhoneAuthProvider;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityForgotPasswordBinding;
-
-import java.util.concurrent.TimeUnit;
 
 public class ForgotPasswordActivity extends AppCompatActivity {
     ActivityForgotPasswordBinding binding;
@@ -43,38 +38,25 @@ public class ForgotPasswordActivity extends AppCompatActivity {
 
     private void setClick() {
         binding.btnNext.setOnClickListener(view -> {
-            if (validate()) {
-                String phoneNumber = binding.edPhoneNumber.getText().toString().trim();
-                onSent(phoneNumber);
+            String email = binding.edUsername.getText().toString().trim();
+            if (validate(email)) {
+                onSent(email);
             }
         });
+
+        binding.btnSignIn.setOnClickListener(view -> startActivity(new Intent(this, SignInActivity.class)));
     }
 
     private void onSent(String phoneNumber) {
-        PhoneAuthOptions options =
-                PhoneAuthOptions.newBuilder(mAuth)
-                        .setPhoneNumber(phoneNumber)
-                        .setTimeout(60L, TimeUnit.SECONDS)
-                        .setActivity(this)
-                        .setCallbacks(new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-                            @Override
-                            public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                                signInWithPhoneAuthCredential(phoneAuthCredential);
-                            }
-
-                            @Override
-                            public void onVerificationFailed(@NonNull FirebaseException e) {
-                                Toast.makeText(ForgotPasswordActivity.this, "Verification Failed", Toast.LENGTH_SHORT).show();
-                            }
-
-                            @Override
-                            public void onCodeSent(@NonNull String id, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
-                                super.onCodeSent(id, forceResendingToken);
-                                loadOTPActivity(phoneNumber, id);
-                            }
-                        })
-                        .build();
-        PhoneAuthProvider.verifyPhoneNumber(options);
+        mAuth.sendPasswordResetEmail(phoneNumber)
+                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()) {
+                            Toast.makeText(ForgotPasswordActivity.this, "Email sent", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 
     private void loadOTPActivity(String phoneNumber, String id) {
@@ -114,8 +96,11 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 });
     }
 
-    private boolean validate() {
+    private boolean validate(String email) {
         boolean isDone = true;
+        if (email.equals("")) {
+            isDone = false;
+        }
         return isDone;
     }
 }

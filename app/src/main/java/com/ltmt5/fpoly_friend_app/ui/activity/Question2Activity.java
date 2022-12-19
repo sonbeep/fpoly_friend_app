@@ -18,21 +18,22 @@ public class Question2Activity extends AppCompatActivity {
         binding = ActivityQuestion2Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.btnNext.setOnClickListener(v -> {
-//            if (validate()) {
-            PublicData.profileTemp.setAge(Integer.parseInt(binding.ed1.getText().toString().trim()));
-            startActivity(new Intent(this, Question3Activity.class));
-//            }
+            String age = binding.ed1.getText().toString().trim();
+            if (validate(age)) {
+                PublicData.profileTemp.setAge(Integer.parseInt(binding.ed1.getText().toString().trim()));
+                startActivity(new Intent(this, Question3Activity.class));
+            }
         });
     }
 
-    boolean validate() {
+    boolean validate(String age2) {
         boolean isDone = true;
-        if (binding.ed1.getText().toString().trim().equals("")) {
+        if (age2.equals("")) {
             Toast.makeText(this, "Ngày sinh không được để trống", Toast.LENGTH_SHORT).show();
             isDone = false;
         } else {
-            int i = Integer.parseInt(binding.ed1.getText().toString().trim());
-            if (i < 1900 || i > 2022) {
+            int age = Integer.parseInt(binding.ed1.getText().toString().trim());
+            if (age < 1900 || age > 2022) {
                 Toast.makeText(this, "Năm không hợp lệ", Toast.LENGTH_SHORT).show();
                 isDone = false;
             }

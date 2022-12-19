@@ -96,9 +96,10 @@ public class SignUpActivity extends AppCompatActivity {
         binding.btnSignUp.setOnClickListener(view -> {
             String email = binding.edUsername.getText().toString().trim();
             String password = binding.edPassword.getText().toString().trim();
-//            if(validate(email,password)){
-            handleSignUpClick(email, password);
-//            }
+            String phone = binding.edPhone.getText().toString().trim();
+            if (validate(email, password, phone)) {
+                handleSignUpClick(email, password);
+            }
         });
         binding.btnBack.setOnClickListener(view -> onBackPressed());
         binding.imageProfile.setOnClickListener(view -> {
@@ -174,12 +175,13 @@ public class SignUpActivity extends AppCompatActivity {
             userProfile.setPassword(password);
             userProfile.setName("người dùng 1");
             userProfile.setAge(2002);
+            userProfile.setMatch(0);
             userProfile.setGender("other");
             userProfile.setEducation("không tìm thấy");
             userProfile.setHobbies(list);
-            //            Log.e("AAA","uri: "+imageUri.toString());
             storageRef = storage.getReference().child("image_uri/" + user.getUid() + "/uImage");
             storageRef.putFile(imageUri).addOnCompleteListener(this, task -> {
+                progressDialog.dismiss();
                 if (task.isSuccessful()) {
                     storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                         userProfile.setImageUri(uri.toString());
@@ -202,7 +204,6 @@ public class SignUpActivity extends AppCompatActivity {
             Log.e(TAG, "user null");
             showToast("Đã xảy ra lỗi");
         }
-        progressDialog.dismiss();
 
     }
 
@@ -236,10 +237,7 @@ public class SignUpActivity extends AppCompatActivity {
         Toast.makeText(this, meesage, Toast.LENGTH_SHORT).show();
     }
 
-    private boolean validate() {
-        String phone = binding.edPhone.getText().toString().trim();
-        String email = binding.edUsername.getText().toString().trim();
-        String password = binding.edPassword.getText().toString().trim();
+    private boolean validate(String email, String password, String phone) {
         String emailPattern = "[a-zA-Z0-9._-]+@fpt.edu.vn";
         if (email.equals("") || password.equals("") || phone.equals("")) {
             Toast.makeText(this, "Không được để trống", Toast.LENGTH_SHORT).show();
@@ -250,7 +248,7 @@ public class SignUpActivity extends AppCompatActivity {
         } else if (!email.matches(emailPattern)) {
             Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (encodedImage == null) {
+        } else if (imageUri == null) {
             Toast.makeText(this, "Ảnh không hợp lệ", Toast.LENGTH_SHORT).show();
             return false;
         } else {

@@ -100,9 +100,8 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
         binding.tvForgot.setOnClickListener(view -> {
-//            Intent intent = new Intent(this, ForgotPasswordActivity.class);
-//            startActivity(intent);
-            Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, ForgotPasswordActivity.class);
+            startActivity(intent);
         });
         binding.btnSignUp.setOnClickListener(view -> startActivity(new Intent(SignInActivity.this, SignUpActivity.class)));
     }
@@ -151,11 +150,7 @@ public class SignInActivity extends AppCompatActivity {
 
 
     private void updateUI(FirebaseUser user) {
-        preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
         preferenceManager.putString(Constants.KEY_USER_ID, user.getUid());
-        Log.e(TAG, "uId: " + user.getUid());
-//        preferenceManager.putString(Constants.KEY_NAME, user.getDisplayName());
-//        preferenceManager.putString(Constants.KEY_IMAGE, user.getPhotoUrl().toString());
 
         DatabaseReference myRef = database.getReference("user_profile/" + user.getUid());
         myRef.addValueEventListener(new ValueEventListener() {
@@ -163,13 +158,18 @@ public class SignInActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userProfile = snapshot.getValue(UserProfile.class);
                 if (userProfile != null) {
-                    if (userProfile.getAvailability() != -1) {
+                    if (userProfile.getAvailability() == -1) {
+                        startActivity(new Intent(SignInActivity.this, Question1Activity.class));
+                    } else if (userProfile.getAvailability() == -101) {
+                        Toast.makeText(SignInActivity.this, "Tài khoản đã bị khoá", Toast.LENGTH_SHORT).show();
+                    } else if (userProfile.getAvailability() == 1) {
+                        preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
                         loadUser();
                     } else {
-                        startActivity(new Intent(SignInActivity.this, Question1Activity.class));
+                        Toast.makeText(SignInActivity.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(SignInActivity.this, "Email đã bị vô hiệu hóa", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SignInActivity.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
                 }
             }
 

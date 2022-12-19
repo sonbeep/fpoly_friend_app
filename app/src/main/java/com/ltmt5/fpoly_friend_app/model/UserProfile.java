@@ -32,6 +32,7 @@ public class UserProfile implements Serializable {
     private String showPriority;
     private String imageUri;
     private String token;
+    private int match;
 
     public UserProfile() {
     }
@@ -249,5 +250,13 @@ public class UserProfile implements Serializable {
 
     public void setPhone(int phone) {
         this.phone = phone;
+    }
+
+    public int getMatch() {
+        return match;
+    }
+
+    public void setMatch(int match) {
+        this.match = match;
     }
 }
