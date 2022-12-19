@@ -21,12 +21,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityLogInBinding;
+import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
+import com.ltmt5.fpoly_friend_app.help.utilities.PreferenceManager;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
 
 public class LogInActivity extends AppCompatActivity {
     ActivityLogInBinding binding;
     FirebaseDatabase database;
     ProgressDialog progressDialog;
+    boolean isban;
+    FirebaseUser user;
+    PreferenceManager preferenceManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,44 +50,80 @@ public class LogInActivity extends AppCompatActivity {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Loading...");
         progressDialog.setCancelable(false);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
+        database = FirebaseDatabase.getInstance();
+        user = FirebaseAuth.getInstance().getCurrentUser();
+        preferenceManager = new PreferenceManager(getApplicationContext());
+
+        if (preferenceManager.getBoolean(Constants.KEY_IS_SIGNED_IN)) {
             progressDialog.show();
-            database = FirebaseDatabase.getInstance();
-            DatabaseReference myRef = database.getReference("user_profile/");
-            myRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    progressDialog.dismiss();
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        try {
-                            UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
-                            if (userProfile != null) {
-                                if (userProfile.getUserId() != null) {
-                                    if (userProfile.getUserId().equals(user.getUid())) {
-                                        App.currentUser = userProfile;
-                                    } else {
-                                        App.userProfileList.add(userProfile);
-                                    }
+            getData();
 
-                                }
-                            }
-                        } catch (Exception e) {
-                            Log.e("AAA", "" + e);
-                        }
-
-                    }
-                    Log.e(TAG, "list profile size: " + App.userProfileList.size());
-                    startActivity(new Intent(LogInActivity.this, MainActivity.class));
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    Log.e(TAG, "profile list empty");
-                }
-            });
         } else {
             binding.layoutMain.setVisibility(View.VISIBLE);
         }
+
+    }
+
+    private void getData() {
+        DatabaseReference myRef = database.getReference("user_profile/" + user.getUid());
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                progressDialog.dismiss();
+                try {
+                    UserProfile userProfile = snapshot.getValue(UserProfile.class);
+                    if (userProfile != null) {
+                        if (userProfile.getAvailability() == -101) {
+                            preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, false);
+                            startActivity(new Intent(getApplicationContext(), LogInActivity.class));
+                            Toast.makeText(getApplicationContext(), "Tài khoản đã bị khoá", Toast.LENGTH_SHORT).show();
+                            binding.layoutMain.setVisibility(View.VISIBLE);
+                        } else {
+                            getUser();
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.e(TAG, "" + e);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "profile list empty");
+            }
+        });
+    }
+
+    private void getUser() {
+        DatabaseReference myRef = database.getReference("user_profile/");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    try {
+                        UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                        if (userProfile != null) {
+                            if (userProfile.getUserId() != null) {
+                                if (userProfile.getUserId().equals(user.getUid())) {
+                                    App.currentUser = userProfile;
+                                } else {
+                                    App.userProfileList.add(userProfile);
+                                }
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e("AAA", "" + e);
+                    }
+
+                }
+                Log.e(TAG, "list profile size: " + App.userProfileList.size());
+                startActivity(new Intent(LogInActivity.this, MainActivity.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "profile list empty");
+            }
+        });
     }
 }

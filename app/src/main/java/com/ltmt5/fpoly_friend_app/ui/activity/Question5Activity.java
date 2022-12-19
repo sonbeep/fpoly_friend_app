@@ -34,14 +34,14 @@ public class Question5Activity extends AppCompatActivity implements HobbiesAdapt
         initView();
         setClick();
         binding.btnNext.setOnClickListener(v -> {
-//            if (validate()) {
+            if (validate()) {
             List<String> list = new ArrayList<>();
             for (Hobbies hobbies : hobbiesList) {
                 list.add(hobbies.getName());
             }
             PublicData.profileTemp.setHobbies(list);
             startActivity(new Intent(this, WelcomeActivity.class));
-//            }
+            }
         });
     }
 

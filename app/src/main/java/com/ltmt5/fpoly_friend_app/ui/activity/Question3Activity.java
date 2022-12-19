@@ -2,6 +2,7 @@ package com.ltmt5.fpoly_friend_app.ui.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -20,11 +21,13 @@ public class Question3Activity extends AppCompatActivity {
         binding = ActivityQuestion3Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.btnNext.setOnClickListener(v -> {
-//            if (!mGender.equals("none")) {
-//                PublicData.gender = mGender;
+            if (!mGender.equals("none")) {
             PublicData.profileTemp.setGender(mGender);
             startActivity(new Intent(this, Question4Activity.class));
-//            }
+            }
+            else {
+                Toast.makeText(this, "Vui lòng chọn giới tính", Toast.LENGTH_SHORT).show();
+            }
         });
         binding.btnMale.setOnClickListener(v -> {
             mGender = "Nam";

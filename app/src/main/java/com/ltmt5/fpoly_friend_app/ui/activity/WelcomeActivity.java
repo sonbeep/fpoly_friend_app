@@ -15,6 +15,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityWelcomeBinding;
 import com.ltmt5.fpoly_friend_app.help.PublicData;
+import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
+import com.ltmt5.fpoly_friend_app.help.utilities.PreferenceManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,6 +57,8 @@ public class WelcomeActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                     dialog.dismiss();
+                    PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+                    preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
                     startActivity(new Intent(WelcomeActivity.this, MainActivity.class));
                 }
             });

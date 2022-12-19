@@ -231,7 +231,7 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
 //        documentReference.update(Constants.KEY_FCM_TOKEN, token)
 //                .addOnFailureListener(e -> showToast("Unable to update token"));
 
-        if (App.currentUser.getToken() == null) {
+        if (App.currentUser.getFcmToken() == null) {
             fcmToken.setValue(token, new DatabaseReference.CompletionListener() {
                 @Override
                 public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {

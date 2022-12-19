@@ -1,6 +1,7 @@
 package com.ltmt5.fpoly_friend_app.ui.fragment;
 
 import static com.ltmt5.fpoly_friend_app.App.TAG;
+import static com.ltmt5.fpoly_friend_app.App.currentUser;
 import static com.ltmt5.fpoly_friend_app.App.user;
 
 import android.app.ActivityOptions;
@@ -103,8 +104,16 @@ public class SwipeViewFragment extends Fragment {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                 Log.e(TAG, "created user profile");
+                DatabaseReference myRef2 = database.getReference("user_profile/" + user.getUid() + "/match");
+                myRef2.setValue((currentUser.getMatch() + 1), new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                        Log.e(TAG, "update match");
+                    }
+                });
             }
         });
+
     }
 
     private Intent getBundledIntent(UserProfile profile) {

@@ -18,16 +18,17 @@ public class Question1Activity extends AppCompatActivity {
         binding = ActivityQuestion1Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         binding.btnNext.setOnClickListener(v -> {
-//            if (validate()) {
-            PublicData.profileTemp.setName(binding.ed1.getText().toString().trim());
+            String name = binding.ed1.getText().toString().trim();
+            if (validate(name)) {
+            PublicData.profileTemp.setName(name);
             startActivity(new Intent(this, Question2Activity.class));
-//            }
+            }
         });
     }
 
-    boolean validate() {
+    boolean validate(String name) {
         boolean isDone = true;
-        if (binding.ed1.getText().toString().trim().equals("")) {
+        if (name.equals("")) {
             Toast.makeText(this, "Tên không được để trống", Toast.LENGTH_SHORT).show();
             isDone = false;
         }
