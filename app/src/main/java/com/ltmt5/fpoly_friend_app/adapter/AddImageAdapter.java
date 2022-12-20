@@ -17,7 +17,7 @@ import java.util.List;
 
 public class AddImageAdapter extends RecyclerView.Adapter<AddImageAdapter.ViewHolder> {
     private final Context context;
-    private final ItemClick itemClick;
+    private ItemClick itemClick;
     private List<Uri> list;
 
     public AddImageAdapter(Context context, ItemClick itemClick) {
