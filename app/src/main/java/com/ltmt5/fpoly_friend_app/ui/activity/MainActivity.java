@@ -2,13 +2,8 @@ package com.ltmt5.fpoly_friend_app.ui.activity;
 
 import static com.ltmt5.fpoly_friend_app.App.TAG;
 
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Base64;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -17,8 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -27,20 +20,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
 import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityMainBinding;
-import com.ltmt5.fpoly_friend_app.model.Profile;
-import com.ltmt5.fpoly_friend_app.model.UserProfile;
-import com.ltmt5.fpoly_friend_app.ui.fragment.AddFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.ChatFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.LoveFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.SwipeViewFragment;
-import com.ltmt5.fpoly_friend_app.ui.fragment.UserFragment;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

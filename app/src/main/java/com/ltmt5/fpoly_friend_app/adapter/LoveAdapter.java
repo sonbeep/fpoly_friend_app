@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.ltmt5.fpoly_friend_app.databinding.ItemLoveBinding;
-import com.ltmt5.fpoly_friend_app.model.UserProfile;
 
 import java.util.List;
 

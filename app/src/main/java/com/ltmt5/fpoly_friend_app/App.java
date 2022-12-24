@@ -8,8 +8,6 @@ import android.os.Build;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.ltmt5.fpoly_friend_app.help.SharePref;
-import com.ltmt5.fpoly_friend_app.model.UserProfile;
 
 import java.util.ArrayList;
 import java.util.List;
