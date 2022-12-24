@@ -20,6 +20,7 @@ public class Question3Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityQuestion3Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        binding.btnBack.setOnClickListener(v -> onBackPressed());
         binding.btnNext.setOnClickListener(v -> {
             if (!mGender.equals("none")) {
             PublicData.profileTemp.setGender(mGender);

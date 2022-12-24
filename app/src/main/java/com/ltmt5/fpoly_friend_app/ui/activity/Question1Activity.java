@@ -24,6 +24,7 @@ public class Question1Activity extends AppCompatActivity {
             startActivity(new Intent(this, Question2Activity.class));
             }
         });
+        binding.btnBack.setOnClickListener(v -> finishAffinity());
     }
 
     boolean validate(String name) {

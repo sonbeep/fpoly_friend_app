@@ -44,7 +44,7 @@ public class SwipeViewFragment extends Fragment {
     public static int mPos = 0;
     FragmentSwipeViewBinding binding;
     MainActivity mainActivity;
-    FirebaseDatabase database;
+    public static FirebaseDatabase database;
     private Context mContext;
 
     public SwipeViewFragment() {
@@ -75,6 +75,7 @@ public class SwipeViewFragment extends Fragment {
             animateFab(binding.btnLike);
             binding.swipeView.doSwipe(true);
         });
+
 
         binding.btnBoost.setOnClickListener(v -> animateFab(binding.btnBoost));
         binding.btnStar.setOnClickListener(v -> animateFab(binding.btnStar));
@@ -149,4 +150,31 @@ public class SwipeViewFragment extends Fragment {
     private void animateFab(final View fab) {
         fab.animate().scaleX(0.7f).setDuration(100).withEndAction(() -> fab.animate().scaleX(1f).scaleY(1f));
     }
+
+    public static void match(){
+        Log.e(TAG,"match");
+        if (mPos < 0 || mPos > userProfileList.size() - 1) {
+            mPos = userProfileList.size() - 1;
+        }
+        mProfile = userProfileList.get(mPos);
+        DatabaseReference myRef = database.getReference("user_profile_match/" + user.getUid() + "/" + mProfile.getUserId());
+        myRef.setValue(mProfile, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                Log.e(TAG, "created user profile");
+                DatabaseReference myRef2 = database.getReference("user_profile/" + user.getUid() + "/match");
+                myRef2.setValue((currentUser.getMatch() + 1), new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                        Log.e(TAG, "update match");
+                    }
+                });
+            }
+        });
+    }
+
+    public static void unMatch(){
+        Log.e(TAG,"unMatch");
+    }
+
 }

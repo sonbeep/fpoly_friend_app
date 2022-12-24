@@ -145,21 +145,6 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
         });
     }
 
-    public String convertBitmapToArray(Bitmap bitmap) {
-        int previewWith = 150;
-        int previewHeight = bitmap.getHeight() * previewWith / bitmap.getWidth();
-        Bitmap previewBitmap = Bitmap.createScaledBitmap(bitmap, previewWith, previewHeight, false);
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
-        byte[] bytes = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(bytes, Base64.DEFAULT);
-    }
-
-    public Bitmap getBitmapFromArray(String encoded) {
-        byte[] imageAsBytes = Base64.decode(encoded.getBytes(), Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -195,7 +180,6 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
         getToken();
         init();
         listenConversation();
-
         getUsers();
 
 
@@ -203,7 +187,7 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
 
     private void init() {
         conversions = new ArrayList<>();
-        conversionAdapter = new RecentConversionAdapter(conversions, this);
+        conversionAdapter = new RecentConversionAdapter(conversions,App.context, this);
         binding.recChat.setAdapter(conversionAdapter);
     }
 

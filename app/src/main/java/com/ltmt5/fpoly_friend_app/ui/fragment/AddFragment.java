@@ -56,6 +56,7 @@ public class AddFragment extends Fragment implements AddImageAdapter.ItemClick {
     StorageReference storageRef;
     FirebaseUser user;
     private Uri imageUri;
+
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
         @SuppressLint("NotifyDataSetChanged")
         @Override
@@ -112,13 +113,13 @@ public class AddFragment extends Fragment implements AddImageAdapter.ItemClick {
     }
 
     void getImage() {
-        uriList.clear();
         progressDialog.show();
         DatabaseReference myRef = database.getReference("user_image/" + user.getUid());
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 progressDialog.dismiss();
+                uriList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     try {
                         String uri = dataSnapshot.getValue(String.class);

@@ -162,14 +162,16 @@ public class SignInActivity extends AppCompatActivity {
                         startActivity(new Intent(SignInActivity.this, Question1Activity.class));
                     } else if (userProfile.getAvailability() == -101) {
                         Toast.makeText(SignInActivity.this, "Tài khoản đã bị khoá", Toast.LENGTH_SHORT).show();
-                    } else if (userProfile.getAvailability() == 1) {
+                    } else if (userProfile.getAvailability() == 0) {
                         preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
+                        preferenceManager.putString(Constants.KEY_NAME, userProfile.getName());
+                        preferenceManager.putString(Constants.KEY_IMAGE, userProfile.getImageUri());
                         loadUser();
                     } else {
-                        Toast.makeText(SignInActivity.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "Đã xảy ra lỗi1");
                     }
                 } else {
-                    Toast.makeText(SignInActivity.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, "Đã xảy ra lỗi");
                 }
             }
 
