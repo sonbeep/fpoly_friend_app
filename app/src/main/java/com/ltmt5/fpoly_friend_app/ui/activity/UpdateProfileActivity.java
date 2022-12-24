@@ -181,25 +181,25 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
 
 //        personality
 
-        if (userProfile.getPersonality() == null) {
+        if (userProfile.getPersonality() != null) {
             binding.tvPersonality.setText(userProfile.getPersonality());
         }
 
 //        favorite
 
-        if (userProfile.getFavoriteSong() == null) {
+        if (userProfile.getFavoriteSong() != null) {
             binding.tvFavoriteSong.setText(userProfile.getFavoriteSong());
         }
 
 //        orient
 
-        if (userProfile.getSexualOrientation() == null) {
+        if (userProfile.getSexualOrientation() != null) {
             binding.tvSexualOrientation.setText(userProfile.getSexualOrientation());
         }
 
 //        priority
 
-        if (userProfile.getShowPriority() == null) {
+        if (userProfile.getShowPriority() != null) {
             binding.tvShowPriority.setText(userProfile.getShowPriority());
         }
 

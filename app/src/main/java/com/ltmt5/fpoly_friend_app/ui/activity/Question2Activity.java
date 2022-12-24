@@ -24,6 +24,7 @@ public class Question2Activity extends AppCompatActivity {
                 startActivity(new Intent(this, Question3Activity.class));
             }
         });
+        binding.btnBack.setOnClickListener(v -> onBackPressed());
     }
 
     boolean validate(String age2) {

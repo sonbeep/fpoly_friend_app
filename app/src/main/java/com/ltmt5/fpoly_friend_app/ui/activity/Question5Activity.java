@@ -43,6 +43,7 @@ public class Question5Activity extends AppCompatActivity implements HobbiesAdapt
             startActivity(new Intent(this, WelcomeActivity.class));
             }
         });
+        binding.btnBack.setOnClickListener(v -> onBackPressed());
     }
 
     private void initView() {

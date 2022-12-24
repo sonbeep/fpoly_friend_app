@@ -87,39 +87,39 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        getDataIntent();
+//        getDataIntent();
         intitView();
-        getUserInfo();
+//        getUserInfo();
     }
 
     private void intitView() {
         database = FirebaseDatabase.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         swipeViewFragment = new SwipeViewFragment();
-        getUserProfile();
+//        getUserProfile();
 
         binding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         loadFragment(swipeViewFragment);
 
 
-        FirebaseMessaging.getInstance().getToken()
-                .addOnCompleteListener(new OnCompleteListener<String>() {
-                    @Override
-                    public void onComplete(@NonNull Task<String> task) {
-                        if (!task.isSuccessful()) {
-                            Log.e(TAG, "Fetching FCM registration token failed", task.getException());
-                            return;
-                        }
-
-                        // Get new FCM registration token
-                        String token = task.getResult();
-                        Log.e(TAG, "token: " + token);
-
-                        // Log and toast
-//                        String msg = getString(R.string.msg_token_fmt, token);
-//                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-                    }
-                });
+//        FirebaseMessaging.getInstance().getToken()
+//                .addOnCompleteListener(new OnCompleteListener<String>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<String> task) {
+//                        if (!task.isSuccessful()) {
+//                            Log.e(TAG, "Fetching FCM registration token failed", task.getException());
+//                            return;
+//                        }
+//
+//                        // Get new FCM registration token
+//                        String token = task.getResult();
+//                        Log.e(TAG, "token: " + token);
+//
+//                        // Log and toast
+////                        String msg = getString(R.string.msg_token_fmt, token);
+////                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
 
         checkList();
     }
@@ -156,20 +156,20 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public Bitmap getBitmapFromUri(Uri uri) {
-        Bitmap bitmap = null;
-        try {
-            bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), uri);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return bitmap;
-    }
+//    public Bitmap getBitmapFromUri(Uri uri) {
+//        Bitmap bitmap = null;
+//        try {
+//            bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), uri);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return bitmap;
+//    }
 
-    private void getDataIntent() {
-        Intent intent = getIntent();
-        phoneNumber = intent.getStringExtra("phoneNumber");
-    }
+//    private void getDataIntent() {
+//        Intent intent = getIntent();
+//        phoneNumber = intent.getStringExtra("phoneNumber");
+//    }
 
     private void getUserInfo() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -229,22 +229,6 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "profile list empty");
             }
         });
-    }
-
-
-    public String convertBitmapToArray(Bitmap bitmap) {
-        int previewWith = 150;
-        int previewHeight = bitmap.getHeight() * previewWith / bitmap.getWidth();
-        Bitmap previewBitmap = Bitmap.createScaledBitmap(bitmap, previewWith, previewHeight, false);
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        previewBitmap.compress(Bitmap.CompressFormat.JPEG, 50, byteArrayOutputStream);
-        byte[] bytes = byteArrayOutputStream.toByteArray();
-        return Base64.encodeToString(bytes, Base64.DEFAULT);
-    }
-
-    public Bitmap getBitmapFromArray(String encoded) {
-        byte[] imageAsBytes = Base64.decode(encoded.getBytes(), Base64.DEFAULT);
-        return BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
     }
 
 

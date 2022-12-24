@@ -23,6 +23,7 @@ public class Question4Activity extends AppCompatActivity {
             startActivity(new Intent(this, Question5Activity.class));
             }
         });
+        binding.btnBack.setOnClickListener(v -> onBackPressed());
     }
 
     boolean validate() {

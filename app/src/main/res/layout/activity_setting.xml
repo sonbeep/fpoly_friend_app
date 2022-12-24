@@ -87,7 +87,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:maxLines="1"
-                            android:text="Fploy Friend Platium"
+                            android:text="Fpoly Friend Platium"
                             android:textColor="@color/md_black_1000"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -141,7 +141,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:maxLines="1"
-                            android:text="Fploy Friend Gold"
+                            android:text="Fpoly Friend Gold"
                             android:textColor="@color/md_black_1000"
                             android:textSize="18sp"
                             android:textStyle="bold" />
@@ -195,7 +195,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:maxLines="1"
-                            android:text="Fploy Friend Plus"
+                            android:text="Fpoly Friend Plus"
                             android:textColor="@color/md_black_1000"
                             android:textSize="18sp"
                             android:textStyle="bold" />

@@ -68,7 +68,7 @@ public class RecentlyAdapter extends RecyclerView.Adapter<RecentlyAdapter.ViewHo
         }
 
         public void bindData(UserProfile userProfile) {
-            if (userProfile.getAvailability() == 1) {
+            if (userProfile.getAvailability() == 0) {
                 binding.btnAvailable.setVisibility(View.VISIBLE);
             } else {
                 binding.btnAvailable.setVisibility(View.INVISIBLE);
