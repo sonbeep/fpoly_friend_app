@@ -36,7 +36,7 @@ import com.mindorks.placeholderview.SwipeDecor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SwipeViewFragment extends Fragment {
+public class   SwipeViewFragment extends Fragment {
     public static final String EXTRA_USER_PROFILE = "EXTRA_USER_PROFILE";
     public static final String EXTRA_SWIPE_VIEW_SOURCE = "EXTRA_SWIPE_VIEW_SOURCE";
     public static UserProfile mProfile;

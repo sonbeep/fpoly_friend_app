@@ -20,16 +20,9 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -55,7 +48,7 @@ public class SignUpActivity extends AppCompatActivity {
     StorageReference storageRef;
     private FirebaseAuth mAuth;
     private String encodedImage;
-    ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<ActivityResult>() {
+    ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<>() {
         @SuppressLint("NotifyDataSetChanged")
         @Override
         public void onActivityResult(ActivityResult result) {
@@ -65,7 +58,9 @@ public class SignUpActivity extends AppCompatActivity {
                     imageUri = result.getData().getData();
                     bitmap = getBitmapFromUri(imageUri);
                 }
-                encodedImage = EncodeImage(bitmap);
+                if (bitmap != null) {
+                    encodedImage = EncodeImage(bitmap);
+                }
                 binding.imageProfile.setImageBitmap(bitmap);
                 binding.textAddImage.setVisibility(View.INVISIBLE);
             }
@@ -102,33 +97,27 @@ public class SignUpActivity extends AppCompatActivity {
             }
         });
         binding.btnBack.setOnClickListener(view -> onBackPressed());
-        binding.imageProfile.setOnClickListener(view -> {
-            TedPermission.create().setPermissionListener(new PermissionListener() {
-                @Override
-                public void onPermissionGranted() {
-                    Intent pickIntent = new Intent();
-                    pickIntent.setType("image/*");
-                    pickIntent.setAction(Intent.ACTION_GET_CONTENT);
-                    launcher.launch(pickIntent);
-                }
+        binding.imageProfile.setOnClickListener(view -> TedPermission.create().setPermissionListener(new PermissionListener() {
+            @Override
+            public void onPermissionGranted() {
+                Intent pickIntent = new Intent();
+                pickIntent.setType("image/*");
+                pickIntent.setAction(Intent.ACTION_GET_CONTENT);
+                launcher.launch(pickIntent);
+            }
 
-                @Override
-                public void onPermissionDenied(List<String> deniedPermissions) {
+            @Override
+            public void onPermissionDenied(List<String> deniedPermissions) {
 
-                }
-            }).setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]").setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE).check();
-
-
-        });
+            }
+        }).setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]").setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE).check());
     }
 
 
     private void initView() {
         storage = FirebaseStorage.getInstance();
-
         database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
-
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Loading...");
@@ -139,24 +128,20 @@ public class SignUpActivity extends AppCompatActivity {
         isDone = true;
         progressDialog.show();
         mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            updateProfile();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            progressDialog.dismiss();
-                            Log.e(TAG, "Authentication failed.", task.getException());
-                            Toast.makeText(SignUpActivity.this, "Đăng kí không thành công",
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "createUserWithEmail:success");
+                        updateProfile();
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        progressDialog.dismiss();
+                        Log.e(TAG, "Authentication failed.", task.getException());
+                        Toast.makeText(SignUpActivity.this, "Đăng kí không thành công",
+                                Toast.LENGTH_SHORT).show();
                     }
                 });
     }
-
     private void updateProfile() {
         int phone = Integer.parseInt(binding.edPhone.getText().toString().trim());
         String email = binding.edUsername.getText().toString().trim();
@@ -186,13 +171,10 @@ public class SignUpActivity extends AppCompatActivity {
                     storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
                         userProfile.setImageUri(uri.toString());
                         DatabaseReference myRef = database.getReference("user_profile/" + user.getUid());
-                        myRef.setValue(userProfile, new DatabaseReference.CompletionListener() {
-                            @Override
-                            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                                Log.e(TAG, "created user profile");
-                                showToast("Đăng kí thành công");
-                                updateUI();
-                            }
+                        myRef.setValue(userProfile, (error, ref) -> {
+                            Log.e(TAG, "created user profile");
+                            showToast("Đăng kí thành công");
+                            updateUI();
                         });
                     });
                 } else {
@@ -239,14 +221,20 @@ public class SignUpActivity extends AppCompatActivity {
 
     private boolean validate(String email, String password, String phone) {
         String emailPattern = "[a-zA-Z0-9._-]+@fpt.edu.vn";
+        String phonePattern =  "^(0|\\+84)(\\s|\\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\\d)(\\s|\\.)?(\\d{3})(\\s|\\.)?(\\d{3})$";
         if (email.equals("") || password.equals("") || phone.equals("")) {
             Toast.makeText(this, "Không được để trống", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (password.length() < 8) {
-            Toast.makeText(this, "Password quá ngắn", Toast.LENGTH_SHORT).show();
+        }
+        else if(!phone.matches(phonePattern)){
+            Toast.makeText(this, "Điện thoại phải bắt đầu bằng số 0 hoặc +84 ", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (password.length() < 8) {
+            Toast.makeText(this, "Password yêu cầu từ 8 ký tự trở lên", Toast.LENGTH_SHORT).show();
             return false;
         } else if (!email.matches(emailPattern)) {
-            Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Email không hợp lệ. Yêu cầu nhập mail đuôi fpt.edu.vn", Toast.LENGTH_SHORT).show();
             return false;
         } else if (imageUri == null) {
             Toast.makeText(this, "Ảnh không hợp lệ", Toast.LENGTH_SHORT).show();

@@ -34,7 +34,7 @@ public class Question2Activity extends AppCompatActivity {
             isDone = false;
         } else {
             int age = Integer.parseInt(binding.ed1.getText().toString().trim());
-            if (age < 1900 || age > 2022) {
+            if (age < 1970 || age > 2022) {
                 Toast.makeText(this, "Năm không hợp lệ", Toast.LENGTH_SHORT).show();
                 isDone = false;
             }
