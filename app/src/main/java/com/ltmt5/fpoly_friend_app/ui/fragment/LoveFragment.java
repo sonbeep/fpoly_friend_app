@@ -22,12 +22,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.adapter.FilterLoveAdapter;
 import com.ltmt5.fpoly_friend_app.adapter.LoveAdapter;
+import com.ltmt5.fpoly_friend_app.adapter.RecomentAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.FragmentLoveBinding;
 import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
 import com.ltmt5.fpoly_friend_app.model.Chat;
+import com.ltmt5.fpoly_friend_app.model.Hobbies;
+import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.activity.ChatActivity;
 import com.ltmt5.fpoly_friend_app.ui.activity.MainActivity;
 
