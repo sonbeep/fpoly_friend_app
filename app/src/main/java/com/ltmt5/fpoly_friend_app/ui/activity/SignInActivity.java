@@ -96,8 +96,8 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
         binding.tvForgot.setOnClickListener(view -> {
-//            Intent intent = new Intent(this, ForgotPasswordActivity.class);
-//            startActivity(intent);
+            Intent intent = new Intent(this, ForgotPasswordActivity.class);
+            startActivity(intent);
         });
         binding.btnSignUp.setOnClickListener(view -> startActivity(new Intent(SignInActivity.this, SignUpActivity.class)));
     }
