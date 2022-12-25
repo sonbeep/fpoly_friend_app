@@ -224,11 +224,16 @@ public class SignUpActivity extends AppCompatActivity {
         if (email.equals("") || password.equals("") || phone.equals("")) {
             Toast.makeText(this, "Không được để trống", Toast.LENGTH_SHORT).show();
             return false;
-        } else if (password.length() < 8) {
+        }
+        else if(phone.length()!=10 && !phone.startsWith(String.valueOf(0))){
+            Toast.makeText(this, "Điện thoại đúng 10 số và bắt đầu bằng số 0", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else if (password.length() < 8) {
             Toast.makeText(this, "Password quá ngắn", Toast.LENGTH_SHORT).show();
             return false;
         } else if (!email.matches(emailPattern)) {
-            Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Email không hợp lệ. Yêu cầu nhập mail fpt", Toast.LENGTH_SHORT).show();
             return false;
         } else if (imageUri == null) {
             Toast.makeText(this, "Ảnh không hợp lệ", Toast.LENGTH_SHORT).show();

@@ -150,7 +150,7 @@ public class SignInActivity extends AppCompatActivity {
                 userProfile = snapshot.getValue(UserProfile.class);
                 if (userProfile != null) {
                     if (userProfile.getAvailability() == -1) {
-//                        startActivity(new Intent(SignInActivity.this, Question1Activity.class));
+                        startActivity(new Intent(SignInActivity.this, Question1Activity.class));
                     } else if (userProfile.getAvailability() == -101) {
                         Toast.makeText(SignInActivity.this, "Tài khoản đã bị khoá", Toast.LENGTH_SHORT).show();
                     } else if (userProfile.getAvailability() == 0) {
@@ -172,10 +172,17 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private boolean validate(String email, String password) {
+        String emailPattern = "[a-zA-Z0-9._-]+@fpt.edu.vn";
         if (email.equals("") || password.equals("")) {
             Toast.makeText(this, "Email, password không được để trống", Toast.LENGTH_SHORT).show();
             return false;
-        } else {
+        }
+        else if (!email.matches(emailPattern)) {
+            Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+
+        else {
             return true;
         }
 
