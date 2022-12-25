@@ -100,6 +100,8 @@ public class SignInActivity extends AppCompatActivity {
             startActivity(intent);
         });
         binding.btnSignUp.setOnClickListener(view -> startActivity(new Intent(SignInActivity.this, SignUpActivity.class)));
+
+        binding.btnBack.setOnClickListener(v -> onBackPressed());
     }
 
     void handleNextClick(String email, String password) {
