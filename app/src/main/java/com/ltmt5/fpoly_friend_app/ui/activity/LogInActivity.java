@@ -96,6 +96,7 @@ public class LogInActivity extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                App.userProfileList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     try {
                         UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);

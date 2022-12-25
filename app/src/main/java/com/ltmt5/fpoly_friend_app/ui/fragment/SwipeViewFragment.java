@@ -137,9 +137,9 @@ public class   SwipeViewFragment extends Fragment {
                         .setViewHeight(windowSize.y - bottomMargin)
                         .setViewGravity(Gravity.TOP)
                         .setPaddingTop(20)
-                        .setRelativeScale(0.01f)
-                        .setSwipeInMsgLayoutId(R.layout.tinder_swipe_in_msg_view)
-                        .setSwipeOutMsgLayoutId(R.layout.tinder_swipe_out_msg_view));
+                        .setRelativeScale(0.01f));
+//                        .setSwipeInMsgLayoutId(R.layout.tinder_swipe_in_msg_view)
+//                        .setSwipeOutMsgLayoutId(R.layout.tinder_swipe_out_msg_view));
         userProfileList = App.userProfileList;
         Log.e(TAG, "ls app:" + userProfileList.size());
         for (int i = 0; i < userProfileList.size(); i++) {
