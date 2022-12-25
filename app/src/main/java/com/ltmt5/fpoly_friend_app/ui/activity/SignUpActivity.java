@@ -230,7 +230,7 @@ public class SignUpActivity extends AppCompatActivity {
             return false;
         }
         else if (password.length() < 8) {
-            Toast.makeText(this, "Password quá ngắn", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Password yêu cầu từ 8 ký tự trở lên", Toast.LENGTH_SHORT).show();
             return false;
         } else if (!email.matches(emailPattern)) {
             Toast.makeText(this, "Email không hợp lệ. Yêu cầu nhập mail fpt", Toast.LENGTH_SHORT).show();
