@@ -32,6 +32,7 @@ import com.ltmt5.fpoly_friend_app.databinding.ActivityChatBinding;
 import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
 import com.ltmt5.fpoly_friend_app.help.utilities.PreferenceManager;
 import com.ltmt5.fpoly_friend_app.model.ChatMessage;
+import com.ltmt5.fpoly_friend_app.model.UserProfile;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
