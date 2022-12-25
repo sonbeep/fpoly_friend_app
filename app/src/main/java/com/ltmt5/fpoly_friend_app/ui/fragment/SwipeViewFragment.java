@@ -23,9 +23,14 @@ import androidx.fragment.app.Fragment;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.databinding.FragmentSwipeViewBinding;
+import com.ltmt5.fpoly_friend_app.help.UtilsMode;
+import com.ltmt5.fpoly_friend_app.model.TinderCard;
+import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.activity.MainActivity;
+import com.ltmt5.fpoly_friend_app.ui.activity.ProfileActivity;
 import com.mindorks.placeholderview.SwipeDecor;
 
 import java.util.ArrayList;

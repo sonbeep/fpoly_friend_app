@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.adapter.SwipeAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.FragmentHomeBinding;
 import com.ltmt5.fpoly_friend_app.model.Chat;

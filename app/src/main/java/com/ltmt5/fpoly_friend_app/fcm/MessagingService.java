@@ -14,6 +14,7 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
+import com.ltmt5.fpoly_friend_app.model.User;
 import com.ltmt5.fpoly_friend_app.ui.activity.ChatActivity;
 
 import java.util.Random;

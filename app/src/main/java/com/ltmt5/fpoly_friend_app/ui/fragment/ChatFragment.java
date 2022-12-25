@@ -28,13 +28,18 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.ltmt5.fpoly_friend_app.App;
+import com.ltmt5.fpoly_friend_app.adapter.RecentConversionAdapter;
+import com.ltmt5.fpoly_friend_app.adapter.RecentlyAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.FragmentChatBinding;
 import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
 import com.ltmt5.fpoly_friend_app.help.utilities.PreferenceManager;
 import com.ltmt5.fpoly_friend_app.listener.ConversionListener;
 import com.ltmt5.fpoly_friend_app.model.ChatMessage;
+import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.activity.ChatActivity;
 import com.ltmt5.fpoly_friend_app.ui.activity.MainActivity;
+import com.ltmt5.fpoly_friend_app.ui.activity.StoryActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;

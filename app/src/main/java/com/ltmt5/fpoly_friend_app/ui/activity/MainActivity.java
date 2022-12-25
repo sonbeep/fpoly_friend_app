@@ -20,11 +20,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityMainBinding;
+import com.ltmt5.fpoly_friend_app.model.Profile;
+import com.ltmt5.fpoly_friend_app.model.UserProfile;
+import com.ltmt5.fpoly_friend_app.ui.fragment.AddFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.ChatFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.LoveFragment;
 import com.ltmt5.fpoly_friend_app.ui.fragment.SwipeViewFragment;
+import com.ltmt5.fpoly_friend_app.ui.fragment.UserFragment;
 
 import java.util.ArrayList;
 import java.util.List;
