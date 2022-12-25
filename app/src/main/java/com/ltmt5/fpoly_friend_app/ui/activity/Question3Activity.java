@@ -23,8 +23,8 @@ public class Question3Activity extends AppCompatActivity {
         binding.btnBack.setOnClickListener(v -> onBackPressed());
         binding.btnNext.setOnClickListener(v -> {
             if (!mGender.equals("none")) {
-                PublicData.profileTemp.setGender(mGender);
-                startActivity(new Intent(this, Question4Activity.class));
+            PublicData.profileTemp.setGender(mGender);
+            startActivity(new Intent(this, Question4Activity.class));
             }
             else {
                 Toast.makeText(this, "Vui lòng chọn giới tính", Toast.LENGTH_SHORT).show();
