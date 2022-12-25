@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.databinding.ItemContainerReceivedMessageBinding;
 import com.ltmt5.fpoly_friend_app.databinding.ItemContainerSentMessageBinding;
 import com.ltmt5.fpoly_friend_app.model.ChatMessage;
