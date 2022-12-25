@@ -111,7 +111,6 @@ public class LogInActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         Log.e("AAA", "" + e);
                     }
-
                 }
                 Log.e(TAG, "list profile size: " + App.userProfileList.size());
                 startActivity(new Intent(LogInActivity.this, MainActivity.class));

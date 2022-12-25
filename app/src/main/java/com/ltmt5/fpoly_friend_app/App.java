@@ -23,7 +23,6 @@ public class App extends Application {
     public static FirebaseUser user;
     public static List<UserProfile> userProfileList;
     public static UserProfile currentUser;
-
     @Override
     public void onCreate() {
         super.onCreate();

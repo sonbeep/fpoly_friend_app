@@ -116,10 +116,8 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void initView() {
         storage = FirebaseStorage.getInstance();
-
         database = FirebaseDatabase.getInstance();
         mAuth = FirebaseAuth.getInstance();
-
         progressDialog = new ProgressDialog(this);
         progressDialog.setCancelable(false);
         progressDialog.setMessage("Loading...");
@@ -144,7 +142,6 @@ public class SignUpActivity extends AppCompatActivity {
                     }
                 });
     }
-
     private void updateProfile() {
         int phone = Integer.parseInt(binding.edPhone.getText().toString().trim());
         String email = binding.edUsername.getText().toString().trim();

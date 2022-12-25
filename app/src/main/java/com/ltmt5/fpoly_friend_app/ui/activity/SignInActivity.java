@@ -140,7 +140,6 @@ public class SignInActivity extends AppCompatActivity {
                 });
     }
 
-
     private void updateUI(FirebaseUser user) {
         preferenceManager.putString(Constants.KEY_USER_ID, user.getUid());
 
@@ -166,12 +165,10 @@ public class SignInActivity extends AppCompatActivity {
                     Log.e(TAG, "Đã xảy ra lỗi");
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-
     }
 
     private boolean validate(String email, String password) {
