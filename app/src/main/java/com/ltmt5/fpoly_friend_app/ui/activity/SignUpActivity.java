@@ -226,7 +226,7 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(this, "Không được để trống", Toast.LENGTH_SHORT).show();
             return false;
         }
-        else if(phone.length()!=10 && !phone.matches(phonePattern)){
+        else if(!phone.matches(phonePattern)){
             Toast.makeText(this, "Điện thoại phải bắt đầu bằng số 0 hoặc +84 ", Toast.LENGTH_SHORT).show();
             return false;
         }
