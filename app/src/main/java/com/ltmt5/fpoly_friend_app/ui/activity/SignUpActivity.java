@@ -221,19 +221,20 @@ public class SignUpActivity extends AppCompatActivity {
 
     private boolean validate(String email, String password, String phone) {
         String emailPattern = "[a-zA-Z0-9._-]+@fpt.edu.vn";
+        String phonePattern =  "^(0|\\+84)(\\s|\\.)?((3[2-9])|(5[689])|(7[06-9])|(8[1-689])|(9[0-46-9]))(\\d)(\\s|\\.)?(\\d{3})(\\s|\\.)?(\\d{3})$";
         if (email.equals("") || password.equals("") || phone.equals("")) {
             Toast.makeText(this, "Không được để trống", Toast.LENGTH_SHORT).show();
             return false;
         }
-        else if(phone.length()!=10 && !phone.startsWith(String.valueOf(0))){
-            Toast.makeText(this, "Điện thoại đúng 10 số và bắt đầu bằng số 0", Toast.LENGTH_SHORT).show();
+        else if(phone.length()!=10 && !phone.matches(phonePattern)){
+            Toast.makeText(this, "Điện thoại phải bắt đầu bằng số 0 hoặc +84 ", Toast.LENGTH_SHORT).show();
             return false;
         }
         else if (password.length() < 8) {
             Toast.makeText(this, "Password yêu cầu từ 8 ký tự trở lên", Toast.LENGTH_SHORT).show();
             return false;
         } else if (!email.matches(emailPattern)) {
-            Toast.makeText(this, "Email không hợp lệ. Yêu cầu nhập mail fpt", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Email không hợp lệ. Yêu cầu nhập mail đuôi fpt.edu.vn", Toast.LENGTH_SHORT).show();
             return false;
         } else if (imageUri == null) {
             Toast.makeText(this, "Ảnh không hợp lệ", Toast.LENGTH_SHORT).show();

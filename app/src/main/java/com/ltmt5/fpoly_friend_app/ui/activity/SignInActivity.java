@@ -178,10 +178,9 @@ public class SignInActivity extends AppCompatActivity {
             return false;
         }
         else if (!email.matches(emailPattern)) {
-            Toast.makeText(this, "Email không hợp lệ", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Email không hợp lệ.Yêu cầu nhập đúng mail Fpt", Toast.LENGTH_SHORT).show();
             return false;
         }
-
         else {
             return true;
         }
