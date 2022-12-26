@@ -183,7 +183,7 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
 
     private void init() {
         conversions = new ArrayList<>();
-        conversionAdapter = new RecentConversionAdapter(conversions,App.context, this);
+        conversionAdapter = new RecentConversionAdapter(conversions, App.context, this);
         binding.recChat.setAdapter(conversionAdapter);
     }
 

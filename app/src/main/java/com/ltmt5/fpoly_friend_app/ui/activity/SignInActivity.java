@@ -60,6 +60,7 @@ public class SignInActivity extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                App.userProfileList.clear();
                 progressDialog.dismiss();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     try {
@@ -90,7 +91,8 @@ public class SignInActivity extends AppCompatActivity {
     private void setClick() {
         binding.btnSignIn.setOnClickListener(view -> {
             String email = binding.edUsername.getText().toString().trim();
-            String password = binding.edPassword.getText().toString().trim();
+            //looix
+            String password = binding.edPassword.getText().toString();
             if (validate(email, password)) {
                 handleNextClick(email, password);
             }

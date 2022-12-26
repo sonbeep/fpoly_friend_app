@@ -43,7 +43,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 onSent(email);
             }
         });
-
+        binding.btnBack.setOnClickListener(v -> onBackPressed());
         binding.btnSignIn.setOnClickListener(view -> startActivity(new Intent(this, SignInActivity.class)));
     }
 

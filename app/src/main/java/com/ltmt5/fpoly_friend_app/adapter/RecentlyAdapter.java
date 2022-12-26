@@ -68,11 +68,11 @@ public class RecentlyAdapter extends RecyclerView.Adapter<RecentlyAdapter.ViewHo
         }
 
         public void bindData(UserProfile userProfile) {
-            if (userProfile.getAvailability() == 0) {
-                binding.btnAvailable.setVisibility(View.VISIBLE);
-            } else {
+//            if (userProfile.getAvailability() == 0) {
+//                binding.btnAvailable.setVisibility(View.VISIBLE);
+//            } else {
                 binding.btnAvailable.setVisibility(View.INVISIBLE);
-            }
+//            }
             Glide.with(context).load(userProfile.getImageUri()).centerCrop().error(R.drawable.demo1).into(binding.imgAvatar);
             binding.imgAvatar.setOnClickListener(view -> {
                 itemClick.clickItem(userProfile);

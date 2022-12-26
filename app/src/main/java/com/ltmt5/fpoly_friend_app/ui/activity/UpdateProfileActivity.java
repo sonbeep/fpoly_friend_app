@@ -137,7 +137,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
             binding.tvName.setText(userProfile.getName());
         }
         //age
-        if (userProfile.getAge() < 1900 || userProfile.getAge() > 2022) {
+        if (userProfile.getAge() < 1970 || userProfile.getAge() > 2022) {
             binding.tvAge.setText("Trống");
         } else {
             binding.tvAge.setText("" + userProfile.getAge());
