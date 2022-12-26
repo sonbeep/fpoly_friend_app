@@ -58,7 +58,6 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     void loadUser() {
-
         progressDialog.show();
         DatabaseReference myRef = database.getReference("user_profile/");
         myRef.addValueEventListener(new ValueEventListener() {
@@ -116,6 +115,7 @@ public class SignInActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
+                            mAuth = FirebaseAuth.getInstance();
                             FirebaseUser user = mAuth.getCurrentUser();
 //                            signIn();
                             updateUI(user);

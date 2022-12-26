@@ -84,6 +84,7 @@ public class LogInActivity extends AppCompatActivity {
                     }
                 } catch (Exception e) {
                     Log.e(TAG, "" + e);
+                    binding.layoutMain.setVisibility(View.VISIBLE);
                 }
             }
 
