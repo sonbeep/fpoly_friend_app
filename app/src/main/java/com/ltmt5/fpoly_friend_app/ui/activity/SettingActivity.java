@@ -15,6 +15,8 @@ import com.google.firebase.auth.FirebaseUser;
 import com.ltmt5.fpoly_friend_app.databinding.ActivitySettingBinding;
 import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
 import com.ltmt5.fpoly_friend_app.help.utilities.PreferenceManager;
+import com.ltmt5.fpoly_friend_app.ui.dialog.DeleteDialog;
+import com.ltmt5.fpoly_friend_app.ui.dialog.SignOutDialog;
 
 public class SettingActivity extends AppCompatActivity {
     ActivitySettingBinding binding;
@@ -45,34 +47,58 @@ public class SettingActivity extends AppCompatActivity {
         binding.btnFast.setOnClickListener(view -> Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show());
         binding.btnIncognito.setOnClickListener(view -> Toast.makeText(this, "Coming soon", Toast.LENGTH_SHORT).show());
         binding.btnLogOut.setOnClickListener(view -> {
-            PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-            preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, false);
-            FirebaseAuth.getInstance().signOut();
-            startActivity(new Intent(this, SignInActivity.class));
-            finish();
+            SignOutDialog signUpDialog = SignOutDialog.newInstance();
+            signUpDialog.showAllowingStateLoss(getSupportFragmentManager(), "sign_up");
+            signUpDialog.setOnClickListener(new SignOutDialog.OnClickListener() {
+                @Override
+                public void onApply() {
+                    PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+                    preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, false);
+                    FirebaseAuth.getInstance().signOut();
+                    startActivity(new Intent(SettingActivity.this, SignInActivity.class));
+                    finish();
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
         });
         binding.btnDelete.setOnClickListener(view -> {
-            progressDialog.show();
-            PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-            preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, false);
-            user = FirebaseAuth.getInstance().getCurrentUser();
-            assert user != null;
-            user.delete()
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+            DeleteDialog signUpDialog = DeleteDialog.newInstance();
+            signUpDialog.showAllowingStateLoss(getSupportFragmentManager(), "sign_up");
+            signUpDialog.setOnClickListener(new DeleteDialog.OnClickListener() {
+                @Override
+                public void onApply() {
+                    progressDialog.show();
+                    PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
+                    preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, false);
+                    user = FirebaseAuth.getInstance().getCurrentUser();
+                    assert user != null;
+                    user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             progressDialog.dismiss();
                             if (task.isSuccessful()) {
                                 startActivity(new Intent(SettingActivity.this, SignInActivity.class));
                                 finish();
-                            }
-                            else {
+                            } else {
                                 Toast.makeText(SettingActivity.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
+
         });
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

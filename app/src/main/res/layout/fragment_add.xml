@@ -23,44 +23,56 @@
             android:textColor="@color/black"
             android:textSize="18sp" />
 
+<!--        <TextView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="20dp"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:alpha="0.7"-->
+<!--            android:fontFamily="@font/poppins_medium"-->
+<!--            android:gravity="center"-->
+<!--            android:text="Tiêu đề"-->
+<!--            android:textColor="@color/black"-->
+<!--            android:visibility="invisible" />-->
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:alpha="0.7"
-            android:fontFamily="@font/poppins_medium"
+            android:fontFamily="@font/poppins"
             android:gravity="center"
-            android:text="Tiêu đề"
+            android:text="Thêm ảnh lên story, mọi người có thể\n theo dõi bạn sau khi match"
             android:textColor="@color/black"
-            android:visibility="invisible" />
+            android:textSize="12sp" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="20dp"
-            android:layout_marginTop="10dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:visibility="invisible"
-            app:cardBackgroundColor="@color/transparent"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="0dp"
-            app:strokeColor="@color/prime_2"
-            app:strokeWidth="1dp">
+<!--        <com.google.android.material.card.MaterialCardView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginHorizontal="20dp"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--            android:clickable="true"-->
+<!--            android:focusable="true"-->
+<!--            android:visibility="invisible"-->
+<!--            app:cardBackgroundColor="@color/transparent"-->
+<!--            app:cardCornerRadius="10dp"-->
+<!--            app:cardElevation="0dp"-->
+<!--            app:strokeColor="@color/prime_2"-->
+<!--            app:strokeWidth="1dp">-->
 
-            <EditText
-                android:id="@+id/edTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginHorizontal="10dp"
-                android:background="@color/transparent"
-                android:hint="Bạn đang nghĩ gì?"
+<!--            <EditText-->
+<!--                android:id="@+id/edTitle"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_gravity="center"-->
+<!--                android:layout_marginHorizontal="10dp"-->
+<!--                android:background="@color/transparent"-->
+<!--                android:hint="Bạn đang nghĩ gì?"-->
 
-                android:paddingVertical="11dp"
-                android:textColor="@color/black" />
-        </com.google.android.material.card.MaterialCardView>
+<!--                android:paddingVertical="11dp"-->
+<!--                android:textColor="@color/black" />-->
+<!--        </com.google.android.material.card.MaterialCardView>-->
 
 
         <TextView

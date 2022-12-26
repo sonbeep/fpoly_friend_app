@@ -121,6 +121,7 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
     private void getUsers() {
         progressDialog.show();
         userProfileList.clear();
+        userProfileList.add(App.currentUser);
         userProfile.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

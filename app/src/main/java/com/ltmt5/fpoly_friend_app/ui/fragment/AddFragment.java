@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -38,6 +39,7 @@ import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.adapter.AddImageAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.FragmentAddBinding;
 import com.ltmt5.fpoly_friend_app.ui.activity.MainActivity;
+import com.ltmt5.fpoly_friend_app.ui.dialog.DeleteDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -81,6 +83,7 @@ public class AddFragment extends Fragment implements AddImageAdapter.ItemClick {
                         @Override
                         public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                             Log.e(TAG, "changed image");
+                            Toast.makeText(mainActivity, "Đã cập nhật", Toast.LENGTH_SHORT).show();
                         }
                     });
                 });
@@ -199,9 +202,20 @@ public class AddFragment extends Fragment implements AddImageAdapter.ItemClick {
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void deleteItem(int position) {
-        uriList.remove(position);
-        addImageAdapter.notifyDataSetChanged();
-        positionAdd = position;
-        deleteImgage();
+        DeleteDialog signUpDialog = DeleteDialog.newInstance();
+        signUpDialog.setOnClickListener(new DeleteDialog.OnClickListener() {
+            @Override
+            public void onApply() {
+                uriList.remove(position);
+                addImageAdapter.notifyDataSetChanged();
+                positionAdd = position;
+                deleteImgage();
+            }
+            @Override
+            public void onCancel() {
+
+            }
+        });
+
     }
 }
