@@ -10,10 +10,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -58,11 +54,13 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     void loadUser() {
+
         progressDialog.show();
         DatabaseReference myRef = database.getReference("user_profile/");
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                App.userProfileList.clear();
                 progressDialog.dismiss();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     try {
@@ -93,7 +91,8 @@ public class SignInActivity extends AppCompatActivity {
     private void setClick() {
         binding.btnSignIn.setOnClickListener(view -> {
             String email = binding.edUsername.getText().toString().trim();
-            String password = binding.edPassword.getText().toString().trim();
+            //looix
+            String password = binding.edPassword.getText().toString();
             if (validate(email, password)) {
                 handleNextClick(email, password);
             }
@@ -103,27 +102,24 @@ public class SignInActivity extends AppCompatActivity {
             startActivity(intent);
         });
         binding.btnSignUp.setOnClickListener(view -> startActivity(new Intent(SignInActivity.this, SignUpActivity.class)));
+
+        binding.btnBack.setOnClickListener(v -> onBackPressed());
     }
 
     void handleNextClick(String email, String password) {
         progressDialog.show();
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        progressDialog.dismiss();
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            mAuth = FirebaseAuth.getInstance();
-                            FirebaseUser user = mAuth.getCurrentUser();
+                .addOnCompleteListener(this, task -> {
+                    progressDialog.dismiss();
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
 //                            signIn();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.e(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(SignInActivity.this, "Đăng nhập không thành công", Toast.LENGTH_SHORT).show();
-                        }
+                        updateUI(user);
+                    } else {
+                        Log.e(TAG, "signInWithEmail:failure", task.getException());
+                        Toast.makeText(SignInActivity.this, "Đăng nhập không thành công", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -147,7 +143,6 @@ public class SignInActivity extends AppCompatActivity {
                     }
                 });
     }
-
 
     private void updateUI(FirebaseUser user) {
         preferenceManager.putString(Constants.KEY_USER_ID, user.getUid());
@@ -174,19 +169,23 @@ public class SignInActivity extends AppCompatActivity {
                     Log.e(TAG, "Đã xảy ra lỗi");
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
-
     }
 
     private boolean validate(String email, String password) {
+        String emailPattern = "[a-zA-Z0-9._-]+@fpt.edu.vn";
         if (email.equals("") || password.equals("")) {
             Toast.makeText(this, "Email, password không được để trống", Toast.LENGTH_SHORT).show();
             return false;
-        } else {
+        }
+        else if (!email.matches(emailPattern)) {
+            Toast.makeText(this, "Email không hợp lệ.Yêu cầu nhập đúng mail Fpt", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        else {
             return true;
         }
 

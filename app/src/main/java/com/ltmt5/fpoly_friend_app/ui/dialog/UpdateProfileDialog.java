@@ -277,7 +277,7 @@ public class UpdateProfileDialog extends BaseDialogFragment implements HobbiesAd
 
     List<Hobbies> getListShowPriority() {
         List<Hobbies> list = new ArrayList<>();
-        list.add(new Hobbies("Name"));
+        list.add(new Hobbies("Nam"));
         list.add(new Hobbies("Nữ"));
         list.add(new Hobbies("Khác"));
         list.add(new Hobbies("Tất cả"));

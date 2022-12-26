@@ -9,6 +9,7 @@ public class UserProfile implements Serializable {
     //availability = -1   đã đăng kí, chưa set up
     //availability = 0   đã set up
     //availability = 1   done
+    //availability = 101   khóa tài khoản
 
 
     private int availability;

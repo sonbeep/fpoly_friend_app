@@ -46,4 +46,5 @@ public class StoryItem {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
 }

@@ -33,7 +33,6 @@ public class WelcomeActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         initView();
         setClick();
-
     }
 
     private void setClick() {

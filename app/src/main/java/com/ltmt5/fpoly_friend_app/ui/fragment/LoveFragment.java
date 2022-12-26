@@ -51,7 +51,6 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
     List<UserProfile> userListMain = new ArrayList<>();
     List<UserProfile> userListFind = new ArrayList<>();
 
-
     public static LoveFragment newInstance() {
         return new LoveFragment();
     }
@@ -86,7 +85,6 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
                 loveAdapterFind.setData(userListFind);
                 return false;
             }
-
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;

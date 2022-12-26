@@ -20,8 +20,8 @@ public class Question1Activity extends AppCompatActivity {
         binding.btnNext.setOnClickListener(v -> {
             String name = binding.ed1.getText().toString().trim();
             if (validate(name)) {
-            PublicData.profileTemp.setName(name);
-            startActivity(new Intent(this, Question2Activity.class));
+                PublicData.profileTemp.setName(name);
+                startActivity(new Intent(this, Question2Activity.class));
             }
         });
         binding.btnBack.setOnClickListener(v -> finishAffinity());

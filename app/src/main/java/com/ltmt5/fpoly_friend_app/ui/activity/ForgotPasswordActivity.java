@@ -43,7 +43,7 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 onSent(email);
             }
         });
-
+        binding.btnBack.setOnClickListener(v -> onBackPressed());
         binding.btnSignIn.setOnClickListener(view -> startActivity(new Intent(this, SignInActivity.class)));
     }
 
@@ -59,12 +59,12 @@ public class ForgotPasswordActivity extends AppCompatActivity {
                 });
     }
 
-    private void loadOTPActivity(String phoneNumber, String id) {
-        Intent intent = new Intent(ForgotPasswordActivity.this, OTPActivity.class);
-        intent.putExtra("phoneNumber", phoneNumber);
-        intent.putExtra("id", id);
-        startActivity(intent);
-    }
+//    private void loadOTPActivity(String phoneNumber, String id) {
+//        Intent intent = new Intent(ForgotPasswordActivity.this, OTPActivity.class);
+//        intent.putExtra("phoneNumber", phoneNumber);
+//        intent.putExtra("id", id);
+//        startActivity(intent);
+//    }
 
     private void loadMainActivity(String phoneNumber) {
         Intent intent = new Intent(ForgotPasswordActivity.this, MainActivity.class);

@@ -39,11 +39,11 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
     String userId;
     UserProfile userProfile;
     ActivityStoryBinding binding;
-
     ProgressDialog progressDialog;
     List<String> uriList = new ArrayList<>();
     private FirebaseDatabase database;
     private int counter = 0;
+
     private View.OnTouchListener onTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -69,7 +69,6 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
         initView();
         setClick();
     }
-
     private void initView() {
         database = FirebaseDatabase.getInstance();
         progressDialog = new ProgressDialog(this);
@@ -80,8 +79,6 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
             userProfile = (UserProfile) intent.getSerializableExtra(Constants.KEY_USER);
         }
         getImage();
-
-
     }
 
     private void getImage() {

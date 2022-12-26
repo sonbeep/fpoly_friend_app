@@ -36,7 +36,7 @@ import com.mindorks.placeholderview.SwipeDecor;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SwipeViewFragment extends Fragment {
+public class   SwipeViewFragment extends Fragment {
     public static final String EXTRA_USER_PROFILE = "EXTRA_USER_PROFILE";
     public static final String EXTRA_SWIPE_VIEW_SOURCE = "EXTRA_SWIPE_VIEW_SOURCE";
     public static UserProfile mProfile;
@@ -138,8 +138,8 @@ public class SwipeViewFragment extends Fragment {
                         .setViewGravity(Gravity.TOP)
                         .setPaddingTop(20)
                         .setRelativeScale(0.01f));
-        //                        .setSwipeInMsgLayoutId(R.layout.tinder_swipe_in_msg_view)
-//                        .setSwipeOutMsgLayoutId(R.layout.tinder_swipe_out_msg_view))
+//                        .setSwipeInMsgLayoutId(R.layout.tinder_swipe_in_msg_view)
+//                        .setSwipeOutMsgLayoutId(R.layout.tinder_swipe_out_msg_view));
         userProfileList = App.userProfileList;
         Log.e(TAG, "ls app:" + userProfileList.size());
         for (int i = 0; i < userProfileList.size(); i++) {

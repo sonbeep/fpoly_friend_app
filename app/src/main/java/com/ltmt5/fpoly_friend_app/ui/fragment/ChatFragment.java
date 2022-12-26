@@ -5,10 +5,7 @@ import static com.ltmt5.fpoly_friend_app.App.TAG;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,7 +41,6 @@ import com.ltmt5.fpoly_friend_app.ui.activity.ChatActivity;
 import com.ltmt5.fpoly_friend_app.ui.activity.MainActivity;
 import com.ltmt5.fpoly_friend_app.ui.activity.StoryActivity;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -187,7 +183,7 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
 
     private void init() {
         conversions = new ArrayList<>();
-        conversionAdapter = new RecentConversionAdapter(conversions,App.context, this);
+        conversionAdapter = new RecentConversionAdapter(conversions, App.context, this);
         binding.recChat.setAdapter(conversionAdapter);
     }
 

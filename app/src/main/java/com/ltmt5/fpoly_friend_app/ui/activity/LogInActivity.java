@@ -29,7 +29,6 @@ public class LogInActivity extends AppCompatActivity {
     ActivityLogInBinding binding;
     FirebaseDatabase database;
     ProgressDialog progressDialog;
-    boolean isban;
     FirebaseUser user;
     PreferenceManager preferenceManager;
 
@@ -41,9 +40,7 @@ public class LogInActivity extends AppCompatActivity {
         initView();
         binding.btnLogIn.setOnClickListener(v -> startActivity(new Intent(this, SignInActivity.class)));
         binding.btnSignUp.setOnClickListener(v -> startActivity(new Intent(this, SignUpActivity.class)));
-        binding.btnError.setOnClickListener(v -> {
-            Toast.makeText(this, "Kệ người dùng", Toast.LENGTH_SHORT).show();
-        });
+        binding.btnError.setOnClickListener(v -> Toast.makeText(this, "Vui lòng thông cảm. Chúng tôi sẽ khắc phục", Toast.LENGTH_SHORT).show());
     }
 
     private void initView() {
@@ -100,6 +97,7 @@ public class LogInActivity extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                App.userProfileList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     try {
                         UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
@@ -115,7 +113,6 @@ public class LogInActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         Log.e("AAA", "" + e);
                     }
-
                 }
                 Log.e(TAG, "list profile size: " + App.userProfileList.size());
                 startActivity(new Intent(LogInActivity.this, MainActivity.class));
