@@ -130,9 +130,6 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
                 Log.e(TAG, "profile list empty");
             }
         });
-        if (App.userProfileList == null) {
-            mainActivity.getAllUserProfile();
-        }
         userListMain.addAll(App.userProfileList);
     }
 

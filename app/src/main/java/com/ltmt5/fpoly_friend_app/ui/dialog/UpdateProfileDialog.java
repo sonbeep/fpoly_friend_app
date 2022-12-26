@@ -11,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -158,13 +159,50 @@ public class UpdateProfileDialog extends BaseDialogFragment implements HobbiesAd
                     data = binding.ed1.getText().toString().trim();
                 }
             }
-            Log.e(TAG, "ls: " + list.size());
             for (Hobbies hobbies : list) {
                 stringList.add(hobbies.getName());
             }
-            onClickListener.onApply(data, stringList);
-            dismiss();
+            if (validate()) {
+                onClickListener.onApply(data, stringList);
+                dismiss();
+            }
         });
+    }
+
+    private boolean validate() {
+        boolean isDone = true;
+        switch (name) {
+            case "age":
+                if (binding.ed1.getText().toString().toString().equals("")) {
+                    Toast.makeText(getActivity(), "Không được để trống", Toast.LENGTH_SHORT).show();
+                    isDone = false;
+                }
+                else {
+                    int age = Integer.parseInt(binding.ed1.getText().toString().trim());
+                    if (age < 1970 || age > 2022) {
+                        Toast.makeText(getActivity(), "Năm không hợp lệ", Toast.LENGTH_SHORT).show();
+                        isDone = false;
+                    }
+                }
+
+                break;
+            case "description":
+            case "location":
+            case "personality":
+            case "favoriteSong":
+            case "name":
+                if (binding.ed1.getText().toString().toString().equals("")) {
+                    Toast.makeText(getActivity(), "Không được để trống", Toast.LENGTH_SHORT).show();
+                    isDone = false;
+                }
+                break;
+            default:
+                binding.tv1.setText("Họ tên");
+                binding.rec.setVisibility(View.GONE);
+                break;
+
+        }
+        return isDone;
     }
 
     List<Hobbies> getListGender() {

@@ -179,7 +179,7 @@ public class SignUpActivity extends AppCompatActivity {
                     });
                 } else {
                     Log.e(TAG, "fail");
-                    showToast("Đã xảy ra lỗi");
+                    showToast("Đã xảy ra lỗi v1");
                 }
             });
         } else {

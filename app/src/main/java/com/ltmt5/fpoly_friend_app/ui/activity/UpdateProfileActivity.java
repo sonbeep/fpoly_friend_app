@@ -311,7 +311,6 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
                 @Override
                 public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                     progressDialog.dismiss();
-                    Log.e(TAG, "created user profile");
                 }
             });
         } else {
@@ -320,7 +319,6 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
                 @Override
                 public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                     progressDialog.dismiss();
-                    Log.e(TAG, "created user profile");
                 }
             });
         }
@@ -334,7 +332,6 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                 progressDialog.dismiss();
-                Log.e(TAG, "created user profile");
             }
         });
     }
@@ -377,5 +374,10 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
             isDone = false;
         }
         return isDone;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

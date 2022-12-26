@@ -34,9 +34,11 @@ import com.ltmt5.fpoly_friend_app.ui.activity.ProfileActivity;
 import com.mindorks.placeholderview.SwipeDecor;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-public class   SwipeViewFragment extends Fragment {
+public class SwipeViewFragment extends Fragment {
     public static final String EXTRA_USER_PROFILE = "EXTRA_USER_PROFILE";
     public static final String EXTRA_SWIPE_VIEW_SOURCE = "EXTRA_SWIPE_VIEW_SOURCE";
     public static UserProfile mProfile;
@@ -104,7 +106,6 @@ public class   SwipeViewFragment extends Fragment {
         myRef.setValue(mProfile, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                Log.e(TAG, "created user profile");
                 DatabaseReference myRef2 = database.getReference("user_profile/" + user.getUid() + "/match");
                 myRef2.setValue((currentUser.getMatch() + 1), new DatabaseReference.CompletionListener() {
                     @Override
@@ -125,6 +126,8 @@ public class   SwipeViewFragment extends Fragment {
     }
 
     private void initView() {
+        Collections.shuffle(App.userProfileList);
+        mPos = 0;
         mContext = App.context;
         database = FirebaseDatabase.getInstance();
         mainActivity = (MainActivity) getActivity();
@@ -161,7 +164,6 @@ public class   SwipeViewFragment extends Fragment {
         myRef.setValue(mProfile, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                Log.e(TAG, "created user profile");
                 DatabaseReference myRef2 = database.getReference("user_profile/" + user.getUid() + "/match");
                 myRef2.setValue((currentUser.getMatch() + 1), new DatabaseReference.CompletionListener() {
                     @Override

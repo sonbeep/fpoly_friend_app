@@ -76,10 +76,12 @@ public class UserFragment extends Fragment {
 
         binding.btnUpdate.setOnClickListener(view -> {
             startActivity(new Intent(getActivity(), UpdateProfileActivity.class));
+//            mainActivity.finish();
         });
 
         binding.btnSetting.setOnClickListener(view -> {
             startActivity(new Intent(getActivity(), SettingActivity.class));
+//            mainActivity.finish();
         });
     }
 }
