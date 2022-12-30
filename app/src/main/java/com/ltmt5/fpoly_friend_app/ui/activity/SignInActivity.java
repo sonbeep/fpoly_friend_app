@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -39,6 +40,8 @@ public class SignInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySignInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        isFirst = true;
+        isFirst2 = true;
         intiView();
         setClick();
     }
@@ -54,31 +57,34 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     void loadUser() {
-
+        user = FirebaseAuth.getInstance().getCurrentUser();
         progressDialog.show();
         DatabaseReference myRef = database.getReference("user_profile/");
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                App.userProfileList.clear();
-                progressDialog.dismiss();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    try {
-                        UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
-                        if (userProfile != null) {
-                            if (userProfile.getUserId().equals(user.getUid())) {
-                                App.currentUser = userProfile;
-                            } else {
-                                App.userProfileList.add(userProfile);
-                            }
+                if (isFirst) {
+                    App.userProfileList.clear();
+                    progressDialog.dismiss();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        try {
+                            UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                            if (userProfile != null) {
+                                if (userProfile.getUserId().equals(user.getUid())) {
+                                    App.currentUser = userProfile;
+                                } else {
+                                    App.userProfileList.add(userProfile);
+                                }
 
+                            }
+                        } catch (Exception e) {
+                            Log.e("AAA", "" + e);
                         }
-                    } catch (Exception e) {
-                        Log.e("AAA", "" + e);
                     }
+                    Log.e(TAG, "list profile size: " + App.userProfileList.size());
+                    startActivity(new Intent(SignInActivity.this, MainActivity.class));
+                    isFirst = false;
                 }
-                Log.e(TAG, "list profile size: " + App.userProfileList.size());
-                startActivity(new Intent(SignInActivity.this, MainActivity.class));
             }
 
             @Override
@@ -87,6 +93,9 @@ public class SignInActivity extends AppCompatActivity {
             }
         });
     }
+
+    boolean isFirst;
+    boolean isFirst2;
 
     private void setClick() {
         binding.btnSignIn.setOnClickListener(view -> {
@@ -114,6 +123,7 @@ public class SignInActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithEmail:success");
+                        mAuth = FirebaseAuth.getInstance();
                         FirebaseUser user = mAuth.getCurrentUser();
 //                            signIn();
                         updateUI(user);
@@ -151,24 +161,29 @@ public class SignInActivity extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                userProfile = snapshot.getValue(UserProfile.class);
-                if (userProfile != null) {
-                    if (userProfile.getAvailability() == -1) {
-                        startActivity(new Intent(SignInActivity.this, Question1Activity.class));
-                    } else if (userProfile.getAvailability() == -101) {
-                        Toast.makeText(SignInActivity.this, "Tài khoản đã bị khoá", Toast.LENGTH_SHORT).show();
-                    } else if (userProfile.getAvailability() == 0) {
-                        preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
-                        preferenceManager.putString(Constants.KEY_NAME, userProfile.getName());
-                        preferenceManager.putString(Constants.KEY_IMAGE, userProfile.getImageUri());
-                        loadUser();
+                if (isFirst2) {
+                    userProfile = snapshot.getValue(UserProfile.class);
+                    if (userProfile != null) {
+                        if (userProfile.getAvailability() == -1) {
+                            startActivity(new Intent(SignInActivity.this, Question1Activity.class));
+                        } else if (userProfile.getAvailability() == -101) {
+                            Toast.makeText(SignInActivity.this, "Tài khoản đã bị khoá", Toast.LENGTH_SHORT).show();
+                        } else if (userProfile.getAvailability() == 0) {
+                            preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, true);
+                            preferenceManager.putString(Constants.KEY_NAME, userProfile.getName());
+                            preferenceManager.putString(Constants.KEY_IMAGE, userProfile.getImageUri());
+                            loadUser();
+                        } else {
+                            Log.e(TAG, "Đã xảy ra lỗi v1");
+                        }
                     } else {
-                        Log.e(TAG, "Đã xảy ra lỗi1");
+                        Log.e(TAG, "Đã xảy ra lỗi");
                     }
-                } else {
-                    Log.e(TAG, "Đã xảy ra lỗi");
+                    isFirst2 = false;
                 }
+
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
@@ -180,12 +195,10 @@ public class SignInActivity extends AppCompatActivity {
         if (email.equals("") || password.equals("")) {
             Toast.makeText(this, "Email, password không được để trống", Toast.LENGTH_SHORT).show();
             return false;
-        }
-        else if (!email.matches(emailPattern)) {
+        } else if (!email.matches(emailPattern)) {
             Toast.makeText(this, "Email không hợp lệ.Yêu cầu nhập đúng mail Fpt", Toast.LENGTH_SHORT).show();
             return false;
-        }
-        else {
+        } else {
             return true;
         }
 
@@ -195,5 +208,8 @@ public class SignInActivity extends AppCompatActivity {
         Toast.makeText(this, meesage, Toast.LENGTH_SHORT).show();
     }
 
-
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, LogInActivity.class));
+    }
 }

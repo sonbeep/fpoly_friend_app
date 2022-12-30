@@ -79,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 //        getDataIntent();
         intitView();
+        Log.e(TAG,"Load main");
 //        getUserInfo();
     }
 
@@ -198,6 +199,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getAllUserProfile() {
+        Log.e(TAG,"get all user");
         App.userProfileList = new ArrayList<>();
         List<UserProfile> userProfileList = new ArrayList<>();
         database = FirebaseDatabase.getInstance();
@@ -205,6 +207,7 @@ public class MainActivity extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                App.userProfileList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
                     if (userProfile != null) {
@@ -219,6 +222,9 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(TAG, "profile list empty");
             }
         });
+    }
+    public void finish(){
+        finish();
     }
 
 

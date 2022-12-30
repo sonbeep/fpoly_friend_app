@@ -100,6 +100,9 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
                             Log.e(TAG, "" + e);
                         }
                     }
+                    if (uriList.size()==0){
+                        uriList.add(userProfile.getImageUri());
+                    }
                     startStory();
                 }
 
@@ -127,7 +130,7 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
     }
 
     private void setClick() {
-        binding.btnCancel.setOnClickListener(v -> startActivity(new Intent(this, MainActivity.class)));
+        binding.btnCancel.setOnClickListener(v -> onBackPressed());
 
         binding.reverse.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -149,7 +152,7 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(this, MainActivity.class));
+        super.onBackPressed();
     }
 
     @Override
@@ -168,7 +171,7 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
 
     @Override
     public void onComplete() {
-        startActivity(new Intent(this, MainActivity.class));
+        onBackPressed();
     }
 
     @Override

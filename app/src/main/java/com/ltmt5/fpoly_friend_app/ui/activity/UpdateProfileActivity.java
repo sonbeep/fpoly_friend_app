@@ -292,6 +292,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
                     handleUpdate(name, data);
                 }
 
+
             }
 
             @Override
@@ -311,7 +312,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
                 @Override
                 public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                     progressDialog.dismiss();
-                    Log.e(TAG, "created user profile");
+                    Toast.makeText(UpdateProfileActivity.this, "Đã cập nhật", Toast.LENGTH_SHORT).show();
                 }
             });
         } else {
@@ -320,7 +321,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
                 @Override
                 public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                     progressDialog.dismiss();
-                    Log.e(TAG, "created user profile");
+                    Toast.makeText(UpdateProfileActivity.this, "Đã cập nhật", Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -334,7 +335,6 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                 progressDialog.dismiss();
-                Log.e(TAG, "created user profile");
             }
         });
     }
@@ -377,5 +377,10 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
             isDone = false;
         }
         return isDone;
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
     }
 }

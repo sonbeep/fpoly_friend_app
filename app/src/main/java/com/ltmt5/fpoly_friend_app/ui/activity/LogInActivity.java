@@ -37,6 +37,8 @@ public class LogInActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityLogInBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        isFirst = true;
+        isFirst2 = true;
         initView();
         binding.btnLogIn.setOnClickListener(v -> startActivity(new Intent(this, SignInActivity.class)));
         binding.btnSignUp.setOnClickListener(v -> startActivity(new Intent(this, SignUpActivity.class)));
@@ -66,21 +68,66 @@ public class LogInActivity extends AppCompatActivity {
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                progressDialog.dismiss();
-                try {
-                    UserProfile userProfile = snapshot.getValue(UserProfile.class);
-                    if (userProfile != null) {
-                        if (userProfile.getAvailability() == -101) {
-                            preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, false);
-                            startActivity(new Intent(getApplicationContext(), LogInActivity.class));
-                            Toast.makeText(getApplicationContext(), "Tài khoản đã bị khoá", Toast.LENGTH_SHORT).show();
-                            binding.layoutMain.setVisibility(View.VISIBLE);
-                        } else {
-                            getUser();
+                if (isFirst) {
+                    Log.e(TAG, "log in");
+                    progressDialog.dismiss();
+                    try {
+                        UserProfile userProfile = snapshot.getValue(UserProfile.class);
+                        if (userProfile != null) {
+                            if (userProfile.getAvailability() == -101) {
+                                preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, false);
+                                startActivity(new Intent(getApplicationContext(), LogInActivity.class));
+                                Toast.makeText(getApplicationContext(), "Tài khoản đã bị khoá", Toast.LENGTH_SHORT).show();
+                                binding.layoutMain.setVisibility(View.VISIBLE);
+                            } else {
+                                getUser();
+                            }
+                        }
+                    } catch (Exception e) {
+                        Log.e(TAG, "" + e);
+                        binding.layoutMain.setVisibility(View.VISIBLE);
+                    }
+                    isFirst = false;
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "profile list empty");
+            }
+        });
+    }
+
+    boolean isFirst;
+    boolean isFirst2;
+
+    private void getUser() {
+        DatabaseReference myRef = database.getReference("user_profile/");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (isFirst2){
+                    App.userProfileList.clear();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        try {
+                            UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                            if (userProfile != null) {
+                                if (userProfile.getUserId() != null) {
+                                    if (userProfile.getUserId().equals(user.getUid())) {
+                                        App.currentUser = userProfile;
+                                    } else {
+                                        App.userProfileList.add(userProfile);
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            Log.e("AAA", "" + e);
                         }
                     }
-                } catch (Exception e) {
-                    Log.e(TAG, "" + e);
+                    Log.e(TAG, "list profile size: " + App.userProfileList.size());
+                    startActivity(new Intent(LogInActivity.this, MainActivity.class));
+                    isFirst2 = false;
                 }
             }
 
@@ -91,36 +138,8 @@ public class LogInActivity extends AppCompatActivity {
         });
     }
 
-    private void getUser() {
-        DatabaseReference myRef = database.getReference("user_profile/");
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                App.userProfileList.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    try {
-                        UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
-                        if (userProfile != null) {
-                            if (userProfile.getUserId() != null) {
-                                if (userProfile.getUserId().equals(user.getUid())) {
-                                    App.currentUser = userProfile;
-                                } else {
-                                    App.userProfileList.add(userProfile);
-                                }
-                            }
-                        }
-                    } catch (Exception e) {
-                        Log.e("AAA", "" + e);
-                    }
-                }
-                Log.e(TAG, "list profile size: " + App.userProfileList.size());
-                startActivity(new Intent(LogInActivity.this, MainActivity.class));
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "profile list empty");
-            }
-        });
+    @Override
+    public void onBackPressed() {
+        finishAffinity();
     }
 }
