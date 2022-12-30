@@ -1,5 +1,6 @@
 package com.ltmt5.fpoly_friend_app.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,9 +24,9 @@ public class SplashActivity extends AppCompatActivity {
     private void initView() {
         new Handler().postDelayed(() -> {
             if (App.sharePref.isFirstTimeLaunch()) {
-                startActivity(new Intent(this, OnBoard1Activity.class));
+                startActivity(new Intent((Context) this, OnBoard1Activity.class));
             } else {
-                startActivity(new Intent(this, LogInActivity.class));
+                startActivity(new Intent((Context) this, LogInActivity.class));
             }
             finish();
         }, 1500);

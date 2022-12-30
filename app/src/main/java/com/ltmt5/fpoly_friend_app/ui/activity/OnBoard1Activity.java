@@ -1,5 +1,6 @@
 package com.ltmt5.fpoly_friend_app.ui.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -16,14 +17,14 @@ public class OnBoard1Activity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityOnBoard1Binding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        binding.btnNext.setOnClickListener(v -> startActivity(new Intent(this, OnBoard2Activity.class)));
+        binding.btnNext.setOnClickListener(v -> startActivity(new Intent((Context) this, OnBoard2Activity.class)));
         binding.btnSkip.setOnClickListener(v -> {
             App.sharePref.setFirstTimeLaunch(false);
-            startActivity(new Intent(this, LogInActivity.class));
+            startActivity(new Intent((Context) this, LogInActivity.class));
         });
         binding.btnSignIn.setOnClickListener(v -> {
             App.sharePref.setFirstTimeLaunch(false);
-            startActivity(new Intent(this, SignInActivity.class));
+            startActivity(new Intent((Context) this, SignInActivity.class));
         });
     }
 }
