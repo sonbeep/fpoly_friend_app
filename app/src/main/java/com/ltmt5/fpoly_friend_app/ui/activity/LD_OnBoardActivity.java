@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.ltmt5.fpoly_friend_app.App;
-import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityLdOnBoardBinding;
 
 public class LD_OnBoardActivity extends AppCompatActivity {
