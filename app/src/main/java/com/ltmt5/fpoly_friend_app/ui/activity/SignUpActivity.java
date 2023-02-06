@@ -275,7 +275,7 @@ public class SignUpActivity extends AppCompatActivity {
             Toast.makeText(this, "Số điện thoại không đúng định dạng ", Toast.LENGTH_SHORT).show();
             return false;
         } else if (email.equals("")) {
-            Toast.makeText(this, "Email không được để trống", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Không được để trống", Toast.LENGTH_SHORT).show();
             return false;
         } else if (!email.matches(emailPattern)) {
             Toast.makeText(this, "Email không hợp lệ. Yêu cầu nhập gmail fpt.edu.vn", Toast.LENGTH_SHORT).show();

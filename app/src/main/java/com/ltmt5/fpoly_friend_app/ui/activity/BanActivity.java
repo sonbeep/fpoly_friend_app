@@ -1,13 +1,12 @@
 package com.ltmt5.fpoly_friend_app.ui.activity;
 
-import static com.ltmt5.fpoly_friend_app.App.TAG;
-
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
@@ -18,16 +17,20 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.normal.TedPermission;
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.adapter.AddImageAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityBanBinding;
 import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
+import com.ltmt5.fpoly_friend_app.model.Ban;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -35,16 +38,17 @@ public class BanActivity extends AppCompatActivity implements AddImageAdapter.It
     ActivityBanBinding binding;
     UserProfile mUserProfile;
     AddImageAdapter addImageAdapter;
+    FirebaseDatabase database;
     List<Uri> uriList;
     ActivityResultLauncher<Intent> launcher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), new ActivityResultCallback<>() {
         @Override
         public void onActivityResult(ActivityResult result) {
             if (result.getResultCode() == Activity.RESULT_OK) {
                 if (result.getData() != null) {
-                    if (uriList.size() < 7) {
+                    if (uriList.size() < 4) {
                         uriList.add(result.getData().getData());
                     } else {
-                        Toast.makeText(BanActivity.this, "Tối đa 6", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(BanActivity.this, "Tối đa 3", Toast.LENGTH_SHORT).show();
                     }
 
                 }
@@ -63,6 +67,11 @@ public class BanActivity extends AppCompatActivity implements AddImageAdapter.It
     }
 
     private void initView() {
+        database = FirebaseDatabase.getInstance();
+        storage = FirebaseStorage.getInstance();
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setCancelable(false);
+        progressDialog.setMessage("Loading...");
         uriList = new ArrayList<>();
         mUserProfile = (UserProfile) getIntent().getSerializableExtra(Constants.KEY_USER);
         if (mUserProfile != null) {
@@ -72,6 +81,7 @@ public class BanActivity extends AppCompatActivity implements AddImageAdapter.It
         addImageAdapter = new AddImageAdapter(this, this);
         binding.recAddImage.setAdapter(addImageAdapter);
     }
+
     FirebaseStorage storage;
     StorageReference storageRef;
 
@@ -93,28 +103,38 @@ public class BanActivity extends AppCompatActivity implements AddImageAdapter.It
             }).setDeniedMessage("If you reject permission,you can not use this service\n\nPlease turn on permissions at [Setting] > [Permission]").setPermissions(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE).check();
 
         });
-//        binding.btnNext.setOnClickListener(v -> {
-//            storageRef = storage.getReference().child("image_uri/" + user.getUid() + "/uImage");
-//            storageRef.putFile(imageUri).addOnCompleteListener(this, task -> {
-//                if (task.isSuccessful()) {
-//                    storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
-//                        userProfile.setImageUri(uri.toString());
-//                        DatabaseReference myRef = database.getReference("user_profile/" + user.getUid());
-//                        myRef.setValue(userProfile, (error, ref) -> {
-//                            progressDialog.dismiss();
-//                            Log.e(TAG, "created user profile");
-//                            showToast("Đăng kí thành công");
-//                            updateUI();
-//                        });
-//                    });
-//                } else {
-//                    progressDialog.dismiss();
-//                    Log.e(TAG, "fail");
-//                    showToast("Đã xảy ra lỗi v1");
-//                }
-//            });
-//        });
+
+        binding.btnNext.setOnClickListener(v -> {
+            progressDialog.show();
+            urlList = new ArrayList<>();
+            for (Uri uri : uriList) {
+                storageRef = storage.getReference().child("image_ban/" + App.currentUser.getUserId() + "/uBan" + System.currentTimeMillis());
+                storageRef.putFile(uri).addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        storageRef.getDownloadUrl().addOnSuccessListener(uri2 -> {
+                            urlList.add(uri2.toString());
+                        });
+                    }
+                });
+            }
+            new Handler().postDelayed(() -> {
+                Ban ban = new Ban();
+                ban.setUserId(mUserProfile.getUserId());
+                ban.setEvidence(urlList);
+                ban.setDate(new Date());
+                DatabaseReference myRef = database.getReference("user_ban/" + App.currentUser.getUserId() + "/" + System.currentTimeMillis());
+                myRef.setValue(ban, (error, ref) -> {
+                    progressDialog.dismiss();
+                    Toast.makeText(this, "Đã gửi phản hồi", Toast.LENGTH_SHORT).show();
+                    onBackPressed();
+                });
+                progressDialog.dismiss();
+            }, 2000);
+        });
     }
+
+    List<String> urlList;
+    ProgressDialog progressDialog;
 
     @Override
     public void clickItem(int position) {

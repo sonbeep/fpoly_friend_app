@@ -202,20 +202,20 @@ public class AddFragment extends Fragment implements AddImageAdapter.ItemClick {
     @SuppressLint("NotifyDataSetChanged")
     @Override
     public void deleteItem(int position) {
-        DeleteDialog signUpDialog = DeleteDialog.newInstance();
-        signUpDialog.setOnClickListener(new DeleteDialog.OnClickListener() {
-            @Override
-            public void onApply() {
+//        DeleteDialog signUpDialog = DeleteDialog.newInstance();
+//        signUpDialog.setOnClickListener(new DeleteDialog.OnClickListener() {
+//            @Override
+//            public void onApply() {
                 uriList.remove(position);
                 addImageAdapter.notifyDataSetChanged();
                 positionAdd = position;
                 deleteImgage();
-            }
-            @Override
-            public void onCancel() {
-
-            }
-        });
+//            }
+//            @Override
+//            public void onCancel() {
+//
+//            }
+//        });
 
     }
 }

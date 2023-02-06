@@ -1,10 +1,11 @@
 package com.ltmt5.fpoly_friend_app.model;
 
+import java.util.Date;
 import java.util.List;
 
 public class Ban {
     private String userId;
-    private String date;
+    private Date date;
     private List<String> evidence;
 
     public Ban() {
@@ -18,11 +19,11 @@ public class Ban {
         this.userId = userId;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 

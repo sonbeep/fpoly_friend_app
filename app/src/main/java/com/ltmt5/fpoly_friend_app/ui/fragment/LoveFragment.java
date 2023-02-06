@@ -86,16 +86,21 @@ public class LoveFragment extends BaseFragment implements FilterLoveAdapter.Item
             public boolean onQueryTextSubmit(String query) {
                 userListFind.clear();
                 for (UserProfile userProfile : userListMain) {
-                    if (userProfile.getHobbies() != null) {
-                        for (String s : userProfile.getHobbies()) {
-                            if (s.contains(query)) {
-                                if (!userListFind.contains(userProfile)) {
-                                    userListFind.add(userProfile);
-                                }
-                            }
-                        }
+//                    if (userProfile.getHobbies() != null) {
+//                        for (String s : userProfile.getHobbies()) {
+//                            if (s.contains(query)) {
+//                                if (!userListFind.contains(userProfile)) {
+//                                    userListFind.add(userProfile);
+//                                }
+//                            }
+//                        }
+//                    }
+                    if (userProfile.getName().contains(query)){
+                        userListFind.add(userProfile);
                     }
+                    Log.e(TAG, "onQueryTextSubmit: "+userProfile.getName() );
                 }
+                Log.e(TAG, "onQueryTextSubmit: "+userListFind.size()+query );
                 loveAdapterFind.setData(userListFind);
                 return false;
             }
