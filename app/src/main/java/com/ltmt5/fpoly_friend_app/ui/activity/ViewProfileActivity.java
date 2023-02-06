@@ -2,6 +2,7 @@ package com.ltmt5.fpoly_friend_app.ui.activity;
 
 import static com.ltmt5.fpoly_friend_app.App.currentUser;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -90,6 +91,10 @@ public class ViewProfileActivity extends AppCompatActivity {
                 }
             });
 
+        });
+
+        binding.btnBan.setOnClickListener(v -> {
+            startActivity(new Intent(this,BanActivity.class).putExtra(Constants.KEY_USER,mUserProfile));
         });
     }
 
