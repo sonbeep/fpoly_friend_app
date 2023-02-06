@@ -103,7 +103,9 @@ public class UpdateProfileDialog extends BaseDialogFragment implements HobbiesAd
                 break;
             case "location":
                 binding.tv1.setText("Địa chỉ");
-                binding.rec.setVisibility(View.GONE);
+                binding.cvEd.setVisibility(View.GONE);
+                hobbiesAdapter.setData(getListLocation(), data);
+                list.add(new Hobbies(data));
                 break;
             case "zodiac":
                 binding.tv1.setText("Cung hoàng đạo");
@@ -151,7 +153,7 @@ public class UpdateProfileDialog extends BaseDialogFragment implements HobbiesAd
         binding.btnApply.setOnClickListener(v -> {
             String data = null;
             if (!name.equals("hobbies")) {
-                if (name.equals("gender") || name.equals("education") || name.equals("sexualOrientation") || name.equals("zodiac") || name.equals("showPriority")) {
+                if (name.equals("location")||name.equals("gender") || name.equals("education") || name.equals("sexualOrientation") || name.equals("zodiac") || name.equals("showPriority")) {
                     if (list.size() != 0) {
                         data = list.get(0).getName();
                     }
@@ -187,7 +189,6 @@ public class UpdateProfileDialog extends BaseDialogFragment implements HobbiesAd
 
                 break;
             case "description":
-            case "location":
             case "personality":
             case "favoriteSong":
             case "name":
@@ -319,6 +320,20 @@ public class UpdateProfileDialog extends BaseDialogFragment implements HobbiesAd
         list.add(new Hobbies("Nữ"));
         list.add(new Hobbies("Khác"));
         list.add(new Hobbies("Tất cả"));
+        return list;
+    }
+
+    List<Hobbies> getListLocation() {
+        List<Hobbies> list = new ArrayList<>();
+        list.add(new Hobbies("Hà Nội"));
+        list.add(new Hobbies("Bắc Giang"));
+        list.add(new Hobbies("Hải Phòng"));
+        list.add(new Hobbies("TP.HCM"));
+        list.add(new Hobbies("Đà Nẵng"));
+        list.add(new Hobbies("Huế"));
+        list.add(new Hobbies("Đồng Nai"));
+        list.add(new Hobbies("Cần Thơ"));
+        list.add(new Hobbies("Tây Nguyên"));
         return list;
     }
 

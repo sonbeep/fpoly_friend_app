@@ -23,21 +23,7 @@
         android:theme="@style/Theme.Fpoly_friend_app"
         tools:targetApi="31">
         <activity
-            android:name=".LD_MainActivity3"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".LD_MainActivity2"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
-        </activity>
-        <activity
-            android:name=".ui.activity.LD_MainActivity"
+            android:name=".ui.activity.ViewProfileActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

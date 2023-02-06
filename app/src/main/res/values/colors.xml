@@ -137,5 +137,7 @@
     <color name="md_skip">#FC735D</color>
     <color name="md_reverse">#FFD351</color>
 
+    <color name="color_hint">#B3B3B3</color>
+
 
 </resources>

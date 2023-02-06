@@ -12,6 +12,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.databinding.ActivitySettingBinding;
 import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
 import com.ltmt5.fpoly_friend_app.help.utilities.PreferenceManager;
@@ -52,10 +53,9 @@ public class SettingActivity extends AppCompatActivity {
             signUpDialog.setOnClickListener(new SignOutDialog.OnClickListener() {
                 @Override
                 public void onApply() {
-                    PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-                    preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, false);
+                    App.sharePref.setSignIn(false);
                     FirebaseAuth.getInstance().signOut();
-                    startActivity(new Intent(SettingActivity.this, SignInActivity.class));
+                    startActivity(new Intent(SettingActivity.this, LogInActivity.class));
                     finish();
                 }
 

@@ -27,6 +27,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.ltmt5.fpoly_friend_app.App;
 import com.ltmt5.fpoly_friend_app.adapter.ChatAdapter;
 import com.ltmt5.fpoly_friend_app.databinding.ActivityChatBinding;
 import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
@@ -112,7 +113,7 @@ public class ChatActivity extends BaseActivity {
         chatAdapter = new ChatAdapter(
                 receiverUser2.getImageUri(),
                 chatMessages,
-                preferenceManager.getString(Constants.KEY_USER_ID)
+                App.currentUser.getUserId()
         );
         binding.chatRecyclerview.setAdapter(chatAdapter);
         database = FirebaseFirestore.getInstance();
@@ -123,7 +124,7 @@ public class ChatActivity extends BaseActivity {
 
     private void sendMessage() {
         HashMap<String, Object> message = new HashMap<>();
-        message.put(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
+        message.put(Constants.KEY_SENDER_ID, App.currentUser.getUserId());
         message.put(Constants.KEY_RECEIVER_ID, receiverUser2.getUserId());
         message.put(Constants.KEY_MESSAGE, binding.inputMessage.getText().toString());
         message.put(Constants.KEY_TIMESTAMP, new Date());
@@ -132,9 +133,9 @@ public class ChatActivity extends BaseActivity {
             updateConversion(binding.inputMessage.getText().toString());
         } else {
             HashMap<String, Object> conversion = new HashMap<>();
-            conversion.put(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
-            conversion.put(Constants.KEY_SENDER_NAME, preferenceManager.getString(Constants.KEY_SENDER_NAME));
-            conversion.put(Constants.KEY_SENDER_IMAGE, preferenceManager.getString(Constants.KEY_IMAGE));
+            conversion.put(Constants.KEY_SENDER_ID,  App.currentUser.getUserId());
+            conversion.put(Constants.KEY_SENDER_NAME,  App.currentUser.getUserId());
+            conversion.put(Constants.KEY_SENDER_IMAGE,  App.currentUser.getImageUri());
             conversion.put(Constants.KEY_RECEIVER_ID, receiverUser2.getUserId());
             conversion.put(Constants.KEY_RECEIVER_NAME, receiverUser2.getName());
             conversion.put(Constants.KEY_RECEIVER_IMAGE, receiverUser2.getImageUri());
@@ -148,9 +149,9 @@ public class ChatActivity extends BaseActivity {
                 tokens.put(receiverUser2.getFcmToken());
 
                 JSONObject data = new JSONObject();
-                data.put(Constants.KEY_USER_ID, preferenceManager.getString(Constants.KEY_USER_ID));
-                data.put(Constants.KEY_NAME, preferenceManager.getString(Constants.KEY_NAME));
-                data.put(Constants.KEY_FCM_TOKEN, preferenceManager.getString(Constants.KEY_FCM_TOKEN));
+                data.put(Constants.KEY_USER_ID,  App.currentUser.getUserId());
+                data.put(Constants.KEY_NAME,  App.currentUser.getName());
+                data.put(Constants.KEY_FCM_TOKEN,  App.currentUser.getFcmToken());
                 data.put(Constants.KEY_MESSAGE, binding.inputMessage.getText().toString());
 
                 JSONObject body = new JSONObject();
@@ -227,12 +228,12 @@ public class ChatActivity extends BaseActivity {
 
     private void listenMessages() {
         database.collection(Constants.KEY_COLLECTION_CHAT)
-                .whereEqualTo(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID))
+                .whereEqualTo(Constants.KEY_SENDER_ID,  App.currentUser.getUserId())
                 .whereEqualTo(Constants.KEY_RECEIVER_ID, receiverUser2.getUserId())
                 .addSnapshotListener(eventListener);
         database.collection(Constants.KEY_COLLECTION_CHAT)
                 .whereEqualTo(Constants.KEY_SENDER_ID, receiverUser2.getUserId())
-                .whereEqualTo(Constants.KEY_RECEIVER_ID, preferenceManager.getString(Constants.KEY_USER_ID))
+                .whereEqualTo(Constants.KEY_RECEIVER_ID,  App.currentUser.getUserId())
                 .addSnapshotListener(eventListener);
     }
 
@@ -279,12 +280,12 @@ public class ChatActivity extends BaseActivity {
     private void checkForConversion() {
         if (chatMessages.size() != 0) {
             checkForConversionRemotely(
-                    preferenceManager.getString(Constants.KEY_USER_ID),
+                     App.currentUser.getUserId(),
                     receiverUser2.getUserId()
             );
             checkForConversionRemotely(
                     receiverUser2.getUserId(),
-                    preferenceManager.getString(Constants.KEY_USER_ID)
+                     App.currentUser.getUserId()
             );
         }
     }

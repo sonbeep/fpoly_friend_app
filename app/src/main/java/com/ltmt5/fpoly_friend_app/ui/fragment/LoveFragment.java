@@ -3,7 +3,6 @@ package com.ltmt5.fpoly_friend_app.ui.fragment;
 import static com.ltmt5.fpoly_friend_app.App.TAG;
 import static com.ltmt5.fpoly_friend_app.App.user;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +13,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,16 +30,13 @@ import com.ltmt5.fpoly_friend_app.help.utilities.Constants;
 import com.ltmt5.fpoly_friend_app.model.Chat;
 import com.ltmt5.fpoly_friend_app.model.Hobbies;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
-import com.ltmt5.fpoly_friend_app.ui.activity.ChatActivity;
-import com.ltmt5.fpoly_friend_app.ui.activity.MainActivity;
+import com.ltmt5.fpoly_friend_app.ui.activity.ViewProfileActivity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClick, LoveAdapter.ItemClick, RecomentAdapter.ItemClick {
+public class LoveFragment extends BaseFragment implements FilterLoveAdapter.ItemClick, LoveAdapter.ItemClick, RecomentAdapter.ItemClick {
     FragmentLoveBinding binding;
-    MainActivity mainActivity;
-    Context context;
     LoveAdapter loveAdapter;
     LoveAdapter loveAdapterFind;
     FirebaseDatabase database;
@@ -50,20 +45,39 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
     List<UserProfile> userProfileList = new ArrayList<>();
     List<UserProfile> userListMain = new ArrayList<>();
     List<UserProfile> userListFind = new ArrayList<>();
+    List<UserProfile> recommendList;
+    UserProfile mUserProfile;
 
     public static LoveFragment newInstance() {
         return new LoveFragment();
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentLoveBinding.inflate(inflater);
-        initalizeView();
+        initView();
         setClick();
         setUpSearchView();
+        getListRecommend();
         return binding.getRoot();
+    }
+
+    private void getListRecommend() {
+        ensureHomeActivity().checkList();
+        mUserProfile = App.currentUser;
+        recommendList = new ArrayList<>();
+        for (UserProfile userProfile : App.userProfileList) {
+            if (userProfile.getAge() == mUserProfile.getAge() || userProfile.getEducation().equals(mUserProfile.getEducation())) {
+                recommendList.add(userProfile);
+            }
+            if (userProfile.getLocation() != null && mUserProfile.getLocation() != null) {
+                if (userProfile.getLocation().equals(mUserProfile.getLocation())) {
+                    recommendList.add(userProfile);
+                }
+            }
+        }
+        loveAdapterFind.setData(recommendList);
     }
 
     private void setUpSearchView() {
@@ -85,6 +99,7 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
                 loveAdapterFind.setData(userListFind);
                 return false;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
@@ -92,25 +107,24 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
         });
     }
 
-    private void initalizeView() {
-        context = App.context;
+    private void initView() {
         database = FirebaseDatabase.getInstance();
-        mainActivity = (MainActivity) getActivity();
+        ensureHomeActivity().checkList();
 
-        loveAdapter = new LoveAdapter(context, this);
+        loveAdapter = new LoveAdapter(App.context, this);
         binding.recLove.setAdapter(loveAdapter);
 
-        loveAdapterFind = new LoveAdapter(context, this);
+        loveAdapterFind = new LoveAdapter(App.context, this);
         binding.recFindResult.setAdapter(loveAdapterFind);
 
-        recomentAdapter = new RecomentAdapter(context, this);
+        recomentAdapter = new RecomentAdapter(App.context, this);
         binding.recFind.setAdapter(recomentAdapter);
         recomentAdapter.setData(getList());
 
         user = FirebaseAuth.getInstance().getCurrentUser();
 
         database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("user_profile_match/" + user.getUid());
+        DatabaseReference myRef = database.getReference("user_profile_match/" + user.getUid() + "/");
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -118,7 +132,8 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
                     if (dataSnapshot != null) {
                         UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
                         if (userProfile != null) {
-                            userProfileList.add(userProfile);
+                            if (userProfile.getAvailability() == -2)
+                                userProfileList.add(userProfile);
                         }
                     }
                 }
@@ -133,28 +148,32 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
         userListMain.addAll(App.userProfileList);
     }
 
+    private void getListMatch() {
+
+    }
+
     private void setClick() {
         binding.cvFind.setOnClickListener(view -> {
-            binding.cvFind.setCardBackgroundColor(ContextCompat.getColor(mainActivity, R.color.prime_1));
+            binding.cvFind.setCardBackgroundColor(ContextCompat.getColor(ensureHomeActivity(), R.color.prime_1));
             binding.cvFind.setStrokeWidth(0);
-            binding.tvFind.setTextColor(ContextCompat.getColor(mainActivity, R.color.white));
+            binding.tvFind.setTextColor(ContextCompat.getColor(ensureHomeActivity(), R.color.white));
 
-            binding.cvMatch.setCardBackgroundColor(ContextCompat.getColor(mainActivity, R.color.transparent));
+            binding.cvMatch.setCardBackgroundColor(ContextCompat.getColor(ensureHomeActivity(), R.color.transparent));
             binding.cvMatch.setStrokeWidth(3);
-            binding.tvMatch.setTextColor(ContextCompat.getColor(mainActivity, R.color.black));
+            binding.tvMatch.setTextColor(ContextCompat.getColor(ensureHomeActivity(), R.color.black));
 
             binding.layoutFind.setVisibility(View.VISIBLE);
             binding.layoutMatch.setVisibility(View.GONE);
         });
 
         binding.cvMatch.setOnClickListener(view -> {
-            binding.cvMatch.setCardBackgroundColor(ContextCompat.getColor(mainActivity, R.color.prime_1));
+            binding.cvMatch.setCardBackgroundColor(ContextCompat.getColor(ensureHomeActivity(), R.color.prime_1));
             binding.cvMatch.setStrokeWidth(0);
-            binding.tvMatch.setTextColor(ContextCompat.getColor(mainActivity, R.color.white));
+            binding.tvMatch.setTextColor(ContextCompat.getColor(ensureHomeActivity(), R.color.white));
 
-            binding.cvFind.setCardBackgroundColor(ContextCompat.getColor(mainActivity, R.color.transparent));
+            binding.cvFind.setCardBackgroundColor(ContextCompat.getColor(ensureHomeActivity(), R.color.transparent));
             binding.cvFind.setStrokeWidth(3);
-            binding.tvFind.setTextColor(ContextCompat.getColor(mainActivity, R.color.black));
+            binding.tvFind.setTextColor(ContextCompat.getColor(ensureHomeActivity(), R.color.black));
 
             binding.layoutFind.setVisibility(View.GONE);
             binding.layoutMatch.setVisibility(View.VISIBLE);
@@ -163,7 +182,7 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
 
     @Override
     public void clickItem(UserProfile userProfile) {
-        startActivity(new Intent(getActivity(), ChatActivity.class).putExtra(Constants.KEY_USER, userProfile));
+        startActivity(new Intent(getActivity(), ViewProfileActivity.class).putExtra(Constants.KEY_USER, userProfile));
     }
 
     @Override
@@ -173,6 +192,7 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
 
     List<Hobbies> getList() {
         List<Hobbies> list = new ArrayList<>();
+        list.add(new Hobbies("Đề xuất"));
         list.add(new Hobbies("Thế hệ 9x"));
         list.add(new Hobbies("Harry Potter"));
         list.add(new Hobbies("SoundCloud"));
@@ -211,21 +231,27 @@ public class LoveFragment extends Fragment implements FilterLoveAdapter.ItemClic
         list.add(new Hobbies("Shisha"));
         list.add(new Hobbies("Cricket"));
         list.add(new Hobbies("Phim truyền hình Hàn Quốc"));
+        list.get(0).setSelected(true);
         return list;
     }
 
     @Override
     public void clickRecommend(Hobbies hobbies) {
-        userListFind.clear();
-        for (UserProfile userProfile : userListMain) {
-            if (userProfile.getHobbies() != null) {
-                for (String s : userProfile.getHobbies()) {
-                    if (hobbies.getName().equals(s)) {
-                        userListFind.add(userProfile);
+        if (hobbies.getName().equals("Đề xuất")) {
+            getListRecommend();
+        } else {
+            userListFind.clear();
+            for (UserProfile userProfile : userListMain) {
+                if (userProfile.getHobbies() != null) {
+                    for (String s : userProfile.getHobbies()) {
+                        if (hobbies.getName().equals(s)) {
+                            userListFind.add(userProfile);
+                        }
                     }
                 }
             }
+            loveAdapterFind.setData(userListFind);
         }
-        loveAdapterFind.setData(userListFind);
+
     }
 }

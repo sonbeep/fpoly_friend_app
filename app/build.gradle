@@ -75,7 +75,7 @@ dependencies {
     implementation 'net.qiujuer.genius:ui:2.0.0'
     implementation 'com.github.kofigyan:StateProgressBar:78670c686e'
     implementation 'com.github.Yalantis:Koloda-Android:v0.0.2-alpha'
-    implementation 'com.github.smarteist:autoimageslider:1.4.0'
+//    implementation 'com.github.smarteist:autoimageslider:1.4.0'
     implementation 'io.github.florent37:shapeofview:1.4.7'
     implementation 'com.mindorks.android:placeholderview:1.0.3'
     annotationProcessor 'com.mindorks.android:placeholderview-compiler:1.0.3'

@@ -24,7 +24,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.ltmt5.fpoly_friend_app.App;
-import com.ltmt5.fpoly_friend_app.R;
 import com.ltmt5.fpoly_friend_app.databinding.FragmentSwipeViewBinding;
 import com.ltmt5.fpoly_friend_app.help.UtilsMode;
 import com.ltmt5.fpoly_friend_app.model.TinderCard;
@@ -34,7 +33,6 @@ import com.ltmt5.fpoly_friend_app.ui.activity.ProfileActivity;
 import com.mindorks.placeholderview.SwipeDecor;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,12 +42,37 @@ public class SwipeViewFragment extends Fragment {
     public static UserProfile mProfile;
     public static List<UserProfile> userProfileList = new ArrayList<>();
     public static int mPos = 0;
+    public static FirebaseDatabase database;
     FragmentSwipeViewBinding binding;
     MainActivity mainActivity;
-    public static FirebaseDatabase database;
     private Context mContext;
 
     public SwipeViewFragment() {
+    }
+
+    public static void match() {
+        Log.e(TAG, "match");
+        if (mPos < 0 || mPos > userProfileList.size() - 1) {
+            mPos = userProfileList.size() - 1;
+        }
+        mProfile = userProfileList.get(mPos);
+        DatabaseReference myRef = database.getReference("user_profile_match/" + user.getUid() + "/" + mProfile.getUserId());
+        myRef.setValue(mProfile, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                DatabaseReference myRef2 = database.getReference("user_profile/" + user.getUid() + "/match");
+                myRef2.setValue((currentUser.getMatch() + 1), new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                        Log.e(TAG, "update match");
+                    }
+                });
+            }
+        });
+    }
+
+    public static void unMatch() {
+        Log.e(TAG, "unMatch");
     }
 
     @Override
@@ -92,18 +115,20 @@ public class SwipeViewFragment extends Fragment {
                 mPos = userProfileList.size() - 1;
             }
             mProfile = userProfileList.get(mPos);
-            UserProfile userProfile = new UserProfile(mProfile.getUserId(), mProfile.getName(), mProfile.getAge(), mProfile.getGender(), mProfile.getEducation(), mProfile.getHobbies(), mProfile.getImageUri());
-            mainActivity.startActivity(getBundledIntent(userProfile), options.toBundle());
+            mainActivity.startActivity(getBundledIntent(mProfile), options.toBundle());
         });
     }
 
     private void handleLikeClick() {
+        UserProfile userProfile = currentUser;
         if (mPos < 0 || mPos > userProfileList.size() - 1) {
             mPos = userProfileList.size() - 1;
         }
         mProfile = userProfileList.get(mPos);
-        DatabaseReference myRef = database.getReference("user_profile_match/" + user.getUid() + "/" + mProfile.getUserId());
-        myRef.setValue(mProfile, new DatabaseReference.CompletionListener() {
+        userProfile.setAvailability(-2);
+
+        DatabaseReference myRef = database.getReference("user_profile_match/" + mProfile.getUserId()+"/"+ currentUser.getUserId());
+        myRef.setValue(userProfile, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
                 DatabaseReference myRef2 = database.getReference("user_profile/" + user.getUid() + "/match");
@@ -144,7 +169,6 @@ public class SwipeViewFragment extends Fragment {
 //                        .setSwipeInMsgLayoutId(R.layout.tinder_swipe_in_msg_view)
 //                        .setSwipeOutMsgLayoutId(R.layout.tinder_swipe_out_msg_view));
         userProfileList = App.userProfileList;
-        Log.e(TAG, "ls app:" + userProfileList.size());
         for (int i = 0; i < userProfileList.size(); i++) {
             binding.swipeView.addView(new TinderCard(mContext, userProfileList.get(i), binding.swipeView, i));
         }
@@ -152,31 +176,6 @@ public class SwipeViewFragment extends Fragment {
 
     private void animateFab(final View fab) {
         fab.animate().scaleX(0.7f).setDuration(100).withEndAction(() -> fab.animate().scaleX(1f).scaleY(1f));
-    }
-
-    public static void match(){
-        Log.e(TAG,"match");
-        if (mPos < 0 || mPos > userProfileList.size() - 1) {
-            mPos = userProfileList.size() - 1;
-        }
-        mProfile = userProfileList.get(mPos);
-        DatabaseReference myRef = database.getReference("user_profile_match/" + user.getUid() + "/" + mProfile.getUserId());
-        myRef.setValue(mProfile, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                DatabaseReference myRef2 = database.getReference("user_profile/" + user.getUid() + "/match");
-                myRef2.setValue((currentUser.getMatch() + 1), new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                        Log.e(TAG, "update match");
-                    }
-                });
-            }
-        });
-    }
-
-    public static void unMatch(){
-        Log.e(TAG,"unMatch");
     }
 
 }

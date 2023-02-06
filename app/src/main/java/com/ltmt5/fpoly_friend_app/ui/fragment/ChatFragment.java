@@ -71,7 +71,8 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
                     ChatMessage chatMessage = new ChatMessage();
                     chatMessage.senderId = senderId;
                     chatMessage.receiverId = receiverId;
-                    if (preferenceManager.getString(Constants.KEY_USER_ID).equals(senderId)) {
+                    if (senderId==null) Log.e(TAG, "null: " );
+                    if (App.currentUser.getUserId().equals(senderId)) {
                         chatMessage.conversionImage = documentChange.getDocument().getString(Constants.KEY_RECEIVER_IMAGE);
                         chatMessage.conversionName = documentChange.getDocument().getString(Constants.KEY_RECEIVER_NAME);
                         chatMessage.conversionId = documentChange.getDocument().getString(Constants.KEY_RECEIVER_ID);
@@ -95,6 +96,7 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
                     }
                 }
             }
+            Log.e(TAG, "listen: "+conversions.size() );
             Collections.sort(conversions, (obj1, obj2) -> obj2.dateObject.compareTo(obj1.dateObject));
             conversionAdapter.notifyDataSetChanged();
             binding.recChat.smoothScrollToPosition(0);
@@ -190,10 +192,10 @@ public class ChatFragment extends Fragment implements RecentlyAdapter.ItemClick,
 
     private void listenConversation() {
         firestore.collection(Constants.KEY_COLLECTION_CONVERSATION)
-                .whereEqualTo(Constants.KEY_SENDER_ID, preferenceManager.getString(Constants.KEY_USER_ID))
+                .whereEqualTo(Constants.KEY_SENDER_ID, App.currentUser.getUserId())
                 .addSnapshotListener(eventListener);
         firestore.collection(Constants.KEY_COLLECTION_CONVERSATION)
-                .whereEqualTo(Constants.KEY_RECEIVER_ID, preferenceManager.getString(Constants.KEY_USER_ID))
+                .whereEqualTo(Constants.KEY_RECEIVER_ID, App.currentUser.getUserId())
                 .addSnapshotListener(eventListener);
     }
 

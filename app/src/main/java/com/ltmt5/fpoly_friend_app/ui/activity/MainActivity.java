@@ -68,18 +68,22 @@ public class MainActivity extends AppCompatActivity {
     };
     FirebaseDatabase database;
     FirebaseUser user;
-    String phoneNumber;
-    String id;
     SwipeViewFragment swipeViewFragment;
+    boolean isFirst;
+
+    public void checkList() {
+        if (App.userProfileList == null || App.userProfileList.size() == 0) {
+            getUser();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-//        getDataIntent();
         intitView();
-        Log.e(TAG,"Load main");
+        Log.e(TAG, "Load main");
 //        getUserInfo();
     }
 
@@ -87,44 +91,44 @@ public class MainActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         user = FirebaseAuth.getInstance().getCurrentUser();
         swipeViewFragment = new SwipeViewFragment();
-//        getUserProfile();
+        if (App.userProfileList.size() == 0) {
+            getUser();
+        }
 
         binding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         loadFragment(swipeViewFragment);
-
-
-//        FirebaseMessaging.getInstance().getToken()
-//                .addOnCompleteListener(new OnCompleteListener<String>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<String> task) {
-//                        if (!task.isSuccessful()) {
-//                            Log.e(TAG, "Fetching FCM registration token failed", task.getException());
-//                            return;
-//                        }
-//
-//                        // Get new FCM registration token
-//                        String token = task.getResult();
-//                        Log.e(TAG, "token: " + token);
-//
-//                        // Log and toast
-////                        String msg = getString(R.string.msg_token_fmt, token);
-////                        Toast.makeText(MainActivity.this, msg, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-
-        checkList();
     }
 
-    public void checkList() {
-        if (App.userProfileList == null) {
-            App.userProfileList = new ArrayList<>();
-            getAllUserProfile();
-        } else {
-            if (App.userProfileList.size() == 0) {
-                getAllUserProfile();
+    private void getUser() {
+        isFirst = true;
+        DatabaseReference myRef = database.getReference("user_profile/");
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (isFirst) {
+                    App.userProfileList.clear();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        try {
+                            UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                            if (userProfile != null) {
+                                App.userProfileList.add(userProfile);
+                            }
+                        } catch (Exception e) {
+                            Log.e("AAA", "get user error" + e);
+                        }
+                    }
+                    Log.e(TAG, "main - list profile size: " + App.userProfileList.size());
+                    isFirst = false;
+                }
             }
-        }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e(TAG, "profile list empty");
+            }
+        });
     }
+
 
     public void loadFragment(Fragment fragment) {
         // load fragment
@@ -146,21 +150,6 @@ public class MainActivity extends AppCompatActivity {
     public void loadProfileActivity() {
 
     }
-
-//    public Bitmap getBitmapFromUri(Uri uri) {
-//        Bitmap bitmap = null;
-//        try {
-//            bitmap = MediaStore.Images.Media.getBitmap(getApplication().getContentResolver(), uri);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return bitmap;
-//    }
-
-//    private void getDataIntent() {
-//        Intent intent = getIntent();
-//        phoneNumber = intent.getStringExtra("phoneNumber");
-//    }
 
     private void getUserInfo() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
@@ -199,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void getAllUserProfile() {
-        Log.e(TAG,"get all user");
+        Log.e(TAG, "get all user");
         App.userProfileList = new ArrayList<>();
         List<UserProfile> userProfileList = new ArrayList<>();
         database = FirebaseDatabase.getInstance();
@@ -223,7 +212,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-    public void finish(){
+
+    public void finish() {
         finish();
     }
 
