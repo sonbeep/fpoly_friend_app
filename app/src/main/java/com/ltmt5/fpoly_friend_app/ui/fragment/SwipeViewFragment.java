@@ -18,7 +18,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,13 +29,14 @@ import com.ltmt5.fpoly_friend_app.model.TinderCard;
 import com.ltmt5.fpoly_friend_app.model.UserProfile;
 import com.ltmt5.fpoly_friend_app.ui.activity.MainActivity;
 import com.ltmt5.fpoly_friend_app.ui.activity.ProfileActivity;
+import com.ltmt5.fpoly_friend_app.ui.dialog.SubDialog;
 import com.mindorks.placeholderview.SwipeDecor;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class SwipeViewFragment extends Fragment {
+public class SwipeViewFragment extends BaseFragment {
     public static final String EXTRA_USER_PROFILE = "EXTRA_USER_PROFILE";
     public static final String EXTRA_SWIPE_VIEW_SOURCE = "EXTRA_SWIPE_VIEW_SOURCE";
     public static UserProfile mProfile;
@@ -97,8 +97,6 @@ public class SwipeViewFragment extends Fragment {
 
         binding.btnLike.setOnClickListener(v -> {
             handleLikeClick();
-            animateFab(binding.btnLike);
-            binding.swipeView.doSwipe(true);
         });
 
 
@@ -121,18 +119,54 @@ public class SwipeViewFragment extends Fragment {
 
     private void handleLikeClick() {
         UserProfile userProfile = currentUser;
-        if (mPos < 0 || mPos > userProfileList.size() - 1) {
-            mPos = userProfileList.size() - 1;
-        }
-        mProfile = userProfileList.get(mPos);
-        userProfile.setAvailability(-2);
-        DatabaseReference myRef = database.getReference("user_profile_match/" + mProfile.getUserId() + "/" + currentUser.getUserId());
-        myRef.setValue(userProfile, new DatabaseReference.CompletionListener() {
-            @Override
-            public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                Log.e(TAG, "update match");
+        if (currentUser.getMatch() > currentUser.getMatchLimit()) {
+            SubDialog subDialog = SubDialog.newInstance();
+            subDialog.showAllowingStateLoss(ensureHomeActivity().getSupportFragmentManager(), "SubDialog");
+            subDialog.setOnClickListener(new SubDialog.OnClickListener() {
+                @Override
+                public void onPlatinum() {
+                    currentUser.setMatchLimit(currentUser.getMatchLimit() + 5);
+                }
+
+                @Override
+                public void onGold() {
+                    currentUser.setMatchLimit(currentUser.getMatchLimit() + 10);
+                }
+
+                @Override
+                public void onPlus() {
+                    currentUser.setMatchLimit(currentUser.getMatchLimit() + 15);
+                }
+
+                @Override
+                public void onCancel() {
+
+                }
+            });
+        } else {
+            if (mPos < 0 || mPos > userProfileList.size() - 1) {
+                mPos = userProfileList.size() - 1;
             }
-        });
+            mProfile = userProfileList.get(mPos);
+            userProfile.setAvailability(-2);
+            DatabaseReference myRef = database.getReference("user_profile_match/" + mProfile.getUserId() + "/" + currentUser.getUserId());
+            myRef.setValue(userProfile, new DatabaseReference.CompletionListener() {
+                @Override
+                public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                    currentUser.setMatch(currentUser.getMatch() + 1);
+                    DatabaseReference myRef = database.getReference("user_profile/" + currentUser.getUserId());
+                    myRef.setValue(currentUser, new DatabaseReference.CompletionListener() {
+                        @Override
+                        public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
+                            Log.e(TAG, "update match");
+                            animateFab(binding.btnLike);
+                            binding.swipeView.doSwipe(true);
+                        }
+                    });
+                }
+            });
+        }
+
 
     }
 

@@ -32,55 +32,9 @@ public class UserProfile implements Serializable {
     private String imageUri;
     private String token;
     private int match;
+    private int matchLimit;
 
     public UserProfile() {
-    }
-
-    public UserProfile(String name, int age, String gender, String education, List<String> hobbies, List<String> image, String description, String location, String zodiac, String personality, String sexualOrientation, String favoriteSong, String showPriority, String imageUri) {
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-        this.education = education;
-        this.hobbies = hobbies;
-        this.image = image;
-        this.description = description;
-        this.location = location;
-        this.zodiac = zodiac;
-        this.personality = personality;
-        this.sexualOrientation = sexualOrientation;
-        this.favoriteSong = favoriteSong;
-        this.showPriority = showPriority;
-        this.imageUri = imageUri;
-    }
-
-
-    public UserProfile(String name, int age, String gender, String education, List<String> hobbies, List<String> image, String imageUri) {
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-        this.education = education;
-        this.hobbies = hobbies;
-        this.image = image;
-        this.imageUri = imageUri;
-    }
-
-    public UserProfile(int availability, String email, String fcmToken, String imageUri, String name, String password) {
-        this.availability = availability;
-        this.email = email;
-        this.fcmToken = fcmToken;
-        this.imageUri = imageUri;
-        this.name = name;
-        this.password = password;
-    }
-
-    public UserProfile(String userId, String name, int age, String gender, String education, List<String> hobbies, String imageUri) {
-        this.userId = userId;
-        this.name = name;
-        this.age = age;
-        this.gender = gender;
-        this.education = education;
-        this.hobbies = hobbies;
-        this.imageUri = imageUri;
     }
 
     public int getAvailability() {
@@ -257,5 +211,18 @@ public class UserProfile implements Serializable {
 
     public void setMatch(int match) {
         this.match = match;
+    }
+
+    public int getMatchLimit() {
+        if (matchLimit == 0) {
+            return 5;
+        } else {
+            return matchLimit;
+        }
+
+    }
+
+    public void setMatchLimit(int matchLimit) {
+        this.matchLimit = matchLimit;
     }
 }

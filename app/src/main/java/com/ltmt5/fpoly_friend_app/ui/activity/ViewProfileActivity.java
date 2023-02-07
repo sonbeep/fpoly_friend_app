@@ -4,7 +4,7 @@ import static com.ltmt5.fpoly_friend_app.App.currentUser;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -32,6 +32,7 @@ public class ViewProfileActivity extends AppCompatActivity {
     UserProfile mUserProfile;
     String TAG = "AAA";
     String tempText = "Hi chào cậu, cậu ăn cơm chưa ?";
+    String uID;
     private FirebaseFirestore firebaseFirestore;
     private String conversionId = null;
     private final OnCompleteListener<QuerySnapshot> conversionCompleteListener = task -> {
@@ -55,6 +56,15 @@ public class ViewProfileActivity extends AppCompatActivity {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
         mUserProfile = (UserProfile) getIntent().getSerializableExtra(Constants.KEY_USER);
+        uID = getIntent().getStringExtra(Constants.KEY_USER_ID);
+        if (uID != null) {
+            binding.layoutFooter.setVisibility(View.INVISIBLE);
+            for (UserProfile userProfile : App.userProfileList) {
+                if (userProfile.getUserId().equals(uID)) {
+                    mUserProfile = userProfile;
+                }
+            }
+        }
         if (mUserProfile != null) {
             binding.tvName.setText(mUserProfile.getName());
             binding.tvAge.setText("" + (2022 - mUserProfile.getAge()));
@@ -66,6 +76,7 @@ public class ViewProfileActivity extends AppCompatActivity {
             }
             Glide.with(this).load(mUserProfile.getImageUri()).centerCrop().into(binding.imgAvatar);
         }
+
     }
 
     private void setClick() {
@@ -93,7 +104,7 @@ public class ViewProfileActivity extends AppCompatActivity {
         });
 
         binding.btnBan.setOnClickListener(v -> {
-            startActivity(new Intent(this,BanActivity.class).putExtra(Constants.KEY_USER,mUserProfile));
+            startActivity(new Intent(this, BanActivity.class).putExtra(Constants.KEY_USER, mUserProfile));
         });
     }
 

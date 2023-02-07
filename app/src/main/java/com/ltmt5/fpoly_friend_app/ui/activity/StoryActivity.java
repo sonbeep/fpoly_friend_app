@@ -36,7 +36,6 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
     StoryAdapter storyAdapter;
     long pressTime = 0L;
     long limit = 500L;
-    String userId;
     UserProfile userProfile;
     ActivityStoryBinding binding;
     ProgressDialog progressDialog;
@@ -148,6 +147,8 @@ public class StoryActivity extends AppCompatActivity implements StoriesProgressV
             }
         });
         binding.skip.setOnTouchListener(onTouchListener);
+
+        binding.imgAvatar.setOnClickListener(v -> startActivity(new Intent(this,ViewProfileActivity.class).putExtra(Constants.KEY_USER_ID,userProfile.getUserId())));
     }
 
     @Override

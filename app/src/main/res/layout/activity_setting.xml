@@ -87,7 +87,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center"
                             android:maxLines="1"
-                            android:text="Fpoly Friend Platium"
+                            android:text="Fpoly Friend Platinum"
                             android:textColor="@color/md_black_1000"
                             android:textSize="18sp"
                             android:textStyle="bold" />
