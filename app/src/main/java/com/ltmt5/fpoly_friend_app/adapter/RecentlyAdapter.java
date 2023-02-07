@@ -3,7 +3,6 @@ package com.ltmt5.fpoly_friend_app.adapter;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -68,11 +67,11 @@ public class RecentlyAdapter extends RecyclerView.Adapter<RecentlyAdapter.ViewHo
         }
 
         public void bindData(UserProfile userProfile) {
-//            if (userProfile.getAvailability() == 0) {
-//                binding.btnAvailable.setVisibility(View.VISIBLE);
-//            } else {
-                binding.btnAvailable.setVisibility(View.INVISIBLE);
-//            }
+            if (userProfile.getAvailability() == -2) {
+                binding.btnAvailable.setImageResource(R.drawable.ic_active_off);
+            } else {
+                binding.btnAvailable.setImageResource(R.drawable.ic_active);
+            }
             Glide.with(context).load(userProfile.getImageUri()).centerCrop().error(R.drawable.demo1).into(binding.imgAvatar);
             binding.imgAvatar.setOnClickListener(view -> {
                 itemClick.clickItem(userProfile);

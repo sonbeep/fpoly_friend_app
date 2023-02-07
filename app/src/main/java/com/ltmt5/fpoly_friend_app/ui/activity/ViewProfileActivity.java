@@ -66,7 +66,6 @@ public class ViewProfileActivity extends AppCompatActivity {
             }
             Glide.with(this).load(mUserProfile.getImageUri()).centerCrop().into(binding.imgAvatar);
         }
-        Log.e(TAG, "initView: " + mUserProfile);
     }
 
     private void setClick() {

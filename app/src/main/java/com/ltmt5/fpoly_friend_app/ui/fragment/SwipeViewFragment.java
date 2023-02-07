@@ -126,18 +126,11 @@ public class SwipeViewFragment extends Fragment {
         }
         mProfile = userProfileList.get(mPos);
         userProfile.setAvailability(-2);
-
-        DatabaseReference myRef = database.getReference("user_profile_match/" + mProfile.getUserId()+"/"+ currentUser.getUserId());
+        DatabaseReference myRef = database.getReference("user_profile_match/" + mProfile.getUserId() + "/" + currentUser.getUserId());
         myRef.setValue(userProfile, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                DatabaseReference myRef2 = database.getReference("user_profile/" + user.getUid() + "/match");
-                myRef2.setValue((currentUser.getMatch() + 1), new DatabaseReference.CompletionListener() {
-                    @Override
-                    public void onComplete(@Nullable DatabaseError error, @NonNull DatabaseReference ref) {
-                        Log.e(TAG, "update match");
-                    }
-                });
+                Log.e(TAG, "update match");
             }
         });
 

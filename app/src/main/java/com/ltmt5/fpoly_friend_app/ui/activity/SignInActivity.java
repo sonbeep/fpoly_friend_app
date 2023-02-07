@@ -32,7 +32,6 @@ public class SignInActivity extends AppCompatActivity {
     FirebaseDatabase database;
     FirebaseUser user;
     boolean isFirst;
-    boolean isFirst2;
     UserProfile mUserProfile;
     private FirebaseAuth mAuth;
     private PreferenceManager preferenceManager;
@@ -59,6 +58,7 @@ public class SignInActivity extends AppCompatActivity {
     }
 
     private void getUser() {
+        isFirst = true;
         DatabaseReference myRef = database.getReference("user_profile/");
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -148,7 +148,7 @@ public class SignInActivity extends AppCompatActivity {
             }
         }
         if (mUserProfile != null) {
-            if (mUserProfile.getAvailability() == -1) {
+            if (mUserProfile.getAvailability() == -101) {
                 showToast("Tài khoản đã bị khoá");
             } else {
                 App.sharePref.setSignIn(true);

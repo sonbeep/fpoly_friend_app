@@ -34,6 +34,7 @@ import com.ltmt5.fpoly_friend_app.ui.activity.ViewProfileActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class LoveFragment extends BaseFragment implements FilterLoveAdapter.ItemClick, LoveAdapter.ItemClick, RecomentAdapter.ItemClick {
     FragmentLoveBinding binding;
@@ -47,6 +48,7 @@ public class LoveFragment extends BaseFragment implements FilterLoveAdapter.Item
     List<UserProfile> userListFind = new ArrayList<>();
     List<UserProfile> recommendList;
     UserProfile mUserProfile;
+    boolean isFirst;
 
     public static LoveFragment newInstance() {
         return new LoveFragment();
@@ -95,12 +97,10 @@ public class LoveFragment extends BaseFragment implements FilterLoveAdapter.Item
 //                            }
 //                        }
 //                    }
-                    if (userProfile.getName().contains(query)){
+                    if (userProfile.getName().toLowerCase(Locale.ROOT).contains(query.toLowerCase(Locale.ROOT))) {
                         userListFind.add(userProfile);
                     }
-                    Log.e(TAG, "onQueryTextSubmit: "+userProfile.getName() );
                 }
-                Log.e(TAG, "onQueryTextSubmit: "+userListFind.size()+query );
                 loveAdapterFind.setData(userListFind);
                 return false;
             }
@@ -127,22 +127,33 @@ public class LoveFragment extends BaseFragment implements FilterLoveAdapter.Item
         recomentAdapter.setData(getList());
 
         user = FirebaseAuth.getInstance().getCurrentUser();
-
         database = FirebaseDatabase.getInstance();
+        userListMain.addAll(App.userProfileList);
+
+        getListMatch();
+    }
+
+    private void getListMatch() {
+        isFirst = true;
         DatabaseReference myRef = database.getReference("user_profile_match/" + user.getUid() + "/");
         myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    if (dataSnapshot != null) {
-                        UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
-                        if (userProfile != null) {
-                            if (userProfile.getAvailability() == -2)
-                                userProfileList.add(userProfile);
+                if (isFirst) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        if (dataSnapshot != null) {
+                            UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
+                            if (userProfile != null) {
+                                if (userProfile.getAvailability() == -2)
+                                    userProfileList.add(userProfile);
+                            }
                         }
                     }
+                    loveAdapter.setData(userProfileList);
+                    binding.tvTitle.setText("Bạn đã nhận được " + userProfileList.size() + " lượt thích !");
+                    isFirst = false;
                 }
-                loveAdapter.setData(userProfileList);
+
             }
 
             @Override
@@ -150,11 +161,6 @@ public class LoveFragment extends BaseFragment implements FilterLoveAdapter.Item
                 Log.e(TAG, "profile list empty");
             }
         });
-        userListMain.addAll(App.userProfileList);
-    }
-
-    private void getListMatch() {
-
     }
 
     private void setClick() {

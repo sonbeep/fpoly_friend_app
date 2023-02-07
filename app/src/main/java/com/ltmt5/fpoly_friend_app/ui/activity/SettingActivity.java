@@ -72,8 +72,7 @@ public class SettingActivity extends AppCompatActivity {
                 @Override
                 public void onApply() {
                     progressDialog.show();
-                    PreferenceManager preferenceManager = new PreferenceManager(getApplicationContext());
-                    preferenceManager.putBoolean(Constants.KEY_IS_SIGNED_IN, false);
+                    App.sharePref.setSignIn(false);
                     user = FirebaseAuth.getInstance().getCurrentUser();
                     assert user != null;
                     user.delete().addOnCompleteListener(new OnCompleteListener<Void>() {

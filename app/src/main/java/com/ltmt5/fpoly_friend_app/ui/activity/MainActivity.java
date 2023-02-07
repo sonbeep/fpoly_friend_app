@@ -84,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         intitView();
         Log.e(TAG, "Load main");
-//        getUserInfo();
     }
 
     private void intitView() {
@@ -165,52 +164,6 @@ public class MainActivity extends AppCompatActivity {
         } else {
             profile = new Profile(name, null, email);
         }
-    }
-
-    public void getUserProfile() {
-        DatabaseReference myRef = database.getReference("user_profile/" + user.getUid());
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                try {
-                    userProfile = snapshot.getValue(UserProfile.class);
-                } catch (Exception e) {
-                    Log.e(TAG, "" + e);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainActivity.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    public void getAllUserProfile() {
-        Log.e(TAG, "get all user");
-        App.userProfileList = new ArrayList<>();
-        List<UserProfile> userProfileList = new ArrayList<>();
-        database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("user_profile/");
-        myRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                App.userProfileList.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    UserProfile userProfile = dataSnapshot.getValue(UserProfile.class);
-                    if (userProfile != null) {
-                        userProfileList.add(userProfile);
-                    }
-                    App.userProfileList.addAll(userProfileList);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e(TAG, "profile list empty");
-            }
-        });
     }
 
     public void finish() {
