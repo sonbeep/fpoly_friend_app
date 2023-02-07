@@ -329,6 +329,7 @@ public class UpdateProfileActivity extends AppCompatActivity implements AddImage
     }
 
     void handleUpdate(String name, List<String> list) {
+        list.removeIf(s -> s.equals("Trống"));
         progressDialog.show();
         DatabaseReference myRef = database.getReference("user_profile/" + user.getUid() + "/" + name);
         myRef.setValue(list, new DatabaseReference.CompletionListener() {
